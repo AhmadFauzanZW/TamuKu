@@ -1,0 +1,33 @@
+{
+  "dart.flutterSdkPath": "",
+  "dart.analysisExcludedFolders": [
+    "build",
+    ".dart_tool",
+    "android",
+    "ios",
+    "web",
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "Dart-Code.dart-code",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.explicit": "explicit",
+    "source.organizeImports.explicit": "explicit"
+  },
+  "dart.lineLength": 80,
+  "[dart]": {
+    "editor.rulers": [80],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "flutter.hotReloadOnSave": "manual",
+  "dart.previewDart2Wasm": false
+}

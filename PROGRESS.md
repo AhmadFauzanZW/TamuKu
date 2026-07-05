@@ -12,11 +12,11 @@
 | Anggota | Sprint 1 | Sprint 2 | Total |
 |---------|----------|----------|-------|
 | Hafiz Nur Rizki | 0/10 | 0/5 | 0/15 |
-| Ahmad Fauzan | 0/10 | 0/5 | 0/15 |
+| Ahmad Fauzan | 6/10 | 0/5 | 6/15 |
 | Annur Syahrin Aisyah | 0/10 | 0/5 | 0/15 |
-| **TOTAL** | **0/30** | **0/15** | **0/45** |
+| **TOTAL** | **6/30** | **0/15** | **6/45** |
 
-**Persentase Selesai:** 0%
+**Persentase Selesai:** 13.3%
 
 ---
 
@@ -28,12 +28,12 @@
 
 | # | Tugas | Siapa | Status | Tanggal Selesai | Catatan |
 |---|-------|-------|--------|-----------------|---------|
-| S1 | Inisialisasi project Flutter (`flutter create tamuku`) | Semua | ⬜ | — | |
+| S1 | Inisialisasi project Flutter (`flutter create tamuku`) | Semua | ✅ | 2026-07-05 | |
 | S2 | Konfigurasi Firebase (`flutterfire configure`) | Semua | ⬜ | — | |
-| S3 | Setup `pubspec.yaml` + semua dependencies | Semua | ⬜ | — | |
-| S4 | Setup folder Clean Architecture | Semua | ⬜ | — | |
-| S5 | Setup theme system dari DESIGN.md | Semua | ⬜ | — | |
-| S6 | Setup routing + constants + DI (get_it) | Semua | ⬜ | — | |
+| S3 | Setup `pubspec.yaml` + semua dependencies | Semua | ✅ | 2026-07-05 | |
+| S4 | Setup folder Clean Architecture | Semua | ✅ | 2026-07-05 | |
+| S5 | Setup theme system dari DESIGN.md | Semua | ✅ | 2026-07-05 | |
+| S6 | Setup routing + constants + DI (get_it) | Semua | ✅ | 2026-07-05 | |
 
 ---
 
