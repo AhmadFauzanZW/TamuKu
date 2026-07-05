@@ -1,0 +1,100 @@
+# Changelog — TamuKu
+
+Catatan perubahan proyek TamuKu. Format berdasarkan [Keep a Changelog](https://keepachangelog.com/).
+
+Semua perubahan tercatat di sini, diurutkan dari yang terbaru. Setiap entri harus mencakup:
+- Tanggal perubahan
+- Siapa yang melakukan (inisial nama)
+- Apa yang berubah
+- Concept Flutter yang terkait
+
+---
+
+## [Unreleased]
+
+### Ditambahkan
+- (belum ada)
+
+### Diubah
+- (belum ada)
+
+### Diperbaiki
+- (belum ada)
+
+---
+
+## [0.1.0] — 2026-07-05
+
+### Ditambahkan
+- **[Setup]** Inisialisasi repository project — Oleh: Semua
+- **[Dokumentasi]** `AGENTS.md` — Governance file untuk AI agent (arsitektur, schema, coding rules, sprint plan) — Oleh: AF
+- **[Dokumentasi]** `DESIGN.md` — Design system lengkap (750+ baris: 30+ color tokens, typography, spacing, 10 screen layouts, dark mode, Flutter theme code) — Oleh: SA
+- **[Dokumentasi]** `README.md` — Project README (overview, fitur, tech stack, setup guide, struktur) — Oleh: AF
+- **[Dokumentasi]** `CONTRIBUTING.md` — Panduan kontribusi (branch strategy, commit format, PR process, testing) — Oleh: AF
+- **[Dokumentasi]** `.github/copilot-instructions.md` — Instruksi GitHub Copilot (BLoC patterns, templates, file structure) — Oleh: AF
+- **[Tooling]** `.vscode/settings.json` — Workspace settings (formatter, line length, analysis) — Oleh: AF
+- **[Tooling]** `.vscode/launch.json` — Debug/Profile/Release configurations — Oleh: AF
+- **[Tooling]** `.vscode/extensions.json` — Recommended extensions — Oleh: AF
+- **[Agent]** `.vscode/agents/flutter-coder.md` — Flutter/Dart specialist agent — Oleh: AF
+- **[Agent]** `.vscode/agents/firebase-backend.md` — Firebase backend specialist agent — Oleh: AF
+- **[Agent]** `.vscode/agents/ui-reviewer.md` — UI/UX reviewer agent — Oleh: AF
+- **[Config]** `.gitignore` — Flutter + Firebase gitignore — Oleh: AF
+- **[Arsitektur]** Arsitektur Clean Architecture + BLoC (fitur/data|domain|presentation) — Oleh: AF
+- **[Arsitektur]** 7 concept mapping (Widgets, ListView.builder, FutureBuilder/StreamBuilder, BLoC, API+BLoC, Local Storage, Popular Libraries) — Oleh: AF
+- **[Planning]** `Tugas_Tim_TamuKu.docx` — Distribusi tugas tim (Agile, 2 sprint, 15 tugas/orang) — Oleh: AF
+- **[Planning]** Sprint 1 & 2 plan dengan dependency map — Oleh: AF
+- **[Memory]** Connected ke ObsidianVault + Copilot Memory — Oleh: AF
+
+### Keputusan
+- Menggunakan **flutter_bloc 8.x** (bukan Riverpod) — sesuai course requirement + SaaS-ready
+- Menggunakan **Clean Architecture** — features/data|domain|presentation per fitur
+- **Offline-first** dengan hive + sqflite — write local dulu, sync remote saat online
+- **Equatable** untuk semua BLoC states/events — prevent unnecessary rebuilds
+- **get_it** untuk dependency injection
+
+---
+
+## Format Entri Changelog
+
+Gunakan format ini untuk setiap entri baru:
+
+```markdown
+## [versi] — YYYY-MM-DD
+
+### Ditambahkan
+- **[Nama Fitur]** Deskripsi perubahan — Concept: [A-G] — Oleh: [Nama]
+
+### Diubah
+- **[Nama Fitur]** Deskripsi perubahan — Oleh: [Nama]
+
+### Diperbaiki
+- **[Nama Bug]** Deskripsi fix — Oleh: [Nama]
+
+### Dihapus
+- **[Nama Fitur]** Deskripsi penghapusan — Oleh: [Nama]
+
+### Keputusan
+- Deskripsi keputusan teknis yang diambil
+```
+
+### Kode Concept (untuk referensi cepat)
+| Kode | Concept |
+|------|---------|
+| A | Flutter Widgets (Basics, Layout, Scrolling, Text) |
+| B | ListView.builder |
+| C | FutureBuilder & StreamBuilder |
+| D | BLoC (Business Logic Component) |
+| E | API Integration with BLoC |
+| F | Local Storage (Offline Fallback) |
+| G | Popular Libraries |
+
+### Inisial Anggota
+| Inisial | Nama |
+|---------|------|
+| HN | Hafiz Nur Rizki |
+| AF | Ahmad Fauzan |
+| SA | Annur Syahrin Aisyah |
+
+### Versi
+- `0.x.x` — Development / pre-release
+- `1.0.0` — MVP release (demo day)
