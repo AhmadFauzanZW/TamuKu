@@ -5,6 +5,7 @@
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase)
+![BLoC](https://img.shields.io/badge/BLoC-8.x-0094F5?logo=bloc)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
@@ -64,8 +65,10 @@ Admin dapat memantau kunjungan melalui dashboard mobile, menerima notifikasi Wha
 |----------|-----------|-------|
 | Bahasa | Dart | 3.x |
 | Framework | Flutter | 3.x (latest stable) |
-| State Management | Riverpod | 2.x |
+| State Management | flutter_bloc | 8.x |
+| State Equivalence | equatable | 2.x |
 | Database | Cloud Firestore | — |
+| Local Storage | hive + sqflite | — |
 | Authentication | Firebase Auth (Email + Google OAuth) | — |
 | Push Notification | Firebase Cloud Messaging (FCM) | — |
 | File Storage | Firebase Storage | — |
@@ -73,6 +76,9 @@ Admin dapat memantau kunjungan melalui dashboard mobile, menerima notifikasi Wha
 | QR Scanning | mobile_scanner | 5.x |
 | Charts | fl_chart | — |
 | Image Picker | image_picker | — |
+| Network Detection | connectivity_plus | — |
+| Image Caching | cached_network_image | — |
+| Date Formatting | intl | — |
 | Cloud Functions | Firebase Cloud Functions | — |
 | Linting | flutter_lints + analysis_options.yaml | strict |
 
@@ -130,57 +136,67 @@ tamuku/
 ├── lib/
 │   ├── main.dart
 │   ├── app.dart
-│   ├── config/
-│   │   ├── theme.dart
-│   │   ├── routes.dart
-│   │   └── constants.dart
-│   ├── models/
-│   │   ├── guest.dart
-│   │   ├── location.dart
-│   │   └── host.dart
-│   ├── providers/
-│   │   ├── auth_provider.dart
-│   │   ├── guest_provider.dart
-│   │   ├── location_provider.dart
-│   │   └── theme_provider.dart
-│   ├── screens/
+│   │
+│   ├── core/
+│   │   ├── constants/
+│   │   │   └── app_constants.dart
+│   │   ├── theme/
+│   │   │   ├── app_colors.dart
+│   │   │   ├── app_text_styles.dart
+│   │   │   └── app_theme.dart
+│   │   ├── routes/
+│   │   │   └── app_router.dart
+│   │   ├── utils/
+│   │   │   ├── validators.dart
+│   │   │   ├── formatters.dart
+│   │   │   └── permissions.dart
+│   │   └── errors/
+│   │       ├── failures.dart
+│   │       └── exceptions.dart
+│   │
+│   ├── features/
+│   │   ├── auth/
+│   │   │   ├── data/datasources/
+│   │   │   ├── data/repositories/
+│   │   │   ├── domain/entities/
+│   │   │   ├── domain/repositories/
+│   │   │   └── presentation/bloc/
+│   │   │   └── presentation/screens/
 │   │   ├── guest/
-│   │   │   ├── scan_screen.dart
-│   │   │   ├── guest_form_screen.dart
-│   │   │   ├── confirmation_screen.dart
-│   │   │   ├── checkout_screen.dart
-│   │   │   └── error_screen.dart
-│   │   └── admin/
-│   │       ├── login_screen.dart
-│   │       ├── dashboard_screen.dart
-│   │       ├── guest_list_screen.dart
-│   │       ├── qr_generator_screen.dart
-│   │       └── settings_screen.dart
-│   ├── services/
-│   │   ├── firestore_service.dart
-│   │   ├── auth_service.dart
-│   │   ├── qr_service.dart
-│   │   ├── notification_service.dart
-│   │   ├── whatsapp_service.dart
-│   │   └── export_service.dart
-│   ├── widgets/
-│   │   ├── guest_tile.dart
-│   │   ├── stat_card.dart
-│   │   ├── search_bar.dart
-│   │   ├── filter_chips.dart
-│   │   └── app_drawer.dart
-│   └── utils/
-│       ├── validators.dart
-│       ├── formatters.dart
-│       └── permissions.dart
+│   │   │   ├── data/datasources/
+│   │   │   ├── data/repositories/
+│   │   │   ├── domain/entities/
+│   │   │   ├── domain/repositories/
+│   │   │   └── presentation/bloc/
+│   │   │   └── presentation/screens/
+│   │   ├── location/
+│   │   │   ├── data/datasources/
+│   │   │   ├── data/repositories/
+│   │   │   ├── domain/entities/
+│   │   │   ├── domain/repositories/
+│   │   │   └── presentation/bloc/
+│   │   │   └── presentation/screens/
+│   │   └── notification/
+│   │       ├── data/repositories/
+│   │       ├── domain/repositories/
+│   │       └── presentation/bloc/
+│   │
+│   ├── shared/
+│   │   └── widgets/
+│   │
+│   └── injection_container.dart
+│
 ├── assets/
 │   ├── images/
 │   │   └── logo.png
 │   └── fonts/
+│
 ├── test/
 │   ├── unit/
 │   ├── widget/
+│   ├── bloc/
 │   └── integration/
+│
 ├── android/
 ├── ios/
 ├── firebase.json
@@ -213,7 +229,8 @@ tamuku/
 
 **Dosen Pembimbing:** Hedy Pamungkas, S.T., M.T.I
 
-**Mata Kuliah:** Mobile Computing
+**Mflutter_bloc Documentation](https://pub.dev/packages/flutter_bloc)
+- [Equatable Documentation](https://pub.dev/packages/equatable
 **Institusi:** Universitas Cakrawala — 2026
 
 ---
