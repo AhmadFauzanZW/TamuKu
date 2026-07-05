@@ -64,3 +64,5 @@ coverage/
 /ios/Pods/
 /macos/Pods/
 /macos/Flutter/ephemeral/
+*.docx
+generate_tasks.js
