@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'core/constants/app_constants.dart';
+import 'core/routes/app_router.dart';
 import 'core/services/sync_queue_service.dart';
 import 'core/theme/app_theme.dart';
 import 'injection_container.dart' as di;
@@ -64,9 +65,8 @@ class _TamuKuAppState extends State<TamuKuApp> {
           ],
         );
       },
-      home: const Scaffold(
-        body: Center(child: Text(AppConstants.appName)),
-      ),
+      initialRoute: AppRoutes.login,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
