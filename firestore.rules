@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Guests — Tamu
+    match /guests/{guestId} {
+      allow read: if request.auth != null;
+      allow create: if true;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Locations — Lokasi
+    match /locations/{locationId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Hosts — Admin/User
+    match /hosts/{hostId} {
+      allow read, update: if request.auth != null && request.auth.uid == hostId;
+      allow create: if request.auth != null;
+      allow delete: if false;
+    }
+  }
+}

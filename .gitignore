@@ -49,3 +49,5 @@ app.*.map.json
 /ios/Runner/GoogleService-Info.plist
 /lib/firebase_options.dart
 docs/FIREBASE_SETUP.md
+
+node_modules/
