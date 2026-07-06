@@ -6,13 +6,19 @@ import { healthRoutes } from './routes/health';
 import { uploadRoutes } from './routes/upload';
 import { notificationRoutes } from './routes/notifications';
 import { guestRoutes } from './routes/guests';
+import { apiKeyGuard } from './middleware/api-key-guard';
 
 const app = new Elysia()
-  .use(cors())
+  // Mobile app doesn't need browser CORS — disable for MVP
+  .use(cors({ origin: false }))
   .use(swagger())
   .use(healthRoutes)
   .group('/api', (app) =>
-    app.use(uploadRoutes).use(notificationRoutes).use(guestRoutes),
+    app
+      .use(apiKeyGuard)
+      .use(uploadRoutes)
+      .use(notificationRoutes)
+      .use(guestRoutes),
   )
   .listen(config.port);
 

@@ -11,12 +11,12 @@
 
 | Anggota | Sprint 1 | Sprint 2 | Total |
 |---------|----------|----------|-------|
-| Hafiz Nur Rizki | 0/10 | 0/5 | 0/15 |
+| Hafiz Nur Rizki | 10/10 | 5/5 | 15/15 |
 | Ahmad Fauzan | 10/10 | 5/5 | 15/15 |
 | Annur Syahrin Aisyah | 0/10 | 0/5 | 0/15 |
-| TOTAL | **10/30** | **5/15** | **15/45** |
+| TOTAL | **20/30** | **10/15** | **30/45** |
 
-**Persentase Selesai:** 33.3%
+**Persentase Selesai:** 66.7%
 
 ---
 
@@ -45,16 +45,16 @@
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| H1 | Domain: `user_entity.dart`, `auth_repository.dart` | D | ⬜ | — | |
-| H2 | Data: `auth_remote_datasource.dart` (Firebase Auth) | E | ⬜ | — | |
-| H3 | Data: `auth_repository_impl.dart` | D | ⬜ | — | |
-| H4 | BLoC: `auth_event.dart`, `auth_state.dart`, `auth_bloc.dart` | D | ⬜ | — | |
-| H5 | Screen: `login_screen.dart` | A | ⬜ | — | |
-| H6 | Domain: `notification_repository.dart` | D | ⬜ | — | |
-| H7 | Data: `notification_repository_impl.dart` (FCM) | E | ⬜ | — | |
-| H8 | BLoC: `notification_bloc.dart` | D | ⬜ | — | |
-| H9 | Unit tests: auth + notification | — | ⬜ | — | |
-| H10 | Offline: `auth_local_datasource.dart` (hive) | F | ⬜ | — | |
+| H1 | Domain: `user_entity.dart`, `auth_repository.dart` | D | ✅ | 2026-07-06 | |
+| H2 | Data: `auth_remote_datasource.dart` (Firebase Auth) | E | ✅ | 2026-07-06 | Email/password; Google ditunda |
+| H3 | Data: `auth_repository_impl.dart` | D | ✅ | 2026-07-06 | Offline-aware (cache Hive) |
+| H4 | BLoC: `auth_event.dart`, `auth_state.dart`, `auth_bloc.dart` | D | ✅ | 2026-07-06 | |
+| H5 | Screen: `login_screen.dart` | A | ✅ | 2026-07-06 | UI penuh sesuai DESIGN.md |
+| H6 | Domain: `notification_repository.dart` | D | ✅ | 2026-07-06 | |
+| H7 | Data: `notification_repository_impl.dart` (FCM) | E | ✅ | 2026-07-06 | FCM token + Telegram via backend |
+| H8 | BLoC: `notification_bloc.dart` | D | ✅ | 2026-07-06 | |
+| H9 | Unit tests: auth + notification | — | ✅ | 2026-07-06 | 17 test lulus |
+| H10 | Offline: `auth_local_datasource.dart` (hive) | F | ✅ | 2026-07-06 | |
 
 #### 📱 Ahmad Fauzan — Guest CRUD + Check-in/Out (8 hari)
 
@@ -111,10 +111,10 @@
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
 | H11 | Telegram Bot API service (notifikasi ke host via Telegram) | E | ✅ | 2026-07-06 | Reassigned to Ahmad |
-| H12 | Screen: `settings_screen.dart` | A | ⬜ | — | |
-| H13 | Export service: CSV | G | ⬜ | — | |
+| H12 | Screen: `settings_screen.dart` | A | ✅ | 2026-07-06 | + `SettingsCubit` (dark mode persist) |
+| H13 | Export service: CSV | G | ✅ | 2026-07-06 | `csv_export_service.dart` (share_plus) |
 | H14 | Contabo Backend API: FCM push + Telegram via ElysiaJS | E | ✅ | 2026-07-06 | Reassigned to Ahmad |
-| H15 | Widget tests: login_screen, settings_screen | — | ⬜ | — | |
+| H15 | Widget tests: login_screen, settings_screen | — | ✅ | 2026-07-06 | 8 widget test lulus |
 
 #### 📱 Ahmad Fauzan — Offline Sync + Multi-location (5 hari)
 

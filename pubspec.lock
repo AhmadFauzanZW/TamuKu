@@ -169,6 +169,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.4"
+    version: "1.4.0"
   cli_config:
     dependency: transitive
     description:
@@ -568,6 +569,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+    version: "6.3.3"
   hive:
     dependency: "direct main"
     description:
@@ -728,6 +730,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.14.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -1040,14 +1050,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  pubspec_parse:
-    dependency: transitive
-    description:
-      name: pubspec_parse
-      sha256: "0560ba233314abbed0a48a2956f7f022cce7c3e1e73df540277da7544cad4082"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.0"
   qr:
     dependency: transitive
     description:
@@ -1285,14 +1287,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  stream_transform:
-    dependency: transitive
-    description:
-      name: stream_transform
-      sha256: ad47125e588cfd37a9a7f86c7d6356dde8dfe89d071d293f80ca9e9273a33871
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.1"
   string_scanner:
     dependency: transitive
     description:
@@ -1341,6 +1335,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.17"
+      sha256: "0cc24b5ff94b38d2ae73e1eb43cc302b77964fbf67abad1e296025b78deb53d0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.12"
   typed_data:
     dependency: transitive
     description:

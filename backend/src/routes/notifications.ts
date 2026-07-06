@@ -15,10 +15,10 @@ export const notificationRoutes = new Elysia()
           body.data,
         );
         return { success: true, data: { messageId } };
-      } catch (error: any) {
+      } catch {
         return {
           success: false,
-          error: error.message || 'Gagal mengirim notifikasi push',
+          error: 'Gagal mengirim notifikasi push',
         };
       }
     },
@@ -31,17 +31,17 @@ export const notificationRoutes = new Elysia()
       }),
     },
   )
-  // Send Telegram notification
+  // Send Telegram notification — always uses server-configured bot token
   .post(
     '/notifications/telegram',
     async ({ body }) => {
       try {
-        await sendTelegramMessage(body.chatId, body.text, body.botToken);
+        await sendTelegramMessage(body.chatId, body.text);
         return { success: true };
-      } catch (error: any) {
+      } catch {
         return {
           success: false,
-          error: error.message || 'Gagal mengirim notifikasi Telegram',
+          error: 'Gagal mengirim notifikasi Telegram',
         };
       }
     },
@@ -49,7 +49,6 @@ export const notificationRoutes = new Elysia()
       body: t.Object({
         chatId: t.String(),
         text: t.String(),
-        botToken: t.Optional(t.String()),
       }),
     },
   );
