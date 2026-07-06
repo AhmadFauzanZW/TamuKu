@@ -22,6 +22,7 @@ TamuKu is a Flutter mobile app for digital guest book management. University fin
 - **Image**: image_picker
 - **Network**: connectivity_plus (online/offline detection)
 - **Caching**: cached_network_image
+- **Notifications**: firebase_messaging (FCM) + Telegram Bot API (via backend)
 
 ## Coding Rules
 1. Always read DESIGN.md before implementing any UI — use exact color tokens, spacing values, typography

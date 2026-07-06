@@ -14,7 +14,7 @@
 
 TamuKu adalah aplikasi mobile berbasis Flutter yang menggantikan buku tamu konvensional dengan sistem digital berbasis QR code. Tamu cukup memindai QR code di lokasi, mengisi formulir registrasi singkat, dan data kunjungan otomatis tercatat secara real-time.
 
-Admin dapat memantau kunjungan melalui dashboard mobile, menerima notifikasi WhatsApp saat tamu tiba, serta mengunduh data kunjungan dalam format CSV untuk keperluan pelaporan dan kepatuhan.
+Admin dapat memantau kunjungan melalui dashboard mobile, menerima notifikasi Telegram saat tamu tiba, serta mengunduh data kunjungan dalam format CSV untuk keperluan pelaporan dan kepatuhan.
 
 **Target waktu check-in: ≤ 30 detik** — dari pemindaian QR hingga data tercatat.
 

@@ -106,14 +106,14 @@
 
 ### Phase 2.1: Paralel (Hari 1-7) ⬜
 
-#### 🔧 Hafiz Nur Rizki — WhatsApp + Settings + Export (5 hari)
+#### 🔧 Hafiz Nur Rizki — Telegram + Settings + Export (5 hari)
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| H11 | WhatsApp API service (notifikasi ke host) | E | ⬜ | — | |
+| H11 | Telegram Bot API service (notifikasi ke host via Telegram) | E | ⬜ | — | |
 | H12 | Screen: `settings_screen.dart` | A | ⬜ | — | |
 | H13 | Export service: CSV | G | ⬜ | — | |
-| H14 | Contabo Backend API: FCM push + WhatsApp via ElysiaJS | E | ⬜ | — | |
+| H14 | Contabo Backend API: FCM push + Telegram via ElysiaJS | E | ⬜ | — | |
 | H15 | Widget tests: login_screen, settings_screen | — | ⬜ | — | |
 
 #### 📱 Ahmad Fauzan — Offline Sync + Multi-location (5 hari)

@@ -14,7 +14,7 @@ You are a Firebase backend specialist working on **TamuKu**, a digital guest boo
 - **Project ID**: `tamuku-app` (or team-chosen name)
 - **Schema**: 3 collections — `locations`, `guests`, `hosts`
 - **Auth**: Firebase Auth with Email/Password + Google OAuth
-- **Notifications**: FCM push + WhatsApp Business API (via Cloud Functions)
+- **Notifications**: FCM push + Telegram Bot API (via Contabo backend)
 
 ## Mandatory Rules
 

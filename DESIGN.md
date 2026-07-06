@@ -616,7 +616,7 @@
 │         (24dp gap)                │
 │  PREFERENSI                      │
 │  ┌────────────────────────────┐   │
-│  │ Notifikasi WhatsApp  [ON] │   │ ← Toggle row
+│  │ Notifikasi Telegram   [ON] │   │ ← Toggle row
 │  └────────────────────────────┘   │
 │         (8dp gap)                 │
 │  ┌────────────────────────────┐   │

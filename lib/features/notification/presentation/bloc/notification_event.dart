@@ -10,13 +10,13 @@ class InitializeNotifications extends NotificationEvent {
   const InitializeNotifications();
 }
 
-class SendWhatsAppNotification extends NotificationEvent {
+class SendTelegramNotification extends NotificationEvent {
   final String phoneNumber;
   final String guestName;
   final String locationName;
   final String checkInTime;
 
-  const SendWhatsAppNotification({
+  const SendTelegramNotification({
     required this.phoneNumber,
     required this.guestName,
     required this.locationName,

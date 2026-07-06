@@ -8,7 +8,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   @override
   Future<void> subscribeToTopic(String topic) async {}
   @override
-  Future<void> sendWhatsAppMessage({
+  Future<void> sendTelegramMessage({
     required String phoneNumber,
     required String guestName,
     required String locationName,

@@ -65,7 +65,7 @@ abstract final class AppConstants {
   static const String locationNameLabel = 'Nama Lokasi';
   static const String addressLabel = 'Alamat';
   static const String hostPhoneLabel = 'No. WhatsApp Host';
-  static const String whatsappNotificationLabel = 'Notifikasi WhatsApp';
+  static const String whatsappNotificationLabel = 'Notifikasi Telegram';
   static const String darkModeLabel = 'Mode Gelap';
   static const String logoutButton = 'Keluar';
   static const String printButton = 'Unduh / Cetak Poster';
@@ -109,4 +109,8 @@ abstract final class AppConstants {
   /// Google Sign-In Web Client ID dari Firebase Console
   static const String googleWebClientId =
       '762093911458-u891nq74tvdh8jcg9n8p40ieq1oitolg.apps.googleusercontent.com';
+
+  // ─── Telegram ────────────────────────────────────────────────────
+  /// Telegram Bot username (tanpa @)
+  static const String telegramBotUsername = 'TamuKuBot';
 }

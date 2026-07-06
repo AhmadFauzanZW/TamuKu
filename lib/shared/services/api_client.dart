@@ -37,6 +37,17 @@ class ApiClient {
     await _httpPost('/api/notifications/send', body: bodyMap);
   }
 
+  /// Send notification via Telegram Bot API through backend.
+  Future<void> sendTelegramNotification({
+    required String chatId,
+    required String text,
+  }) async {
+    await _httpPost(
+      '/api/notifications/telegram',
+      body: {'chatId': chatId, 'text': text},
+    );
+  }
+
   /// Check backend health.
   Future<bool> healthCheck() async {
     try {

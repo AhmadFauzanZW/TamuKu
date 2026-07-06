@@ -2,7 +2,7 @@ abstract class NotificationRepository {
   Future<void> initialize();
   Future<String?> getToken();
   Future<void> subscribeToTopic(String topic);
-  Future<void> sendWhatsAppMessage({
+  Future<void> sendTelegramMessage({
     required String phoneNumber,
     required String guestName,
     required String locationName,
