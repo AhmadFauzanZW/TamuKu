@@ -71,7 +71,9 @@ class _LoginViewState extends State<LoginView> {
 
   /// Validator for the email field (required + basic format).
   String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Email wajib diisi';
+    if (value == null || value.trim().isEmpty) {
+      return AppConstants.emailRequired;
+    }
     final pattern = RegExp(r'^[\w\-.]+@([\w\-]+\.)+[\w-]{2,4}$');
     if (!pattern.hasMatch(value.trim())) return AppConstants.emailInvalid;
     return null;
@@ -79,8 +81,8 @@ class _LoginViewState extends State<LoginView> {
 
   /// Validator for the password field (required + minimum length).
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return 'Password wajib diisi';
-    if (value.length < 6) return 'Password minimal 6 karakter';
+    if (value == null || value.isEmpty) return AppConstants.passwordRequired;
+    if (value.length < 6) return AppConstants.passwordTooShort;
     return null;
   }
 
@@ -185,7 +187,9 @@ class _LoginViewState extends State<LoginView> {
                     : Icons.visibility_off_outlined,
               ),
               onPressed: () => _obscurePassword.value = !obscure,
-              tooltip: obscure ? 'Tampilkan password' : 'Sembunyikan password',
+              tooltip: obscure
+                  ? AppConstants.showPassword
+                  : AppConstants.hidePassword,
             ),
           ),
           validator: _validatePassword,
@@ -227,9 +231,7 @@ class _LoginViewState extends State<LoginView> {
             : () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text(
-                      'Login dengan Google belum tersedia. Segera hadir.',
-                    ),
+                    content: Text(AppConstants.googleNotAvailable),
                   ),
                 );
               },
@@ -296,7 +298,7 @@ class _OrDivider extends StatelessWidget {
         Expanded(child: Divider(color: AppColors.border)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Text('atau', style: AppTextStyles.caption),
+          child: Text(AppConstants.orDivider, style: AppTextStyles.caption),
         ),
         Expanded(child: Divider(color: AppColors.border)),
       ],
