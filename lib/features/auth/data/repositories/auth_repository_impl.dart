@@ -11,8 +11,8 @@ import '../datasources/auth_remote_datasource.dart';
 ///
 /// **Sign-in**: authenticate remotely → cache user locally → return entity.
 /// **Sign-out**: sign out remotely → clear local cache.
-  /// **Stream**: maps [FirebaseAuth] auth-state changes to [UserEntity] and
-  /// caches the latest user map to local storage.
+/// **Stream**: maps [FirebaseAuth] auth-state changes to [UserEntity] and
+/// caches the latest user map to local storage.
 /// Errors are propagated as thrown exceptions (the [AuthBloc] catches them),
 /// matching the existing throw-based [AuthRepository] contract.
 class AuthRepositoryImpl implements AuthRepository {

@@ -134,7 +134,8 @@ abstract final class AppConstants {
   static const String loginSuccessMessage = 'Berhasil masuk sebagai admin';
   static const String showPassword = 'Tampilkan password';
   static const String hidePassword = 'Sembunyikan password';
-  static const String googleNotAvailable = 'Login dengan Google belum tersedia. Segera hadir.';
+  static const String googleNotAvailable =
+      'Login dengan Google belum tersedia. Segera hadir.';
   static const String orDivider = 'atau';
 
   // ─── Settings UI Strings ─────────────────────────────────────────

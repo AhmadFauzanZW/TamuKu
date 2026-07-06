@@ -86,9 +86,7 @@ Future<void> init() async {
   );
 
   // ─── Services ────────────────────────────────────────────────────
-  getIt.registerLazySingleton<CsvExportService>(
-    () => const CsvExportService(),
-  );
+  getIt.registerLazySingleton<CsvExportService>(() => const CsvExportService());
 
   // ─── BLoCs ──────────────────────────────────────────────────────
   getIt.registerFactory(() => GuestBloc(repository: getIt<GuestRepository>()));

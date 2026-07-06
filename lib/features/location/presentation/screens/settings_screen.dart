@@ -88,19 +88,22 @@ class _ProfileCard extends StatelessWidget {
           _ProfileTile(
             icon: Icons.location_on_outlined,
             label: AppConstants.locationNameLabel,
-            value: 'Kantor Desa Cakrawala', // TODO: fetch from Firestore LocationEntity
+            value:
+                'Kantor Desa Cakrawala', // TODO: fetch from Firestore LocationEntity
           ),
           Divider(height: 1, color: AppColors.border),
           _ProfileTile(
             icon: Icons.map_outlined,
             label: AppConstants.addressLabel,
-            value: 'Jl. Merdeka No. 10, Bandung', // TODO: fetch from Firestore LocationEntity
+            value:
+                'Jl. Merdeka No. 10, Bandung', // TODO: fetch from Firestore LocationEntity
           ),
           Divider(height: 1, color: AppColors.border),
           _ProfileTile(
             icon: Icons.phone_outlined,
             label: AppConstants.hostPhoneLabel,
-            value: '+6281234567890', // TODO: fetch from Firestore LocationEntity
+            value:
+                '+6281234567890', // TODO: fetch from Firestore LocationEntity
           ),
         ],
       ),
