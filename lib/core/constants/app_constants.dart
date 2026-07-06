@@ -18,7 +18,11 @@ abstract final class AppConstants {
   static const String fieldHostPhone = 'hostPhone';
   static const String fieldStatus = 'status';
   static const List<String> keperluanOptions = [
-    'Meeting', 'Personal', 'Kantor', 'Pengiriman', 'Lainnya',
+    'Meeting',
+    'Personal',
+    'Kantor',
+    'Pengiriman',
+    'Lainnya',
   ];
   static const String statusCheckedIn = 'checked_in';
   static const String statusCheckedOut = 'checked_out';
@@ -45,9 +49,11 @@ abstract final class AppConstants {
   static const String thankYouTitle = 'Terima kasih!';
   static const String thankYouMessage = 'Data kunjungan Anda sudah tercatat.';
   static const String checkoutTitle = 'Konfirmasi Check-Out';
-  static const String checkoutMessage = 'Tekan tombol di bawah untuk mencatat waktu kepulangan Anda.';
+  static const String checkoutMessage =
+      'Tekan tombol di bawah untuk mencatat waktu kepulangan Anda.';
   static const String qrNotFoundTitle = 'QR Code Tidak Dikenal';
-  static const String qrNotFoundMessage = 'QR tidak valid atau sudah kedaluwarsa. Silakan hubungi resepsionis.';
+  static const String qrNotFoundMessage =
+      'QR tidak valid atau sudah kedaluwarsa. Silakan hubungi resepsionis.';
   static const String scanAgainButton = 'Scan Ulang';
   static const String searchHint = 'Cari nama tamu...';
   static const String filterToday = 'Hari Ini';
@@ -82,4 +88,25 @@ abstract final class AppConstants {
   static const String keyHostId = 'hostId';
   static const int qrCodeExpiryMinutes = 1440;
   static const int autoRefreshSeconds = 30;
+
+  // ─── Storage (Contabo S3) ──────────────────────────────────────────
+  /// Maximum file size for guest photos (5MB)
+  static const int maxPhotoSizeBytes = 5 * 1024 * 1024;
+
+  /// Allowed image MIME types for guest photos
+  static const List<String> allowedImageTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+  ];
+
+  // ─── Backend API ──────────────────────────────────────────────────
+  /// Contabo VPS backend base URL
+  /// Ganti dengan URL production setelah deploy
+  static const String backendBaseUrl = 'http://localhost:3000';
+
+  // ─── Firebase / Auth ────────────────────────────────────────────────
+  /// Google Sign-In Web Client ID dari Firebase Console
+  static const String googleWebClientId =
+      '762093911458-u891nq74tvdh8jcg9n8p40ieq1oitolg.apps.googleusercontent.com';
 }

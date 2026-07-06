@@ -3,7 +3,7 @@
 > Tracker progress pengerjaan proyek TamuKu.
 > Update file ini setiap kali menyelesaikan tugas. Centang ✅ yang sudah selesai.
 
-**Terakhir diperbarui:** 2026-07-05
+**Terakhir diperbarui:** 2026-07-06
 
 ---
 
@@ -113,7 +113,7 @@
 | H11 | WhatsApp API service (notifikasi ke host) | E | ⬜ | — | |
 | H12 | Screen: `settings_screen.dart` | A | ⬜ | — | |
 | H13 | Export service: CSV | G | ⬜ | — | |
-| H14 | Cloud Functions: trigger notifikasi on Firestore write | E | ⬜ | — | |
+| H14 | Contabo Backend API: FCM push + WhatsApp via ElysiaJS | E | ⬜ | — | |
 | H15 | Widget tests: login_screen, settings_screen | — | ⬜ | — | |
 
 #### 📱 Ahmad Fauzan — Offline Sync + Multi-location (5 hari)

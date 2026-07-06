@@ -13,7 +13,9 @@ TamuKu is a Flutter mobile app for digital guest book management. University fin
 - **Framework**: Flutter 3.x (latest stable)
 - **State Management**: flutter_bloc 8.x (NEVER use setState, NEVER use Provider, NEVER use Riverpod)
 - **State Equivalence**: equatable 2.x (required for all BLoC states and events)
-- **Backend**: Firebase (Firestore, Auth, FCM, Storage, Cloud Functions)
+- **Backend**: Firebase (Firestore, Auth, FCM)
+- **Backend API**: ElysiaJS + Bun on Contabo VPS (replaces Cloud Functions + Firebase Storage)
+- **API Client**: http package (for Contabo backend calls)
 - **Local Storage**: hive + sqflite (offline fallback)
 - **QR**: qr_flutter (generate) + mobile_scanner (scan)
 - **Charts**: fl_chart
@@ -60,6 +62,7 @@ lib/features/[feature]/
 - `lib/core/` — Theme, constants, routes, utils, errors
 - `lib/features/` — Feature modules (auth, guest, location, notification)
 - `lib/shared/widgets/` — Reusable UI components
+- `lib/shared/services/` — API client, S3 config
 - `lib/injection_container.dart` — Dependency injection (get_it)
 
 ## Design System

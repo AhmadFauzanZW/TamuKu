@@ -69,7 +69,7 @@
 2. **Admin (Authenticated)** — Email/Google sign-in → full dashboard with CRUD operations.
 
 **Notification pipeline:**
-- Guest checks in → Firestore write → Cloud Function triggers → FCM push + WhatsApp API message to host phone.
+- Guest checks in → Firestore write → Contabo backend API reads event → backend sends FCM push notification + WhatsApp API message to host phone.
 
 ---
 
@@ -150,7 +150,7 @@ Sync path:   Background queue processes pending writes when connectivity restore
 | `firebase_auth` | Authentication | Admin login |
 | `firebase_core` | Firebase initialization | App startup |
 | `firebase_messaging` | Push notifications | Guest check-in alerts |
-| `firebase_storage` | File storage | Guest photos |
+| `http` | HTTP client | Contabo backend API calls |
 | `qr_flutter` | QR code generation | QR generator screen |
 | `mobile_scanner` | QR code scanning | Guest scan screen |
 | `fl_chart` | Charts and graphs | Dashboard 7-day chart |
@@ -174,16 +174,16 @@ Sync path:   Background queue processes pending writes when connectivity restore
 | Framework | Flutter | 3.x (latest stable) |
 | **State Management** | **flutter_bloc** | **8.x** |
 | **State Equivalence** | **equatable** | **2.x** |
-| Backend | Firebase | Latest |
+| **Backend API** | **ElysiaJS + Bun** | **5.x** |
+| **Backend Host** | **Contabo VPS** | — |
 | Database | Cloud Firestore | — |
 | Authentication | Firebase Auth (Email + Google OAuth) | — |
 | **Local Storage (Offline)** | **hive** + **sqflite** | — |
 | QR Generation | qr_flutter | 4.x |
 | QR Scanning | mobile_scanner | 5.x |
 | Image Picker | image_picker | — |
-| File Storage | Firebase Storage | — |
+| **File Storage** | **Contabo S3 (minio)** | — |
 | Notifications | FCM + WhatsApp Business API | — |
-| Analytics | Firebase Analytics | — |
 | **Charts** | **fl_chart** | — |
 | **Network Detection** | **connectivity_plus** | — |
 | **Image Caching** | **cached_network_image** | — |
@@ -338,6 +338,21 @@ tamuku/
 │
 ├── android/
 ├── ios/
+├── backend/                                     # Contabo VPS backend
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── .env.example
+│   ├── Dockerfile
+│   └── src/
+│       ├── index.ts                             # Entry point
+│       ├── config.ts                            # Environment config
+│       ├── routes/
+│       │   ├── health.ts                        # Health check endpoint
+│       │   ├── upload.ts                        # S3 presigned URL
+│       │   └── notifications.ts                 # FCM push via backend
+│       └── services/
+│           ├── s3.ts                            # Minio/S3 client
+│           └── fcm.ts                           # Firebase Admin FCM
 ├── firebase.json
 ├── firestore.rules
 ├── firestore.indexes.json
@@ -493,10 +508,13 @@ tamuku/
 |---------|---------|
 | Cloud Firestore | Primary database |
 | Firebase Auth | Email/password + Google OAuth sign-in |
-| Firebase Storage | Guest photo uploads |
-| Cloud Functions | Trigger notifications on Firestore writes |
 | Cloud Messaging (FCM) | Push notifications to admin devices |
-| Firebase Analytics | Usage tracking |
+
+**Replaced by Contabo VPS backend:**
+| Service | Replacement |
+|---------|-------------|
+| Cloud Functions | ElysiaJS backend on Contabo VPS (FCM + WhatsApp API) |
+| Firebase Storage | Contabo S3 (minio package in Flutter) |
 
 **Firestore Security Rules:**
 ```
@@ -575,7 +593,7 @@ Every AI agent working on this codebase MUST follow these rules:
 |------|-------|-------------|
 | **W1** | Setup + Widget Foundations + Theme | Flutter project init, Firebase setup, theme system (DESIGN.md tokens), routing, `constants.dart`, demonstrate all widget categories (layout, scrolling, text, input, display, navigation, feedback) in scaffold screens. Implement `ListView.builder` in guest list. |
 | **W2** | BLoC Architecture + Auth + Models | BLoC setup (`flutter_bloc`), dependency injection, Firebase Auth (email + Google), `AuthBloc` with events/states, data models with `equatable`, `FutureBuilder` for settings, `StreamBuilder` for real-time data, Firestore CRUD services. |
-| **W3** | Features + Offline + Integration | `GuestBloc` + `LocationBloc`, Repository pattern, Firebase Remote + Local DataSources (Hive/SQLite offline cache), `connectivity_plus` for online/offline switching, QR scanner/generator, guest form → check-in flow, FCM notifications, WhatsApp API. |
+| **W3** | Features + Offline + Integration | `GuestBloc` + `LocationBloc`, Repository pattern, Firebase Remote + Local DataSources (Hive/SQLite offline cache), `connectivity_plus` for online/offline switching, QR scanner/generator, guest form → check-in flow, Contabo backend API (presigned URL upload + FCM push), WhatsApp API notification. |
 | **W4** | Polish + Testing + SaaS Prep | Dashboard with `fl_chart`, CSV/PDF export, search & filter, BLoC unit tests (`bloc_test`), widget tests, integration tests (scan → form → submit → confirm), offline sync verification, UAT, bug fixes, final demo. |
 
 **Definition of done per sprint:**
@@ -619,6 +637,7 @@ This project is designed as a university MVP that doubles as the foundation for 
 | Dependency injection | Testability, mock-friendly, environment-switching (dev/staging/prod) |
 | equatable | Prevents unnecessary rebuilds, reduces bugs in state comparison |
 | Clean Architecture layers | Domain layer can be reused across platforms (mobile, web, desktop) |
+| Contabo VPS backend (ElysiaJS) | Self-hosted API avoids vendor lock-in, lower cost at scale, full control over notification pipeline |
 
 ### Future SaaS Enhancements (Post-MVP)
 - Multi-tenant architecture (admin manages multiple organizations)
@@ -683,14 +702,20 @@ flutter build ios
 # Deploy Firestore rules
 firebase deploy --only firestore:rules
 
-# Deploy Cloud Functions
-firebase deploy --only functions
-
 # View Flutter dependencies
 flutter pub deps
+
+# Backend (Contabo VPS)
+cd backend
+bun install
+bun run dev
+
+# Build backend for production
+cd backend
+bun run build
 ```
 
 ---
 
-*Last updated: 2026-07-05*
+*Last updated: 2026-07-06*
 *Maintained by: AI Agent System + Ahmad Fauzan*

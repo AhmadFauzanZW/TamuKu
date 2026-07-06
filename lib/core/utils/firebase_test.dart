@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import '../../shared/services/s3_storage_service.dart';
 
 /// Temporary connection test utilities.
 /// Delete after all services confirmed working.
@@ -44,17 +44,21 @@ class FirebaseTest {
     }
   }
 
-  /// Test Firebase Storage upload/download
-  static Future<void> testStorage() async {
+  /// Test Contabo S3 connection
+  static Future<void> testS3() async {
     try {
-      final ref = FirebaseStorage.instance.ref().child('test/hello.txt');
-      await ref.putString('TamuKu Storage connected!');
-      final url = await ref.getDownloadURL();
-      // ignore: avoid_print
-      print('✅ Storage connected! URL: $url');
+      final service = S3StorageService();
+      final healthy = await service.healthCheck();
+      if (healthy) {
+        // ignore: avoid_print
+        print('✅ S3 Storage connected!');
+      } else {
+        // ignore: avoid_print
+        print('❌ S3 bucket not reachable');
+      }
     } catch (e) {
       // ignore: avoid_print
-      print('❌ Storage error: $e');
+      print('❌ S3 error: $e');
     }
   }
 
@@ -76,7 +80,7 @@ class FirebaseTest {
     print('=== Firebase Connection Tests ===');
     await testFirestore();
     await testAuth();
-    await testStorage();
+    await testS3();
     await testFCM();
     // ignore: avoid_print
     print('=== Tests Complete ===');

@@ -1,0 +1,22 @@
+{
+  "name": "tamuku-backend",
+  "version": "1.0.0",
+  "description": "TamuKu Backend API — ElysiaJS on Contabo VPS",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "start": "bun dist/index.js"
+  },
+  "dependencies": {
+    "elysia": "^5.0.0",
+    "@elysiajs/cors": "^5.0.0",
+    "@elysiajs/swagger": "^5.0.0",
+    "firebase-admin": "^12.0.0",
+    "minio": "^8.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

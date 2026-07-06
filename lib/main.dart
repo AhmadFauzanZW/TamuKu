@@ -16,7 +16,7 @@ void main() async {
     FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   }
-
+  
   await di.init();
   runApp(const TamuKuApp());
 }

@@ -51,3 +51,5 @@ app.*.map.json
 docs/FIREBASE_SETUP.md
 
 node_modules/
+
+*.docx
