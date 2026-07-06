@@ -5,13 +5,15 @@ import { config } from './config';
 import { healthRoutes } from './routes/health';
 import { uploadRoutes } from './routes/upload';
 import { notificationRoutes } from './routes/notifications';
+import { guestRoutes } from './routes/guests';
 
 const app = new Elysia()
   .use(cors())
   .use(swagger())
   .use(healthRoutes)
-  .use(uploadRoutes.group('/api'))
-  .use(notificationRoutes.group('/api'))
+  .group('/api', (app) =>
+    app.use(uploadRoutes).use(notificationRoutes).use(guestRoutes),
+  )
   .listen(config.port);
 
 console.log(`🦊 TamuKu Backend running at http://${config.host}:${config.port}`);

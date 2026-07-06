@@ -34,6 +34,7 @@ dependencies:
   lottie: ^3.2.0
   permission_handler: ^11.3.1
   get_it: ^8.0.2
+  fpdart: ^1.1.1
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
 
@@ -43,6 +44,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   bloc_test: ^9.1.7
   mocktail: ^1.0.4
+  test: ^1.25.8
   build_runner: ^2.4.14
   freezed: ^2.5.8
   json_serializable: ^6.9.2

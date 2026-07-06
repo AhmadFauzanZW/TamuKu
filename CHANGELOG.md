@@ -23,6 +23,37 @@ Semua perubahan tercatat di sini, diurutkan dari yang terbaru. Setiap entri haru
 
 ---
 
+## [0.2.0] — 2026-07-06
+
+### Ditambahkan
+- **[Domain]** GuestEntity + GuestStatus + Keperluan enums — Concept: D — Oleh: AF
+- **[Domain]** GuestRepository abstract interface — Concept: D — Oleh: AF
+- **[Data]** GuestRemoteDataSource (Firestore CRUD) — Concept: E — Oleh: AF
+- **[Data]** GuestLocalDataSource (Hive offline cache) — Concept: F — Oleh: AF
+- **[Data]** GuestRepositoryImpl (offline-first strategy) — Concept: D+F — Oleh: AF
+- **[Data]** SyncQueueService + SyncOperation (pending writes queue) — Concept: F — Oleh: AF
+- **[Data]** NetworkInfo (connectivity_plus) — Concept: G — Oleh: AF
+- **[BLoC]** GuestBloc (LoadGuests, CheckIn, CheckOut, Delete, Search) — Concept: D — Oleh: AF
+- **[BLoC]** GuestFormBloc (photo, keperluan, submit state) — Concept: D — Oleh: AF
+- **[Screen]** GuestFormScreen (registration form with validation) — Concept: A — Oleh: AF
+- **[Screen]** ConfirmationScreen (check-in success) — Concept: A — Oleh: AF
+- **[Screen]** CheckoutScreen (check-out with duration) — Concept: A — Oleh: AF
+- **[Screen]** ErrorScreen (generic error display) — Concept: A — Oleh: AF
+- **[Widget]** GuestTile (guest list item with badges) — Concept: B — Oleh: AF
+- **[Widget]** StatCard (dashboard metric card) — Concept: A — Oleh: AF
+- **[Widget]** GuestSearchBar (debounced search) — Concept: A — Oleh: AF
+- **[Widget]** GuestFilterChips (status filter) — Concept: A — Oleh: AF
+- **[Widget]** ConnectivityBanner (offline indicator) — Concept: G — Oleh: AF
+- **[Widget]** PhotoPickerSection (camera/gallery picker) — Concept: A — Oleh: AF
+- **[Widget]** GuestSubmitButton (loading-aware submit) — Concept: A — Oleh: AF
+- **[Backend]** Telegram Bot API service (H11) — Concept: E — Oleh: AF
+- **[Backend]** Contabo Backend API enhanced (H14) — FCM + Telegram dual notify — Concept: E — Oleh: AF
+- **[Backend]** Guest notification endpoint — Concept: E — Oleh: AF
+- **[Testing]** 27 unit tests (repository + bloc) — Oleh: AF
+- **[Testing]** 27 widget tests (screens + widgets) — Oleh: AF
+
+---
+
 ## [0.1.0] — 2026-07-05
 
 ### Ditambahkan

@@ -9,9 +9,9 @@
     "start": "bun dist/index.js"
   },
   "dependencies": {
-    "elysia": "^5.0.0",
-    "@elysiajs/cors": "^5.0.0",
-    "@elysiajs/swagger": "^5.0.0",
+    "elysia": "^1.4.0",
+    "@elysiajs/cors": "^1.3.0",
+    "@elysiajs/swagger": "^1.3.0",
     "firebase-admin": "^12.0.0",
     "minio": "^8.0.0",
     "dotenv": "^16.4.0"

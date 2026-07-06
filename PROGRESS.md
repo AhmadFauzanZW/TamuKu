@@ -12,11 +12,11 @@
 | Anggota | Sprint 1 | Sprint 2 | Total |
 |---------|----------|----------|-------|
 | Hafiz Nur Rizki | 0/10 | 0/5 | 0/15 |
-| Ahmad Fauzan | 6/10 | 0/5 | 6/15 |
+| Ahmad Fauzan | 10/10 | 5/5 | 15/15 |
 | Annur Syahrin Aisyah | 0/10 | 0/5 | 0/15 |
-| TOTAL | **7/30** | **0/15** | **7/45** |
+| TOTAL | **10/30** | **5/15** | **15/45** |
 
-Persentase Selesai:** 15.6%
+**Persentase Selesai:** 33.3%
 
 ---
 
@@ -60,16 +60,16 @@ Persentase Selesai:** 15.6%
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| A1 | Domain: `guest_entity.dart`, `guest_repository.dart` | D | ⬜ | — | |
-| A2 | Data: `guest_remote_datasource.dart` (Firestore) | E | ⬜ | — | |
-| A3 | Data: `guest_repository_impl.dart` (remote+local) | D+F | ⬜ | — | |
-| A4 | Data: `guest_local_datasource.dart` (hive/sqflite) | F | ⬜ | — | |
-| A5 | BLoC: `guest_event.dart`, `guest_state.dart`, `guest_bloc.dart` | D | ⬜ | — | |
-| A6 | Screen: `guest_form_screen.dart` | A | ⬜ | — | |
-| A7 | Screen: `confirmation_screen.dart` + `checkout_screen.dart` | A | ⬜ | — | |
-| A8 | Screen: `error_screen.dart` | A | ⬜ | — | |
-| A9 | Widget: `guest_tile.dart` | B | ⬜ | — | |
-| A10 | Unit tests: guest_repository + bloc | — | ⬜ | — | |
+| A1 | Domain: `guest_entity.dart`, `guest_repository.dart` | D | ✅ | 2026-07-06 | |
+| A2 | Data: `guest_remote_datasource.dart` (Firestore) | E | ✅ | 2026-07-06 | |
+| A3 | Data: `guest_repository_impl.dart` (remote+local) | D+F | ✅ | 2026-07-06 | |
+| A4 | Data: `guest_local_datasource.dart` (hive/sqflite) | F | ✅ | 2026-07-06 | |
+| A5 | BLoC: `guest_event.dart`, `guest_state.dart`, `guest_bloc.dart` | D | ✅ | 2026-07-06 | |
+| A6 | Screen: `guest_form_screen.dart` | A | ✅ | 2026-07-06 | |
+| A7 | Screen: `confirmation_screen.dart` + `checkout_screen.dart` | A | ✅ | 2026-07-06 | |
+| A8 | Screen: `error_screen.dart` | A | ✅ | 2026-07-06 | |
+| A9 | Widget: `guest_tile.dart` | B | ✅ | 2026-07-06 | |
+| A10 | Unit tests: guest_repository + bloc | — | ✅ | 2026-07-06 | |
 
 #### 🎨 Annur Syahrin Aisyah — Location + QR + Dashboard (8.5 hari)
 
@@ -110,21 +110,21 @@ Persentase Selesai:** 15.6%
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| H11 | Telegram Bot API service (notifikasi ke host via Telegram) | E | ⬜ | — | |
+| H11 | Telegram Bot API service (notifikasi ke host via Telegram) | E | ✅ | 2026-07-06 | Reassigned to Ahmad |
 | H12 | Screen: `settings_screen.dart` | A | ⬜ | — | |
 | H13 | Export service: CSV | G | ⬜ | — | |
-| H14 | Contabo Backend API: FCM push + Telegram via ElysiaJS | E | ⬜ | — | |
+| H14 | Contabo Backend API: FCM push + Telegram via ElysiaJS | E | ✅ | 2026-07-06 | Reassigned to Ahmad |
 | H15 | Widget tests: login_screen, settings_screen | — | ⬜ | — | |
 
 #### 📱 Ahmad Fauzan — Offline Sync + Multi-location (5 hari)
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| A11 | Offline sync queue: pending writes → sync saat online | F | ⬜ | — | |
-| A12 | `connectivity_plus` integration | G | ⬜ | — | |
-| A13 | Multi-location support | D | ⬜ | — | |
-| A14 | Shared widgets: `stat_card.dart`, `search_bar.dart`, `filter_chips.dart` | A | ⬜ | — | |
-| A15 | Widget tests: guest_form, confirmation | — | ⬜ | — | |
+| A11 | Offline sync queue: pending writes → sync saat online | F | ✅ | 2026-07-06 | |
+| A12 | `connectivity_plus` integration | G | ✅ | 2026-07-06 | |
+| A13 | Multi-location support | D | ✅ | 2026-07-06 | |
+| A14 | Shared widgets: `stat_card.dart`, `search_bar.dart`, `filter_chips.dart` | A | ✅ | 2026-07-06 | |
+| A15 | Widget tests: guest_form, confirmation | — | ✅ | 2026-07-06 | |
 
 #### 🎨 Annur Syahrin Aisyah — Chart + Dark Mode + Polish (5 hari)
 

@@ -1,26 +1,80 @@
 import { config } from '../config';
 
+const TELEGRAM_API = 'https://api.telegram.org/bot';
+
 /**
- * Send notification via Telegram Bot API.
- * Bot must be created via @BotFather on Telegram.
+ * Send a text message via Telegram Bot API.
+ * Uses native fetch — no external HTTP dependency.
+ * @param chatId — Telegram chat/group ID (numeric or @username)
+ * @param text — Message content (supports HTML parse_mode)
+ * @param botToken — Optional override bot token, falls back to config
+ * @returns true on success
  */
 export async function sendTelegramMessage(
   chatId: string,
   text: string,
-): Promise<void> {
-  const url = `https://api.telegram.org/bot${config.telegram.botToken}/sendMessage`;
-  const response = await fetch(url, {
+  botToken?: string,
+): Promise<boolean> {
+  const token = botToken || config.telegram.botToken;
+  if (!token) throw new Error('Telegram bot token not configured');
+
+  const url = `${TELEGRAM_API}${token}/sendMessage`;
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: chatId,
       text,
       parse_mode: 'HTML',
+      disable_web_page_preview: true,
     }),
   });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Telegram API error: ${response.status} ${error}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      `Telegram API error (${res.status}): ${err.description || res.statusText}`,
+    );
   }
+
+  return true;
 }
+
+/** Params for guest check-in notification */
+export interface GuestNotificationParams {
+  hostPhone: string;
+  guestName: string;
+  keperluan: string;
+  instansi?: string;
+  locationName: string;
+  botToken?: string;
+}
+
+/**
+ * Format and send a guest check-in notification via Telegram.
+ * Constructs a human-readable message in Bahasa Indonesia.
+ */
+export async function sendGuestNotification(
+  params: GuestNotificationParams,
+): Promise<boolean> {
+  const { hostPhone, guestName, keperluan, instansi, locationName, botToken } =
+    params;
+
+  const lines = [
+    `🏢 <b>Tamu Baru — ${locationName}</b>`,
+    '',
+    `👤 <b>Nama:</b> ${guestName}`,
+    `📋 <b>Keperluan:</b> ${keperluan}`,
+  ];
+
+  if (instansi) lines.push(`🏛️ <b>Instansi:</b> ${instansi}`);
+  lines.push(
+    '',
+    `🕐 ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`,
+  );
+
+  return sendTelegramMessage(hostPhone, lines.join('\n'), botToken);
+}
+
+/** Alias for backward compatibility */
+export { sendTelegramMessage as sendTelegram };

@@ -17,6 +17,8 @@ abstract final class AppConstants {
   static const String fieldCheckOutTime = 'checkOutTime';
   static const String fieldHostPhone = 'hostPhone';
   static const String fieldStatus = 'status';
+  static const String fieldAddress = 'address';
+  static const String fieldAdminId = 'adminId';
   static const List<String> keperluanOptions = [
     'Meeting',
     'Personal',
@@ -88,6 +90,13 @@ abstract final class AppConstants {
   static const String keyHostId = 'hostId';
   static const int qrCodeExpiryMinutes = 1440;
   static const int autoRefreshSeconds = 30;
+
+  // ─── Local Storage (Hive) ─────────────────────────────────────────
+  /// Hive box name for cached guest data
+  static const String boxNameGuests = 'guests';
+
+  /// Hive box name for sync queue operations
+  static const String boxNameSyncQueue = 'sync_queue';
 
   // ─── Storage (Contabo S3) ──────────────────────────────────────────
   /// Maximum file size for guest photos (5MB)

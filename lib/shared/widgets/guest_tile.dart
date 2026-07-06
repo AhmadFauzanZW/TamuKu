@@ -7,7 +7,8 @@ import '../../core/constants/app_constants.dart';
 
 /// Guest list tile matching DESIGN.md Section 8.3.
 ///
-/// Row with avatar, name/purpose, and time/status badge.
+/// Row with avatar, name/instansi/keperluan, and time/status badge.
+/// Tap navigates to checkout screen.
 class GuestTile extends StatelessWidget {
   final GuestEntity guest;
   final VoidCallback? onTap;
@@ -19,7 +20,7 @@ class GuestTile extends StatelessWidget {
     final initials = guest.name.length >= 2
         ? guest.name.substring(0, 2).toUpperCase()
         : guest.name.toUpperCase();
-    final isCheckedOut = guest.status == AppConstants.statusCheckedOut;
+    final isCheckedOut = guest.status == GuestStatus.checkedOut;
     final time = guest.checkOutTime ?? guest.checkInTime;
     final timeStr =
         '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
@@ -28,6 +29,11 @@ class GuestTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.sm,
+      ),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: InkWell(
         onTap: onTap,
@@ -56,12 +62,19 @@ class GuestTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      guest.keperluan,
-                      style: AppTextStyles.body.copyWith(
-                        color: AppColors.textSecondary,
+                    if (guest.instansi != null && guest.instansi!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                        child: Text(
+                          guest.instansi!,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
+                    _KeperluanBadge(keperluan: guest.keperluan),
                   ],
                 ),
               ),
@@ -103,6 +116,34 @@ class _StatusBadge extends StatelessWidget {
           fontSize: 10,
           fontWeight: FontWeight.w500,
           color: isCheckedOut ? AppColors.primary700 : AppColors.accentAmber,
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact chip showing the visit purpose (keperluan).
+class _KeperluanBadge extends StatelessWidget {
+  final Keperluan keperluan;
+  const _KeperluanBadge({required this.keperluan});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.primary50,
+        borderRadius: BorderRadius.circular(AppRadius.xs),
+      ),
+      child: Text(
+        keperluan.toValue(),
+        style: AppTextStyles.caption.copyWith(
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+          color: AppColors.primary700,
         ),
       ),
     );
