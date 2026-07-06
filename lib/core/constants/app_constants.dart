@@ -98,6 +98,9 @@ abstract final class AppConstants {
   /// Hive box name for sync queue operations
   static const String boxNameSyncQueue = 'sync_queue';
 
+  /// Hive box name for the cached authenticated user (offline session)
+  static const String boxNameAuth = 'auth';
+
   // ─── Storage (Contabo S3) ──────────────────────────────────────────
   /// Maximum file size for guest photos (5MB)
   static const int maxPhotoSizeBytes = 5 * 1024 * 1024;
