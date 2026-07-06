@@ -26,7 +26,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(Authenticated(user));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      final raw = e.toString();
+      final message = raw.contains(': ')
+          ? raw.split(': ').skip(1).join(': ')
+          : raw;
+      emit(AuthError(message));
     }
   }
 
