@@ -11,21 +11,19 @@ class DashboardScreen extends StatelessWidget {
           'Dashboard Admin',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(
-          0xff1B5E20,
-        ), // Primary Color #1B5E20 dari laporan
+        backgroundColor: const Color(0xff1B5E20), // Primary Color #1B5E20 [Sesuai Dokumen]
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // Jalur navigasi ke settings_screen nanti
+              // Jalur navigasi ke settings_screen
             },
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0), // Spacing: card padding 16dp
+        padding: const EdgeInsets.all(16.0), // Spacing: card padding 16dp [Sesuai Dokumen]
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -35,7 +33,7 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Grid Ringkasan Stat Cards (Menggunakan Row & Expanded)
+            // Grid Ringkasan Stat Cards
             Row(
               children: [
                 _buildStatCard('Total Tamu', '24', Icons.people, Colors.blue),
@@ -58,11 +56,9 @@ class DashboardScreen extends StatelessWidget {
 
             // Placeholder Area Grafik Batang fl_chart
             Card(
-              elevation: 1, // Elevation: 1 sesuai laporan
+              elevation: 1, // Elevation: 1 [Sesuai Dokumen]
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  16,
-                ), // Border Radius Cards: 16dp
+                borderRadius: BorderRadius.circular(16), // Border Radius Cards: 16dp [Sesuai Dokumen]
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -104,21 +100,21 @@ class DashboardScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 6),
-                  elevation: 1,
+                  elevation: 1, // Elevation: 1 [Sesuai Dokumen]
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16), // Diubah dari 12 ke 16 agar konsisten dengan Design System [Sesuai Dokumen]
                   ),
                   child: const ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Color(0xff1B5E20),
+                      backgroundColor: Color(0xff1B5E20), // Primary Green [Sesuai Dokumen]
                       child: Icon(Icons.person, color: Colors.white),
                     ),
                     title: Text('Nama Tamu'),
                     subtitle: Text('Keperluan: Pertemuan / Kunjungan'),
                     trailing: Text(
-                      '10:05 WIB',
+                      '10:05 WIB', // Format Indonesian-first WIB [Sesuai Dokumen]
                       style: TextStyle(color: Colors.grey, fontSize: 12),
-                    ), // Format WIB
+                    ),
                   ),
                 );
               },
@@ -138,9 +134,9 @@ class DashboardScreen extends StatelessWidget {
   ) {
     return Expanded(
       child: Card(
-        elevation: 1, // Elevation: 1 sesuai aturan rancangan
+        elevation: 1, // Elevation: 1 [Sesuai Dokumen]
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Radius 16dp
+          borderRadius: BorderRadius.circular(16), // Radius 16dp [Sesuai Dokumen]
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
