@@ -14,22 +14,22 @@
 | Hafiz Nur Rizki | 0/10 | 0/5 | 0/15 |
 | Ahmad Fauzan | 6/10 | 0/5 | 6/15 |
 | Annur Syahrin Aisyah | 0/10 | 0/5 | 0/15 |
-| **TOTAL** | **6/30** | **0/15** | **6/45** |
+| TOTAL | **7/30** | **0/15** | **7/45** |
 
-**Persentase Selesai:** 13.3%
+Persentase Selesai:** 15.6%
 
 ---
 
 ## Sprint 1: Fondasi + Fitur Inti (Minggu 1-2)
 
-### Phase 1.1: Setup Bersama (Hari 1-2) ⬜
+### Phase 1.1: Setup Bersama (Hari 1-2) ✅
 
 > ⚠️ Phase ini harus selesai SEBELUM Phase 1.2 dimulai. Semua anggota mengerjakan BERSAMA.
 
 | # | Tugas | Siapa | Status | Tanggal Selesai | Catatan |
 |---|-------|-------|--------|-----------------|---------|
 | S1 | Inisialisasi project Flutter (`flutter create tamuku`) | Semua | ✅ | 2026-07-05 | |
-| S2 | Konfigurasi Firebase (`flutterfire configure`) | Semua | ⬜ | — | |
+| S2 | Konfigurasi Firebase (`flutterfire configure`) | Semua | ✅ | 2026-07-06 | Firebase project: tamuku-6360f |
 | S3 | Setup `pubspec.yaml` + semua dependencies | Semua | ✅ | 2026-07-05 | |
 | S4 | Setup folder Clean Architecture | Semua | ✅ | 2026-07-05 | |
 | S5 | Setup theme system dari DESIGN.md | Semua | ✅ | 2026-07-05 | |
