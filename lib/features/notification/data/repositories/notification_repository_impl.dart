@@ -103,11 +103,20 @@ class NotificationRepositoryImpl implements NotificationRepository {
     required String locationName,
     required String checkInTime,
   }) {
+    String escapeHtml(String value) => value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+
+    final safeGuestName = escapeHtml(guestName);
+    final safeLocationName = escapeHtml(locationName);
+    final safeCheckInTime = escapeHtml(checkInTime);
+
     final lines = <String>[
-      '🏢 <b>Tamu Baru — $locationName</b>',
+      '🏢 <b>Tamu Baru — $safeLocationName</b>',
       '',
-      '👤 <b>Nama:</b> $guestName',
-      '🕐 <b>Waktu Check-In:</b> $checkInTime',
+      '👤 <b>Nama:</b> $safeGuestName',
+      '🕐 <b>Waktu Check-In:</b> $safeCheckInTime',
     ];
     return lines.join('\n');
   }
