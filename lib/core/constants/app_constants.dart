@@ -86,6 +86,7 @@ abstract final class AppConstants {
   static const String emailInvalid = 'Format email tidak valid';
   static const String keperluanRequired = 'Pilih keperluan kunjungan';
   static const String keyDarkMode = 'darkMode';
+  static const String keyNotificationsEnabled = 'notificationsEnabled';
   static const String keyLocationId = 'locationId';
   static const String keyHostId = 'hostId';
   static const int qrCodeExpiryMinutes = 1440;
@@ -125,4 +126,22 @@ abstract final class AppConstants {
   // ─── Telegram ────────────────────────────────────────────────────
   /// Telegram Bot username (tanpa @)
   static const String telegramBotUsername = 'TamuKuBot';
+
+  // ─── Auth UI Strings ─────────────────────────────────────────────
+  static const String emailRequired = 'Email wajib diisi';
+  static const String passwordRequired = 'Password wajib diisi';
+  static const String passwordTooShort = 'Password minimal 6 karakter';
+  static const String loginSuccessMessage = 'Berhasil masuk sebagai admin';
+  static const String showPassword = 'Tampilkan password';
+  static const String hidePassword = 'Sembunyikan password';
+  static const String googleNotAvailable = 'Login dengan Google belum tersedia. Segera hadir.';
+  static const String orDivider = 'atau';
+
+  // ─── Settings UI Strings ─────────────────────────────────────────
+  static const String sectionProfileLocation = 'PROFIL LOKASI';
+  static const String sectionPreferences = 'PREFERENSI';
+  static const String exportFailed = 'Gagal mengekspor data';
+  static const String logoutConfirmTitle = 'Keluar Akun';
+  static const String logoutConfirmMessage = 'Apakah Anda yakin ingin keluar?';
+  static const String cancelButton = 'Batal';
 }

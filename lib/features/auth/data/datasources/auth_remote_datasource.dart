@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/utils/user_mapper.dart';
 
 /// Abstract interface for remote authentication operations via Firebase Auth.
 ///
@@ -51,7 +51,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (user == null) {
         throw const AuthException('Gagal masuk. Silakan coba lagi.');
       }
-      return _mapUser(user);
+      return UserMapper.toMap(user);
     } on FirebaseAuthException catch (e) {
       throw AuthException(_messageForCode(e.code));
     } on AuthException {
@@ -73,19 +73,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (_) {
       throw const AuthException('Gagal keluar. Silakan coba lagi.');
     }
-  }
-
-  /// Builds the user [Map] returned to the repository layer.
-  Map<String, dynamic> _mapUser(User user) {
-    return <String, dynamic>{
-      'uid': user.uid,
-      'email': user.email ?? '',
-      'name': (user.displayName == null || user.displayName!.isEmpty)
-          ? (user.email ?? 'Admin')
-          : user.displayName!,
-      'photoUrl': user.photoURL,
-      'role': AppConstants.roleAdmin,
-    };
   }
 
   /// Maps a [FirebaseAuthException] code to a Bahasa Indonesia message.

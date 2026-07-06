@@ -27,8 +27,8 @@ export const guestRoutes = new Elysia().post(
           },
         );
         fcmResult = { success: true, messageId };
-      } catch (error: any) {
-        errors.push(`FCM: ${error.message}`);
+      } catch {
+        errors.push('FCM: Gagal mengirim notifikasi push');
         fcmResult = { success: false };
       }
     }
@@ -43,11 +43,10 @@ export const guestRoutes = new Elysia().post(
           keperluan: body.keperluan,
           instansi: body.instansi,
           locationName: body.locationName,
-          botToken: body.botToken,
         });
         telegramResult = { success: true };
-      } catch (error: any) {
-        errors.push(`Telegram: ${error.message}`);
+      } catch {
+        errors.push('Telegram: Gagal mengirim notifikasi');
         telegramResult = { success: false };
       }
     }
@@ -72,7 +71,6 @@ export const guestRoutes = new Elysia().post(
       locationName: t.String(),
       hostFcmToken: t.Optional(t.String()),
       hostPhone: t.Optional(t.String()),
-      botToken: t.Optional(t.String()),
     }),
   },
 );

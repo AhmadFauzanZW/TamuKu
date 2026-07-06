@@ -148,7 +148,7 @@ class _LoginViewState extends State<LoginView> {
       Navigator.of(context).pushReplacementNamed(AppRoutes.dashboard);
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Berhasil masuk sebagai admin')),
+        const SnackBar(content: Text(AppConstants.loginSuccessMessage)),
       );
     }
   }

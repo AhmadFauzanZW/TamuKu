@@ -8,9 +8,9 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../../shared/blocs/settings/settings_cubit.dart';
+import '../../../../shared/blocs/settings/settings_state.dart';
 import '../../data/services/csv_export_service.dart';
-import '../bloc/settings_cubit.dart';
-import '../bloc/settings_state.dart';
 
 /// Admin settings screen.
 ///
@@ -51,9 +51,9 @@ class SettingsView extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            _sectionLabel('PROFIL LOKASI'),
+            _sectionLabel(AppConstants.sectionProfileLocation),
             const _ProfileCard(),
-            _sectionLabel('PREFERENSI'),
+            _sectionLabel(AppConstants.sectionPreferences),
             const _PreferencesCard(),
             const SizedBox(height: AppSpacing.xl),
             const _ExportButton(),
@@ -88,19 +88,19 @@ class _ProfileCard extends StatelessWidget {
           _ProfileTile(
             icon: Icons.location_on_outlined,
             label: AppConstants.locationNameLabel,
-            value: 'Kantor Desa Cakrawala',
+            value: 'Kantor Desa Cakrawala', // TODO: fetch from Firestore LocationEntity
           ),
           Divider(height: 1, color: AppColors.border),
           _ProfileTile(
             icon: Icons.map_outlined,
             label: AppConstants.addressLabel,
-            value: 'Jl. Merdeka No. 10, Bandung',
+            value: 'Jl. Merdeka No. 10, Bandung', // TODO: fetch from Firestore LocationEntity
           ),
           Divider(height: 1, color: AppColors.border),
           _ProfileTile(
             icon: Icons.phone_outlined,
             label: AppConstants.hostPhoneLabel,
-            value: '+6281234567890',
+            value: '+6281234567890', // TODO: fetch from Firestore LocationEntity
           ),
         ],
       ),
@@ -182,18 +182,16 @@ class _PreferencesCard extends StatelessWidget {
 
 /// Full-width button that builds and shares the guest CSV export.
 class _ExportButton extends StatelessWidget {
-  final CsvExportService _service = const CsvExportService();
-
   const _ExportButton();
 
   Future<void> _onExport(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     try {
       // Empty list for MVP; real guest data wired via LocationBloc later.
-      await _service.exportAndShare(const []);
+      await getIt<CsvExportService>().exportAndShare(const []);
     } catch (_) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Gagal mengekspor data')),
+        const SnackBar(content: Text(AppConstants.exportFailed)),
       );
     }
   }
@@ -229,12 +227,12 @@ class _LogoutButton extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Keluar Akun'),
-        content: const Text('Apakah Anda yakin ingin keluar?'),
+        title: const Text(AppConstants.logoutConfirmTitle),
+        content: const Text(AppConstants.logoutConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Batal'),
+            child: const Text(AppConstants.cancelButton),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),

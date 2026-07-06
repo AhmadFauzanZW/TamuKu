@@ -16,6 +16,7 @@ import 'features/guest/data/repositories/guest_repository_impl.dart';
 import 'features/guest/domain/repositories/guest_repository.dart';
 import 'features/guest/presentation/bloc/guest_bloc.dart';
 import 'features/guest/presentation/bloc/guest_form_bloc.dart';
+import 'features/location/data/services/csv_export_service.dart';
 import 'features/notification/data/repositories/notification_repository_impl.dart';
 import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/bloc/notification_bloc.dart';
@@ -82,6 +83,11 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<NotificationRepository>(
     () => NotificationRepositoryImpl(apiClient: getIt<ApiClient>()),
+  );
+
+  // ─── Services ────────────────────────────────────────────────────
+  getIt.registerLazySingleton<CsvExportService>(
+    () => const CsvExportService(),
   );
 
   // ─── BLoCs ──────────────────────────────────────────────────────

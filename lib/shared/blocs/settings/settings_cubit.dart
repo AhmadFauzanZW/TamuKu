@@ -1,15 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/constants/app_constants.dart';
+import '../../../core/constants/app_constants.dart';
 import 'settings_state.dart';
 
 /// Cubit managing the settings screen preference toggles.
 ///
-/// Replaces `setState` on the settings screen (BLoC-only rule). The
-/// dark mode flag is persisted to [SharedPreferences] under
-/// [AppConstants.keyDarkMode]; the notification toggle is held in
-/// memory for the MVP.
+/// Replaces `setState` on the settings screen (BLoC-only rule). Both
+/// dark mode and notification flags are persisted to [SharedPreferences].
 class SettingsCubit extends Cubit<SettingsState> {
   final SharedPreferences _prefs;
 
@@ -19,6 +17,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       super(
         SettingsState(
           darkMode: prefs.getBool(AppConstants.keyDarkMode) ?? false,
+          notificationsEnabled:
+              prefs.getBool(AppConstants.keyNotificationsEnabled) ?? true,
         ),
       );
 
@@ -28,8 +28,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(darkMode: value));
   }
 
-  /// Toggles the Telegram notification preference (in-memory for MVP).
-  void setNotifications(bool value) {
+  /// Toggles the Telegram notification preference and persists the value.
+  Future<void> setNotifications(bool value) async {
+    await _prefs.setBool(AppConstants.keyNotificationsEnabled, value);
     emit(state.copyWith(notificationsEnabled: value));
   }
 }

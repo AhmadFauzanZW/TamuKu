@@ -5,17 +5,16 @@ const TELEGRAM_API = 'https://api.telegram.org/bot';
 /**
  * Send a text message via Telegram Bot API.
  * Uses native fetch — no external HTTP dependency.
+ * Always uses server-configured bot token — client cannot override.
  * @param chatId — Telegram chat/group ID (numeric or @username)
  * @param text — Message content (supports HTML parse_mode)
- * @param botToken — Optional override bot token, falls back to config
  * @returns true on success
  */
 export async function sendTelegramMessage(
   chatId: string,
   text: string,
-  botToken?: string,
 ): Promise<boolean> {
-  const token = botToken || config.telegram.botToken;
+  const token = config.telegram.botToken;
   if (!token) throw new Error('Telegram bot token not configured');
 
   const url = `${TELEGRAM_API}${token}/sendMessage`;
@@ -47,18 +46,17 @@ export interface GuestNotificationParams {
   keperluan: string;
   instansi?: string;
   locationName: string;
-  botToken?: string;
 }
 
 /**
  * Format and send a guest check-in notification via Telegram.
  * Constructs a human-readable message in Bahasa Indonesia.
+ * Bot token is always loaded from server config — never from client.
  */
 export async function sendGuestNotification(
   params: GuestNotificationParams,
 ): Promise<boolean> {
-  const { hostPhone, guestName, keperluan, instansi, locationName, botToken } =
-    params;
+  const { hostPhone, guestName, keperluan, instansi, locationName } = params;
 
   const lines = [
     `🏢 <b>Tamu Baru — ${locationName}</b>`,
@@ -73,7 +71,7 @@ export async function sendGuestNotification(
     `🕐 ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`,
   );
 
-  return sendTelegramMessage(hostPhone, lines.join('\n'), botToken);
+  return sendTelegramMessage(hostPhone, lines.join('\n'));
 }
 
 /** Alias for backward compatibility */

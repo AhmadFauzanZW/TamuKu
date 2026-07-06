@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/user_mapper.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_datasource.dart';
@@ -56,10 +57,17 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<UserEntity?> get authStateChanges {
     return _auth.authStateChanges().asyncMap((user) async {
       if (user == null) return null;
-      final map = _mapFromFirebaseUser(user);
+      final map = UserMapper.toMap(user);
       await _local.cacheUser(map);
       return _entityFromMap(map);
     });
+  }
+
+  @override
+  Future<UserEntity?> getCachedSession() async {
+    final map = await _local.getCachedUser();
+    if (map == null) return null;
+    return _entityFromMap(map);
   }
 
   /// Builds a [UserEntity] from a serialized user [map].
@@ -71,18 +79,5 @@ class AuthRepositoryImpl implements AuthRepository {
       photoUrl: map['photoUrl'] as String?,
       role: map['role'] as String? ?? AppConstants.roleAdmin,
     );
-  }
-
-  /// Serializes a Firebase [User] into the standard user map.
-  Map<String, dynamic> _mapFromFirebaseUser(User user) {
-    return <String, dynamic>{
-      'uid': user.uid,
-      'email': user.email ?? '',
-      'name': (user.displayName == null || user.displayName!.isEmpty)
-          ? (user.email ?? 'Admin')
-          : user.displayName!,
-      'photoUrl': user.photoURL,
-      'role': AppConstants.roleAdmin,
-    };
   }
 }
