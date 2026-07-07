@@ -184,7 +184,7 @@ class _QrGeneratorScreenState extends State<QrGeneratorScreen> {
                 ),
                 pw.SizedBox(height: 4),
                 pw.Text(
-                  'Tidak perlu login — langsung isi formulir tamu',
+                  'Tidak perlu login, langsung isi formulir tamu',
                   style: pw.TextStyle(fontSize: 11, color: PdfColors.grey500),
                   textAlign: pw.TextAlign.center,
                 ),
