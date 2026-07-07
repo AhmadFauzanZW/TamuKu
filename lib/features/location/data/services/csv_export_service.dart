@@ -98,9 +98,9 @@ class CsvExportService {
     final file = File('${dir.path}/tamuku_tamu_$timestamp.csv');
     await file.writeAsString(csv, encoding: utf8);
 
-    await Share.shareXFiles(<XFile>[
-      XFile(file.path, mimeType: 'text/csv'),
-    ], subject: 'Data Tamu TamuKu');
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(file.path, mimeType: 'text/csv')]),
+    );
 
     return csv;
   }
