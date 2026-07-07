@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Application-wide constants for TamuKu.
 abstract final class AppConstants {
   static const String appName = 'TamuKu';
@@ -186,7 +188,9 @@ abstract final class AppConstants {
   // ─── Web Guest URL ────────────────────────────────────────────────
   /// Base URL for the web-based guest check-in page
   /// Served by Contabo backend at /guest/
-  static const String guestWebUrl = 'https://tamuku.app/guest';
+  static String get guestWebUrl => kDebugMode
+      ? 'http://localhost:3000/guest'
+      : 'https://tamuku.chronaxis.site/guest';
 
   // ─── Telegram ────────────────────────────────────────────────────
   /// Telegram Bot username (tanpa @)
@@ -228,4 +232,6 @@ abstract final class AppConstants {
       'Silakan tunjukkan QR Code di bawah ini kepada tamu untuk dipindai '
       'saat melakukan check-in.';
   static const String qrShareButton = 'Bagikan QR Code';
+  static const String qrGeneratorDescription =
+      'Tampilkan QR code untuk check-in tamu';
 }

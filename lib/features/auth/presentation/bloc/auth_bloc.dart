@@ -34,14 +34,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onCachedSessionLoaded(
+  Future<void> _onCachedSessionLoaded(
     _CachedSessionLoaded event,
     Emitter<AuthState> emit,
-  ) {
+  ) async {
     if (event.user != null) {
-      emit(Authenticated(event.user!));
-      // Ensure locationId is stored (may be missing from older sessions)
-      _fetchAndStoreLocationId(event.user!.uid);
+      // Store locationId BEFORE emitting so navigation screen can read it
+      await _fetchAndStoreLocationId(event.user!.uid);
+      if (!isClosed) emit(Authenticated(event.user!));
     }
   }
 
@@ -55,10 +55,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
-      emit(Authenticated(user));
-
-      // Fetch and store the admin's locationId
+      // CRITICAL: Store locationId BEFORE emitting Authenticated
+      // so navigation screen can read it from SharedPreferences
       await _fetchAndStoreLocationId(user.uid);
+      emit(Authenticated(user));
     } on AuthException catch (e) {
       emit(AuthError(e.message));
     } catch (_) {
@@ -73,10 +73,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       final user = await _authRepository.signInWithGoogle();
-      emit(Authenticated(user));
-
-      // Fetch and store the admin's locationId
+      // CRITICAL: Store locationId BEFORE emitting Authenticated
       await _fetchAndStoreLocationId(user.uid);
+      emit(Authenticated(user));
     } on AuthException catch (e) {
       emit(AuthError(e.message));
     } catch (_) {
@@ -94,21 +93,49 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   /// Queries Firestore for the admin's locations and stores the first
-  /// locationId in SharedPreferences. Silently fails if no locations found.
+  /// locationId in SharedPreferences. Falls back to any location if
+  /// no match by adminId. Auto-creates a default location for first run.
   Future<void> _fetchAndStoreLocationId(String adminId) async {
     try {
-      final snapshot = await FirebaseFirestore.instance
+      // 1. Try to find location by adminId
+      var snapshot = await FirebaseFirestore.instance
           .collection(AppConstants.locationsCollection)
           .where(AppConstants.fieldAdminId, isEqualTo: adminId)
           .limit(1)
           .get();
 
-      if (snapshot.docs.isNotEmpty) {
-        final locationId = snapshot.docs.first.id;
-        await _prefs.setString(AppConstants.keyLocationId, locationId);
+      // 2. Fallback: get ANY location
+      if (snapshot.docs.isEmpty) {
+        snapshot = await FirebaseFirestore.instance
+            .collection(AppConstants.locationsCollection)
+            .limit(1)
+            .get();
       }
+
+      // 3. Last resort: create default location for first-time admin
+      if (snapshot.docs.isEmpty) {
+        final docRef = await FirebaseFirestore.instance
+            .collection(AppConstants.locationsCollection)
+            .add({
+              'name': 'Kantor Desa Cakrawala',
+              'address': 'Jl. Merdeka No. 17, Bandung',
+              'adminId': adminId,
+              'hostPhone': '081234567890',
+              'qrCodeValue': '',
+              'createdAt': FieldValue.serverTimestamp(),
+              'isActive': true,
+            });
+        await _prefs.setString(AppConstants.keyLocationId, docRef.id);
+        return;
+      }
+
+      // 4. Store existing location
+      await _prefs.setString(
+        AppConstants.keyLocationId,
+        snapshot.docs.first.id,
+      );
     } catch (_) {
-      // Silently fail — guest list will show empty state
+      // Silently fail — screens will show empty state
     }
   }
 }

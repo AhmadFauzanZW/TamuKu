@@ -38,6 +38,13 @@ class DashboardScreen extends StatelessWidget {
         title: const Text(AppConstants.dashboardTitle),
         actions: [
           IconButton(
+            icon: const Icon(Icons.qr_code_2),
+            tooltip: AppConstants.qrGeneratorTitle,
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.qrGenerator);
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.settings);
@@ -99,10 +106,70 @@ class DashboardScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.xl),
+                // QR Code Access Card
+                Card(
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppRadius.lgBorder,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AppRoutes.qrGenerator);
+                    },
+                    borderRadius: AppRadius.lgBorder,
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary900.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(AppRadius.md),
+                            ),
+                            child: const Icon(
+                              Icons.qr_code_2,
+                              color: AppColors.primary900,
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppConstants.qrGeneratorTitle,
+                                  style: AppTextStyles.bodyLarge.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  AppConstants.qrGeneratorDescription,
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.textSecondaryOf(context),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: AppColors.textSecondaryOf(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
+                const SizedBox(height: AppSpacing.xl),
                 const Text(AppConstants.chartTitle, style: AppTextStyles.h3),
                 const SizedBox(height: AppSpacing.md),
-
                 // fl_chart Bar Chart
                 Card(
                   elevation: 1,
@@ -118,7 +185,6 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -140,7 +206,6 @@ class DashboardScreen extends StatelessWidget {
                   ],
                 ),
 
-                // Recent guests from stream
                 if (snapshot.connectionState == ConnectionState.waiting)
                   const Padding(
                     padding: EdgeInsets.all(AppSpacing.xl),

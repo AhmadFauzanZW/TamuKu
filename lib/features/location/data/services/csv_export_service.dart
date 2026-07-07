@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/utils/formatters.dart';
@@ -9,7 +8,7 @@ import '../../../guest/domain/entities/guest_entity.dart';
 
 /// Service that converts guest records into CSV and shares the result.
 ///
-/// Concept G (Popular Libraries): uses `path_provider` for a temp file
+/// Concept G (Popular Libraries): uses `dart:io` for a temp file
 /// path and `share_plus` for the native share sheet, while `intl`
 /// (via [Formatters]) formats the check-in/out timestamps.
 ///
@@ -93,7 +92,7 @@ class CsvExportService {
     String? locationName,
   }) async {
     final csv = buildCsv(guests, locationName: locationName);
-    final dir = await getTemporaryDirectory();
+    final dir = Directory.systemTemp;
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final file = File('${dir.path}/tamuku_tamu_$timestamp.csv');
     await file.writeAsString(csv, encoding: utf8);

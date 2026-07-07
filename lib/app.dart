@@ -62,7 +62,7 @@ class _TamuKuAppState extends State<TamuKuApp> {
         builder: (context, settingsState) {
           return MaterialApp(
             title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: true,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: settingsState.darkMode

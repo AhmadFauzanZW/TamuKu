@@ -19,7 +19,6 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   sqflite: ^2.4.1
-  path_provider: ^2.1.5
   shared_preferences: ^2.3.4
   qr_flutter: ^4.1.0
   mobile_scanner: ^7.2.0
@@ -32,6 +31,8 @@ dependencies:
   google_fonts: ^8.1.0
   share_plus: ^13.2.0
   google_sign_in: ^6.2.2
+  pdf: ^3.1.7
+  printing: ^5.12.0
   lottie: ^3.2.0
   permission_handler: ^12.0.3
   get_it: ^9.2.1
@@ -40,6 +41,12 @@ dependencies:
   json_annotation: ^4.9.0
   excel: ^4.0.6
 
+
+dependency_overrides:
+  # Pin objective_c to 9.1.0 (no build hooks) to avoid the
+  # "space in C:\Flutter SDK path" bug in dart compile kernel.
+  # Safe for Android — hook only runs on iOS/macOS anyway.
+  objective_c: 9.1.0
 
 dev_dependencies:
   flutter_test:
