@@ -60,18 +60,13 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.xl),
 
-            const Text(
-              AppConstants.chartTitle,
-              style: AppTextStyles.h3,
-            ),
+            const Text(AppConstants.chartTitle, style: AppTextStyles.h3),
             const SizedBox(height: AppSpacing.md),
 
             // Placeholder Area Grafik Batang fl_chart
             Card(
               elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: AppRadius.lgBorder,
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Container(
@@ -160,15 +155,9 @@ class DashboardScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.caption,
-                  ),
+                  Text(title, style: AppTextStyles.caption),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    value,
-                    style: AppTextStyles.h2,
-                  ),
+                  Text(value, style: AppTextStyles.h2),
                 ],
               ),
             ],
