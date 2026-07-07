@@ -145,4 +145,22 @@ abstract final class AppConstants {
   static const String logoutConfirmTitle = 'Keluar Akun';
   static const String logoutConfirmMessage = 'Apakah Anda yakin ingin keluar?';
   static const String cancelButton = 'Batal';
+
+  // ─── Dashboard UI Strings ──────────────────────────────────────
+  static const String dashboardSummaryTitle = 'Ringkasan Hari Ini';
+  static const String dashboardChartPlaceholder =
+      'Area Grafik Batang fl_chart\n(Akan disinkronkan dengan data riil)';
+  static const String dashboardRecentTitle = 'Aktivitas Tamu Terbaru';
+  static const String dashboardViewAll = 'Lihat Semua';
+
+  // ─── Guest List UI Strings ─────────────────────────────────────
+  static const String guestListSearchHint = 'Cari nama tamu atau keperluan...';
+  static const String filterCheckedIn = 'Check-In';
+  static const String filterCompleted = 'Selesai';
+
+  // ─── QR Generator UI Strings ───────────────────────────────────
+  static const String qrInstruction =
+      'Silakan tunjukkan QR Code di bawah ini kepada tamu untuk dipindai '
+      'saat melakukan check-in.';
+  static const String qrShareButton = 'Bagikan QR Code';
 }

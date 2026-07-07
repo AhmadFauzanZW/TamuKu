@@ -1,5 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_text_styles.dart';
+
+/// Dashboard admin menampilkan ringkasan tamu, grafik kunjungan,
+/// dan daftar aktivitas terbaru.
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -8,10 +15,10 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Dashboard Admin',
+          AppConstants.dashboardTitle,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xff1B5E20), // Primary Color #1B5E20 [Sesuai Dokumen]
+        backgroundColor: AppColors.primary900,
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
@@ -23,70 +30,75 @@ class DashboardScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0), // Spacing: card padding 16dp [Sesuai Dokumen]
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Ringkasan Hari Ini',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              AppConstants.dashboardSummaryTitle,
+              style: AppTextStyles.h3,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
 
             // Grid Ringkasan Stat Cards
             Row(
               children: [
-                _buildStatCard('Total Tamu', '24', Icons.people, Colors.blue),
-                const SizedBox(width: 12),
                 _buildStatCard(
-                  'Sedang Check-In',
+                  AppConstants.statTodayGuests,
+                  '24',
+                  Icons.people,
+                  AppColors.accentBlue,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                _buildStatCard(
+                  AppConstants.statActiveGuests,
                   '5',
                   Icons.door_sliding,
-                  Colors.orange,
+                  AppColors.warning,
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
 
             const Text(
-              'Statistik Kunjungan (7 Hari Terakhir)',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              AppConstants.chartTitle,
+              style: AppTextStyles.h3,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
 
             // Placeholder Area Grafik Batang fl_chart
             Card(
-              elevation: 1, // Elevation: 1 [Sesuai Dokumen]
+              elevation: 1,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16), // Border Radius Cards: 16dp [Sesuai Dokumen]
+                borderRadius: AppRadius.lgBorder,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Container(
                   height: 180,
                   alignment: Alignment.center,
-                  child: Text(
-                    'Area Grafik Batang fl_chart\n(Akan disinkronkan dengan variabel grafik di Figma)',
+                  child: const Text(
+                    AppConstants.dashboardChartPlaceholder,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: AppTextStyles.body,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Aktivitas Tamu Terbaru',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  AppConstants.dashboardRecentTitle,
+                  style: AppTextStyles.h3,
                 ),
                 TextButton(
                   onPressed: () {},
                   child: const Text(
-                    'Lihat Semua',
-                    style: TextStyle(color: Color(0xff1B5E20)),
+                    AppConstants.dashboardViewAll,
+                    style: TextStyle(color: AppColors.primary900),
                   ),
                 ),
               ],
@@ -99,20 +111,20 @@ class DashboardScreen extends StatelessWidget {
               itemCount: 3,
               itemBuilder: (context, index) {
                 return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  elevation: 1, // Elevation: 1 [Sesuai Dokumen]
+                  margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                  elevation: 1,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16), // Diubah dari 12 ke 16 agar konsisten dengan Design System [Sesuai Dokumen]
+                    borderRadius: AppRadius.lgBorder,
                   ),
                   child: const ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Color(0xff1B5E20), // Primary Green [Sesuai Dokumen]
+                      backgroundColor: AppColors.primary900,
                       child: Icon(Icons.person, color: Colors.white),
                     ),
                     title: Text('Nama Tamu'),
                     subtitle: Text('Keperluan: Pertemuan / Kunjungan'),
                     trailing: Text(
-                      '10:05 WIB', // Format Indonesian-first WIB [Sesuai Dokumen]
+                      '10:05 WIB',
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ),
@@ -134,33 +146,28 @@ class DashboardScreen extends StatelessWidget {
   ) {
     return Expanded(
       child: Card(
-        elevation: 1, // Elevation: 1 [Sesuai Dokumen]
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Radius 16dp [Sesuai Dokumen]
-        ),
+        elevation: 1,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: iconColor.withOpacity(0.1),
+                backgroundColor: iconColor.withValues(alpha: 0.1),
                 child: Icon(icon, color: iconColor),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(color: Colors.grey, fontSize: 11),
+                    style: AppTextStyles.caption,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     value,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppTextStyles.h2,
                   ),
                 ],
               ),

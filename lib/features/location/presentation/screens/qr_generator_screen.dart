@@ -1,87 +1,87 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_text_styles.dart';
+
+/// Layar generator QR Code lokasi untuk check-in tamu.
 class QrGeneratorScreen extends StatelessWidget {
   const QrGeneratorScreen({super.key});
 
+  static const _dummyLocationId = 'abc123_kantor_cakrawala';
+
   @override
   Widget build(BuildContext context) {
-    // ID lokasi tiruan (dummy) untuk kebutuhan testing UI awal sebelum disambungkan ke BLoC
-    const String dummyLocationId = "abc123_kantor_cakrawala";
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'QR Code Lokasi',
+          AppConstants.qrGeneratorTitle,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(
-          0xff1B5E20,
-        ), // Primary Color #1B5E20 dari Design System laporan
+        backgroundColor: AppColors.primary900,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(
-          16.0,
-        ), // Spacing: card padding 16dp dari laporan
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Center(
           child: Card(
-            elevation: 1, // Elevation: 1 at rest sesuai spesifikasi laporan
+            elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                16,
-              ), // Border Radius Cards: 16dp dari laporan
+              borderRadius: AppRadius.lgBorder,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(AppSpacing.xl),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Kantor Utama',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    AppConstants.locationNameLabel,
+                    style: AppTextStyles.h2,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   const Text(
-                    'Silakan tunjukkan QR Code di bawah ini kepada tamu untuk dipindai saat melakukan check-in.',
+                    AppConstants.qrInstruction,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: AppTextStyles.body,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xl),
 
-                  // Komponen Render QR Code Utama dari library qr_flutter
                   QrImageView(
-                    data: dummyLocationId,
+                    data: _dummyLocationId,
                     version: QrVersions.auto,
                     size: 200.0,
                     gapless: false,
-                    foregroundColor: const Color(
-                      0xff1B5E20,
-                    ), // Menggunakan warna utama agar serasi
+                    eyeStyle: const QrEyeStyle(
+                      eyeShape: QrEyeShape.square,
+                      color: AppColors.primary900,
+                    ),
+                    dataModuleStyle: const QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.square,
+                      color: AppColors.primary900,
+                    ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xl),
 
-                  // Tombol Bagikan QR Code sesuai dengan daftar test case pengujian laporan
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Nanti dihubungkan ke package share_plus oleh timmu untuk membagikan tautan/gambar QR
+                      // TODO: hubungkan ke share_plus
                     },
                     icon: const Icon(Icons.share, color: Colors.white),
                     label: const Text(
-                      'Bagikan QR Code',
+                      AppConstants.qrShareButton,
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff1B5E20),
+                      backgroundColor: AppColors.primary900,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+                        horizontal: AppSpacing.xl,
+                        vertical: AppSpacing.md,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          24,
-                        ), // Border Radius Buttons: 24dp dari laporan
+                        borderRadius: AppRadius.xlBorder,
                       ),
                     ),
                   ),

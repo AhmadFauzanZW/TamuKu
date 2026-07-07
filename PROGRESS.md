@@ -3,7 +3,7 @@
 > Tracker progress pengerjaan proyek TamuKu.
 > Update file ini setiap kali menyelesaikan tugas. Centang ✅ yang sudah selesai.
 
-**Terakhir diperbarui:** 2026-07-06
+**Terakhir diperbarui:** 2026-07-07
 
 ---
 
@@ -13,10 +13,10 @@
 |---------|----------|----------|-------|
 | Hafiz Nur Rizki | 10/10 | 5/5 | 15/15 |
 | Ahmad Fauzan | 10/10 | 5/5 | 15/15 |
-| Annur Syahrin Aisyah | 0/10 | 0/5 | 0/15 |
-| TOTAL | **20/30** | **10/15** | **30/45** |
+| Annur Syahrin Aisyah | 3/10 | 0/5 | 3/15 |
+| TOTAL | **23/30** | **10/15** | **33/45** |
 
-**Persentase Selesai:** 66.7%
+**Persentase Selesai:** 73.3%
 
 ---
 
@@ -81,10 +81,12 @@
 | N4 | Data: `location_local_datasource.dart` | F | ⬜ | — | |
 | N5 | BLoC: `location_event.dart`, `location_state.dart`, `location_bloc.dart` | D | ⬜ | — | |
 | N6 | Screen: `scan_screen.dart` (mobile_scanner) | G | ⬜ | — | |
-| N7 | Screen: `qr_generator_screen.dart` (qr_flutter) | G | ⬜ | — | |
-| N8 | Screen: `dashboard_screen.dart` (stat cards + fl_chart) | G | ⬜ | — | |
-| N9 | Screen: `guest_list_screen.dart` (search + filter) | B | ⬜ | — | |
+| N7 | Screen: `qr_generator_screen.dart` (qr_flutter) | G | ✅ | 2026-07-07 | UI + theme tokens fixed |
+| N8 | Screen: `dashboard_screen.dart` (stat cards + fl_chart) | G | ✅ | 2026-07-07 | UI + theme tokens fixed |
+| N9 | Screen: `guest_list_screen.dart` (search + filter) | B | ✅ | 2026-07-07 | UI + theme tokens fixed |
 | N10 | Unit tests: location_repository + bloc | — | ⬜ | — | |
+>
+> **Catatan Annur Sprint 1:** N7, N8, N9 selesai (UI screens). N1-N5 (domain/data/BLoC) dan N6 (scan_screen), N10 (tests) masih perlu dikerjakan.
 
 ---
 
