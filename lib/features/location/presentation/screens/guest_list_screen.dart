@@ -42,8 +42,10 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(AppConstants.guestListTitle,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      title: const Text(
+        AppConstants.guestListTitle,
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
       backgroundColor: AppColors.primary900,
       iconTheme: const IconThemeData(color: Colors.white),
     );
@@ -74,123 +76,152 @@ class _BodyState extends State<_Body> {
 
   void _onSearch(String q) {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 300),
-        () => context.read<GuestBloc>().add(SearchGuests(q)));
+    _debounce = Timer(
+      const Duration(milliseconds: 300),
+      () => context.read<GuestBloc>().add(SearchGuests(q)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      // Search
-      Padding(
-        padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
-        child: TextField(
-          controller: _searchCtrl,
-          onChanged: _onSearch,
-          decoration: InputDecoration(
-            hintText: AppConstants.guestListSearchHint,
-            prefixIcon: const Icon(Icons.search, color: AppColors.primary900),
-            border: OutlineInputBorder(
-                borderRadius: AppRadius.mdBorder,
-                borderSide: const BorderSide(color: Colors.grey)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: AppRadius.mdBorder,
-                borderSide:
-                    const BorderSide(color: AppColors.primary900, width: 2)),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: AppSpacing.md),
+    return Column(
+      children: [
+        // Search
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.sm,
           ),
-        ),
-      ),
-      // Filter + Sort
-      BlocBuilder<GuestBloc, GuestState>(builder: (context, state) {
-        final af =
-            state is GuestLoaded ? state.activeFilter : AppConstants.filterAll;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-          child: Row(children: [
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _filters.length,
-                  itemBuilder: (_, i) {
-                    final f = _filters[i];
-                    final s = af == f;
-                    return Padding(
-                      padding: const EdgeInsets.only(right: AppSpacing.sm),
-                      child: ChoiceChip(
-                        label: Text(f),
-                        selected: s,
-                        selectedColor: AppColors.primary900,
-                        labelStyle: TextStyle(
-                          color: s ? Colors.white : Colors.black87,
-                          fontWeight:
-                              s ? FontWeight.bold : FontWeight.normal,
-                        ),
-                        onSelected: (sel) {
-                          if (sel) {
-                            context.read<GuestBloc>().add(FilterGuests(f));
-                          }
-                        },
-                      ),
-                    );
-                  },
+          child: TextField(
+            controller: _searchCtrl,
+            onChanged: _onSearch,
+            decoration: InputDecoration(
+              hintText: AppConstants.guestListSearchHint,
+              prefixIcon: const Icon(Icons.search, color: AppColors.primary900),
+              border: OutlineInputBorder(
+                borderRadius: AppRadius.mdBorder,
+                borderSide: const BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: AppRadius.mdBorder,
+                borderSide: const BorderSide(
+                  color: AppColors.primary900,
+                  width: 2,
                 ),
               ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: AppSpacing.md,
+              ),
             ),
-            const SizedBox(width: AppSpacing.sm),
-            PopupMenuButton<SortType>(
-              icon: const Icon(Icons.sort, color: AppColors.primary900),
-              onSelected: (t) =>
-                  context.read<GuestBloc>().add(SortGuests(t)),
-              itemBuilder: (_) => const [
-                PopupMenuItem(
-                    value: SortType.byDateDesc,
-                    child: Text(AppConstants.sortNewest)),
-                PopupMenuItem(
-                    value: SortType.byDateAsc,
-                    child: Text(AppConstants.sortOldest)),
-                PopupMenuItem(
-                    value: SortType.byNameAsc,
-                    child: Text(AppConstants.sortByName)),
-              ],
-            ),
-          ]),
-        );
-      }),
-      const Divider(height: 1),
-      // List
-      Expanded(
-        child: BlocConsumer<GuestBloc, GuestState>(
-          listener: (ctx, s) {
-            if (s is GuestError) {
-              ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-                  content: Text(s.message),
-                  backgroundColor: AppColors.accentRed));
-            }
-          },
-          builder: (ctx, state) {
-            if (state is GuestLoading) {
-              return const Center(
-                  child: CircularProgressIndicator(
-                      color: AppColors.primary900));
-            }
-            if (state is GuestLoaded) {
-              if (state.guests.isEmpty) return const _EmptyState();
-              return ListView.builder(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                itemCount: state.guests.length,
-                itemBuilder: (_, i) => _GuestTile(guest: state.guests[i]),
-              );
-            }
-            return const SizedBox.shrink();
+          ),
+        ),
+        // Filter + Sort
+        BlocBuilder<GuestBloc, GuestState>(
+          builder: (context, state) {
+            final af = state is GuestLoaded
+                ? state.activeFilter
+                : AppConstants.filterAll;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _filters.length,
+                        itemBuilder: (_, i) {
+                          final f = _filters[i];
+                          final s = af == f;
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              right: AppSpacing.sm,
+                            ),
+                            child: ChoiceChip(
+                              label: Text(f),
+                              selected: s,
+                              selectedColor: AppColors.primary900,
+                              labelStyle: TextStyle(
+                                color: s ? Colors.white : Colors.black87,
+                                fontWeight: s
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                              onSelected: (sel) {
+                                if (sel) {
+                                  context.read<GuestBloc>().add(
+                                    FilterGuests(f),
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  PopupMenuButton<SortType>(
+                    icon: const Icon(Icons.sort, color: AppColors.primary900),
+                    onSelected: (t) =>
+                        context.read<GuestBloc>().add(SortGuests(t)),
+                    itemBuilder: (_) => const [
+                      PopupMenuItem(
+                        value: SortType.byDateDesc,
+                        child: Text(AppConstants.sortNewest),
+                      ),
+                      PopupMenuItem(
+                        value: SortType.byDateAsc,
+                        child: Text(AppConstants.sortOldest),
+                      ),
+                      PopupMenuItem(
+                        value: SortType.byNameAsc,
+                        child: Text(AppConstants.sortByName),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
           },
         ),
-      ),
-    ]);
+        const Divider(height: 1),
+        // List
+        Expanded(
+          child: BlocConsumer<GuestBloc, GuestState>(
+            listener: (ctx, s) {
+              if (s is GuestError) {
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  SnackBar(
+                    content: Text(s.message),
+                    backgroundColor: AppColors.accentRed,
+                  ),
+                );
+              }
+            },
+            builder: (ctx, state) {
+              if (state is GuestLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary900),
+                );
+              }
+              if (state is GuestLoaded) {
+                if (state.guests.isEmpty) return const _EmptyState();
+                return ListView.builder(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  itemCount: state.guests.length,
+                  itemBuilder: (_, i) => _GuestTile(guest: state.guests[i]),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -199,14 +230,21 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Icon(Icons.people_outline,
-            size: 64, color: AppColors.textSecondary),
-        const SizedBox(height: AppSpacing.md),
-        Text('Belum ada tamu',
-            style: AppTextStyles.body
-                .copyWith(color: AppColors.textSecondary)),
-      ]),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.people_outline,
+            size: 64,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            'Belum ada tamu',
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -238,41 +276,58 @@ class _GuestTile extends StatelessWidget {
           backgroundColor: AppColors.primary900,
           child: Icon(Icons.person, color: Colors.white, size: 28),
         ),
-        title: Row(children: [
-          Expanded(
-            child: Text(guest.name,
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                guest.name,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
-                overflow: TextOverflow.ellipsis),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
-            decoration: BoxDecoration(
-              color: in_ ? AppColors.warningBg : AppColors.successBg,
-              borderRadius: AppRadius.smBorder,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            child: Text(
-                in_ ? AppConstants.filterCheckedIn : AppConstants.filterCompleted,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
+              decoration: BoxDecoration(
+                color: in_ ? AppColors.warningBg : AppColors.successBg,
+                borderRadius: AppRadius.smBorder,
+              ),
+              child: Text(
+                in_
+                    ? AppConstants.filterCheckedIn
+                    : AppConstants.filterCompleted,
                 style: TextStyle(
-                    color: in_ ? AppColors.warning : AppColors.success,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold)),
-          ),
-        ]),
+                  color: in_ ? AppColors.warning : AppColors.success,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
         subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: AppSpacing.sm),
-              Text('Keperluan: ${guest.keperluan.toValue()}',
-                  style: TextStyle(color: Colors.grey[700])),
-              const SizedBox(height: AppSpacing.xs),
-              Row(children: [
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'Keperluan: ${guest.keperluan.toValue()}',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Row(
+              children: [
                 const Icon(Icons.access_time, size: 14, color: Colors.grey),
                 const SizedBox(width: AppSpacing.xs),
                 Text(t, style: AppTextStyles.caption),
-              ]),
-            ]),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

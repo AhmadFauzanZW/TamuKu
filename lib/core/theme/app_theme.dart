@@ -165,13 +165,23 @@ abstract final class AppTheme {
     ),
     scaffoldBackgroundColor: AppColorsDark.background,
     textTheme: TextTheme(
-      displayLarge: AppTextStyles.display.copyWith(color: AppColorsDark.textPrimary),
-      headlineLarge: AppTextStyles.h1.copyWith(color: AppColorsDark.textPrimary),
-      headlineMedium: AppTextStyles.h2.copyWith(color: AppColorsDark.textPrimary),
+      displayLarge: AppTextStyles.display.copyWith(
+        color: AppColorsDark.textPrimary,
+      ),
+      headlineLarge: AppTextStyles.h1.copyWith(
+        color: AppColorsDark.textPrimary,
+      ),
+      headlineMedium: AppTextStyles.h2.copyWith(
+        color: AppColorsDark.textPrimary,
+      ),
       titleMedium: AppTextStyles.h3.copyWith(color: AppColorsDark.textPrimary),
-      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColorsDark.textPrimary),
+      bodyLarge: AppTextStyles.bodyLarge.copyWith(
+        color: AppColorsDark.textPrimary,
+      ),
       bodyMedium: AppTextStyles.body.copyWith(color: AppColorsDark.textPrimary),
-      labelSmall: AppTextStyles.caption.copyWith(color: AppColorsDark.textSecondary),
+      labelSmall: AppTextStyles.caption.copyWith(
+        color: AppColorsDark.textSecondary,
+      ),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColorsDark.primary900,
@@ -225,7 +235,9 @@ abstract final class AppTheme {
         borderSide: const BorderSide(color: AppColorsDark.primary900, width: 2),
       ),
       hintStyle: AppTextStyles.body.copyWith(color: AppColorsDark.textDisabled),
-      labelStyle: AppTextStyles.body.copyWith(color: AppColorsDark.textSecondary),
+      labelStyle: AppTextStyles.body.copyWith(
+        color: AppColorsDark.textSecondary,
+      ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: Colors.transparent,

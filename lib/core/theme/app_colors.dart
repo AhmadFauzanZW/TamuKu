@@ -39,64 +39,64 @@ abstract final class AppColors {
   static const Color info = Color(0xFF4285F4);
 
   // ─── Theme-aware helpers ──────────────────────────────────────────
-  
+
   /// Returns the appropriate background color based on current theme.
   static Color backgroundOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.background
-          : background;
+      ? AppColorsDark.background
+      : background;
 
   /// Returns the appropriate surface color based on current theme.
   static Color surfaceOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.surface
-          : surface;
+      ? AppColorsDark.surface
+      : surface;
 
   /// Returns the appropriate primary text color based on current theme.
   static Color textPrimaryOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.textPrimary
-          : textPrimary;
+      ? AppColorsDark.textPrimary
+      : textPrimary;
 
   /// Returns the appropriate secondary text color based on current theme.
   static Color textSecondaryOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.textSecondary
-          : textSecondary;
+      ? AppColorsDark.textSecondary
+      : textSecondary;
 
   /// Returns the appropriate border color based on current theme.
   static Color borderOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.border
-          : border;
+      ? AppColorsDark.border
+      : border;
 
   /// Returns the appropriate primary900 color based on current theme.
   static Color primary900Of(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.primary900
-          : primary900;
+      ? AppColorsDark.primary900
+      : primary900;
 
   /// Returns the appropriate primary700 color based on current theme.
   static Color primary700Of(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.primary700
-          : primary700;
+      ? AppColorsDark.primary700
+      : primary700;
 
   /// Returns the appropriate disabled text color based on current theme.
   static Color textDisabledOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.textDisabled
-          : textDisabled;
+      ? AppColorsDark.textDisabled
+      : textDisabled;
 
   /// Returns the appropriate surface variant color based on current theme.
   static Color surfaceVariantOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.surfaceVariant
-          : surfaceVariant;
+      ? AppColorsDark.surfaceVariant
+      : surfaceVariant;
 
   /// Returns the appropriate accent red color based on current theme.
   static Color accentRedOf(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColorsDark.accentRed
-          : accentRed;
+      ? AppColorsDark.accentRed
+      : accentRed;
 }

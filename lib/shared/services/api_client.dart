@@ -71,10 +71,7 @@ class ApiClient {
         'Content-Type': 'application/json',
         'x-api-key': AppConstants.backendApiKey,
       },
-      body: jsonEncode({
-        'guests': guests,
-        'locationName': locationName,
-      }),
+      body: jsonEncode({'guests': guests, 'locationName': locationName}),
     );
 
     if (response.statusCode != 200) {

@@ -45,8 +45,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final resolvedIconColor = iconColor ?? AppColors.primary700;
     final resolvedValueColor = valueColor ?? AppColors.primary900;
-    final resolvedTrendColor =
-        trendColor ?? AppColors.primary700;
+    final resolvedTrendColor = trendColor ?? AppColors.primary700;
 
     return Card(
       elevation: 1,
@@ -95,8 +94,7 @@ class StatCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: resolvedTrendColor.withValues(alpha: 0.1),
-                            borderRadius:
-                                BorderRadius.circular(AppRadius.xs),
+                            borderRadius: BorderRadius.circular(AppRadius.xs),
                           ),
                           child: Text(
                             trend!,

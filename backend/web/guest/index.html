@@ -8,7 +8,7 @@
   <style>
     /* === RESET & BASE === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     :root {
       --primary: #1B5E20;
       --primary-light: #4CAF50;
@@ -473,7 +473,7 @@
 
     document.getElementById('guest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -536,11 +536,11 @@
           return;
         }
         const guest = guestDoc.data();
-        
+
         if (guest.status === 'checked_out') {
           hide('loading');
           show('checkout-confirmation');
-          document.getElementById('checkout-confirm-time').textContent = 
+          document.getElementById('checkout-confirm-time').textContent =
             guest.checkOutTime ? formatTime(guest.checkOutTime.toDate()) : '-';
           return;
         }
@@ -550,11 +550,11 @@
         show('checkout-view');
         document.getElementById('checkout-name').textContent = guest.name;
         document.getElementById('checkout-keperluan').textContent = guest.keperluan;
-        
+
         const checkInTime = guest.checkInTime.toDate();
         document.getElementById('checkout-checkin-time').textContent = formatTime(checkInTime);
         updateDuration(checkInTime);
-        
+
         setInterval(() => updateDuration(checkInTime), 60000);
       } catch (err) {
         console.error('Load guest error:', err);
@@ -564,7 +564,7 @@
 
     document.getElementById('checkout-btn').addEventListener('click', async () => {
       if (!existingGuestId) return;
-      
+
       const btn = document.getElementById('checkout-btn');
       const text = document.getElementById('checkout-text');
       const spinner = document.getElementById('checkout-spinner');
@@ -615,7 +615,7 @@
     // ═══════════════════════════════════════════════════════════════
     function show(id) { document.getElementById(id).classList.remove('hidden'); }
     function hide(id) { document.getElementById(id).classList.add('hidden'); }
-    
+
     function showError(msg) {
       hide('loading');
       show('error-state');
@@ -638,7 +638,7 @@
       const diff = now - checkInTime;
       const hours = Math.floor(diff / 3600000);
       const minutes = Math.floor((diff % 3600000) / 60000);
-      document.getElementById('checkout-duration').textContent = 
+      document.getElementById('checkout-duration').textContent =
         hours > 0 ? `${hours}j ${minutes}m` : `${minutes} menit`;
     }
 

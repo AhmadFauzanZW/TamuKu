@@ -110,20 +110,20 @@ class _GuestFormViewState extends State<GuestFormView> {
 
     _submitting = true;
     if (!mounted) return;
-    context.read<GuestBloc>().add(CheckInRequested(
-          name: _nameCtrl.text.trim(),
-          phone: _phoneCtrl.text.trim(),
-          email: _emailCtrl.text.trim().isEmpty
-              ? null
-              : _emailCtrl.text.trim(),
-          keperluan: fs.keperluan!,
-          instansi: _instansiCtrl.text.trim().isEmpty
-              ? null
-              : _instansiCtrl.text.trim(),
-          photoUrl: photoUrl,
-          locationId: locationId,
-          hostPhone: hostPhone,
-        ));
+    context.read<GuestBloc>().add(
+      CheckInRequested(
+        name: _nameCtrl.text.trim(),
+        phone: _phoneCtrl.text.trim(),
+        email: _emailCtrl.text.trim().isEmpty ? null : _emailCtrl.text.trim(),
+        keperluan: fs.keperluan!,
+        instansi: _instansiCtrl.text.trim().isEmpty
+            ? null
+            : _instansiCtrl.text.trim(),
+        photoUrl: photoUrl,
+        locationId: locationId,
+        hostPhone: hostPhone,
+      ),
+    );
   }
 
   // ── Image Picker ───────────────────────────────────────────────
@@ -195,8 +195,9 @@ class _GuestFormViewState extends State<GuestFormView> {
                 children: [
                   Text(
                     'Silakan isi data kunjungan Anda',
-                    style: AppTextStyles.bodyLarge
-                        .copyWith(color: AppColors.textSecondaryOf(context)),
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.textSecondaryOf(context),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   _field(
@@ -282,9 +283,8 @@ class _GuestFormViewState extends State<GuestFormView> {
               context.read<GuestFormBloc>().add(KeperluanChanged(v));
             }
           },
-          validator: (_) => state.keperluan == null
-              ? AppConstants.keperluanRequired
-              : null,
+          validator: (_) =>
+              state.keperluan == null ? AppConstants.keperluanRequired : null,
         );
       },
     );
@@ -312,7 +312,9 @@ class _GuestFormViewState extends State<GuestFormView> {
   InputDecoration _dec(BuildContext context, String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondaryOf(context)),
+      labelStyle: AppTextStyles.body.copyWith(
+        color: AppColors.textSecondaryOf(context),
+      ),
       filled: true,
       fillColor: AppColors.surfaceOf(context),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

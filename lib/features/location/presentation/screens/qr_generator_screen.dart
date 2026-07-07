@@ -19,19 +19,16 @@ class QrGeneratorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locationId = GetIt.instance<SharedPreferences>()
-            .getString(AppConstants.keyLocationId) ??
+    final locationId =
+        GetIt.instance<SharedPreferences>().getString(
+          AppConstants.keyLocationId,
+        ) ??
         '';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          AppConstants.qrGeneratorTitle,
-        ),
-      ),
+      appBar: AppBar(title: const Text(AppConstants.qrGeneratorTitle)),
       body: Builder(
         builder: (context) {
-
           return Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Center(
@@ -74,7 +71,8 @@ class QrGeneratorScreen extends StatelessWidget {
 
                       ElevatedButton.icon(
                         onPressed: () async {
-                          final qrUrl = '${AppConstants.guestWebUrl}?loc=$locationId';
+                          final qrUrl =
+                              '${AppConstants.guestWebUrl}?loc=$locationId';
                           await SharePlus.instance.share(
                             ShareParams(
                               text: 'Scan QR TamuKu untuk check-in:\n$qrUrl',

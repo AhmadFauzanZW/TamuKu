@@ -227,9 +227,7 @@ class _LoginViewState extends State<LoginView> {
       child: OutlinedButton.icon(
         onPressed: isLoading
             ? null
-            : () => context.read<AuthBloc>().add(
-                  const GoogleSignInRequested(),
-                ),
+            : () => context.read<AuthBloc>().add(const GoogleSignInRequested()),
         icon: const Icon(
           Icons.g_mobiledata,
           size: 28,

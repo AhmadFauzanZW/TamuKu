@@ -12,6 +12,7 @@ import 'package:tamuku/features/auth/presentation/bloc/auth_state.dart';
 // ─── Mocks ────────────────────────────────────────────────────────
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 // ─── Fixtures ─────────────────────────────────────────────────────

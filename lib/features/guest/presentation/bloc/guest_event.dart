@@ -112,8 +112,10 @@ class SearchGuests extends GuestEvent {
 enum SortType {
   /// Sort by check-in date, newest first.
   byDateDesc,
+
   /// Sort by check-in date, oldest first.
   byDateAsc,
+
   /// Sort by guest name alphabetically.
   byNameAsc,
 }

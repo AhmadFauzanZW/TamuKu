@@ -33,9 +33,10 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
   GuestBloc({
     required GuestRepository repository,
     NotificationRepository? notificationRepository,
-  })  : _repository = repository,
-        _notificationRepository = notificationRepository ?? _NoOpNotificationRepository(),
-        super(GuestInitial()) {
+  }) : _repository = repository,
+       _notificationRepository =
+           notificationRepository ?? _NoOpNotificationRepository(),
+       super(GuestInitial()) {
     on<LoadGuests>(_onLoadGuests);
     on<CheckInRequested>(_onCheckInRequested);
     on<CheckOutRequested>(_onCheckOutRequested);
@@ -77,19 +78,17 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
       checkInTime: now,
     );
     final result = await _repository.checkIn(guest);
-    result.fold(
-      (failure) => emit(GuestError(failure.message)),
-      (_) {
-        emit(const GuestOperationSuccess('Check-in berhasil'));
-        _sendCheckInNotification(event, now);
-      },
-    );
+    result.fold((failure) => emit(GuestError(failure.message)), (_) {
+      emit(const GuestOperationSuccess('Check-in berhasil'));
+      _sendCheckInNotification(event, now);
+    });
   }
 
   /// Sends Telegram notification to host (fire-and-forget, non-blocking).
   void _sendCheckInNotification(CheckInRequested event, DateTime checkInTime) {
     if (event.hostPhone == null || event.hostPhone!.isEmpty) return;
-    final timeStr = '${checkInTime.day.toString().padLeft(2, '0')}/'
+    final timeStr =
+        '${checkInTime.day.toString().padLeft(2, '0')}/'
         '${checkInTime.month.toString().padLeft(2, '0')}/'
         '${checkInTime.year} '
         '${checkInTime.hour.toString().padLeft(2, '0')}:'
@@ -169,7 +168,9 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
     // Apply text search
     if (_searchQuery.isNotEmpty) {
       filtered = filtered
-          .where((g) => g.name.toLowerCase().contains(_searchQuery.toLowerCase()))
+          .where(
+            (g) => g.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+          )
           .toList();
     }
 
@@ -194,7 +195,9 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
         break;
     }
 
-    emit(GuestLoaded(filtered, activeFilter: _activeFilter, sortType: _sortType));
+    emit(
+      GuestLoaded(filtered, activeFilter: _activeFilter, sortType: _sortType),
+    );
   }
 
   /// Updates the active status filter and reapplies filter+sort.

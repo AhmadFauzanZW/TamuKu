@@ -36,9 +36,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppConstants.settingsTitle),
-      ),
+      appBar: AppBar(title: const Text(AppConstants.settingsTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -71,14 +69,18 @@ class _ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locationId =
-        getIt<SharedPreferences>().getString(AppConstants.keyLocationId);
+    final locationId = getIt<SharedPreferences>().getString(
+      AppConstants.keyLocationId,
+    );
 
     if (locationId == null || locationId.isEmpty) {
       return _profileShell(
         child: const Padding(
           padding: EdgeInsets.all(AppSpacing.lg),
-          child: Text('Tidak ada lokasi yang dipilih', style: AppTextStyles.body),
+          child: Text(
+            'Tidak ada lokasi yang dipilih',
+            style: AppTextStyles.body,
+          ),
         ),
       );
     }
@@ -109,11 +111,23 @@ class _ProfileCard extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
           child: Column(
             children: [
-              _ProfileTile(icon: Icons.location_on_outlined, label: AppConstants.locationNameLabel, value: name),
+              _ProfileTile(
+                icon: Icons.location_on_outlined,
+                label: AppConstants.locationNameLabel,
+                value: name,
+              ),
               Divider(height: 1, color: AppColors.borderOf(context)),
-              _ProfileTile(icon: Icons.map_outlined, label: AppConstants.addressLabel, value: address),
+              _ProfileTile(
+                icon: Icons.map_outlined,
+                label: AppConstants.addressLabel,
+                value: address,
+              ),
               Divider(height: 1, color: AppColors.borderOf(context)),
-              _ProfileTile(icon: Icons.phone_outlined, label: AppConstants.hostPhoneLabel, value: phone),
+              _ProfileTile(
+                icon: Icons.phone_outlined,
+                label: AppConstants.hostPhoneLabel,
+                value: phone,
+              ),
             ],
           ),
         );
@@ -138,7 +152,11 @@ class _ProfileTile extends StatelessWidget {
   final String label;
   final String value;
 
-  const _ProfileTile({required this.icon, required this.label, required this.value});
+  const _ProfileTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -166,16 +184,28 @@ class _PreferencesCard extends StatelessWidget {
           return Column(
             children: [
               SwitchListTile(
-                secondary: Icon(Icons.notifications_outlined, color: AppColors.primary700Of(context)),
-                title: const Text(AppConstants.whatsappNotificationLabel, style: AppTextStyles.bodyLarge),
+                secondary: Icon(
+                  Icons.notifications_outlined,
+                  color: AppColors.primary700Of(context),
+                ),
+                title: const Text(
+                  AppConstants.whatsappNotificationLabel,
+                  style: AppTextStyles.bodyLarge,
+                ),
                 activeThumbColor: AppColors.primary700Of(context),
                 value: state.notificationsEnabled,
                 onChanged: cubit.setNotifications,
               ),
               Divider(height: 1, color: AppColors.borderOf(context)),
               SwitchListTile(
-                secondary: Icon(Icons.dark_mode_outlined, color: AppColors.primary700Of(context)),
-                title: const Text(AppConstants.darkModeLabel, style: AppTextStyles.bodyLarge),
+                secondary: Icon(
+                  Icons.dark_mode_outlined,
+                  color: AppColors.primary700Of(context),
+                ),
+                title: const Text(
+                  AppConstants.darkModeLabel,
+                  style: AppTextStyles.bodyLarge,
+                ),
                 activeThumbColor: AppColors.primary700Of(context),
                 value: state.darkMode,
                 onChanged: cubit.setDarkMode,
@@ -233,7 +263,10 @@ class _ExportButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: () => _onExport(context),
         icon: const Icon(Icons.download_outlined),
-        label: const Text(AppConstants.actionExportExcel, style: AppTextStyles.button),
+        label: const Text(
+          AppConstants.actionExportExcel,
+          style: AppTextStyles.button,
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary900,
           foregroundColor: Colors.white,

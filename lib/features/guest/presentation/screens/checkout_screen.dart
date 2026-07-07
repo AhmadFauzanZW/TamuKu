@@ -100,16 +100,25 @@ class _CheckoutView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(AppConstants.guestDataTitle, style: AppTextStyles.h3),
+                        const Text(
+                          AppConstants.guestDataTitle,
+                          style: AppTextStyles.h3,
+                        ),
                         const SizedBox(height: AppSpacing.md),
-                        _InfoRow(label: AppConstants.labelName, value: guest.name),
+                        _InfoRow(
+                          label: AppConstants.labelName,
+                          value: guest.name,
+                        ),
                         _InfoRow(
                           label: AppConstants.labelKeperluan,
                           value: guest.keperluan.toValue(),
                         ),
                         if (guest.instansi != null &&
                             guest.instansi!.isNotEmpty)
-                          _InfoRow(label: AppConstants.labelInstansi, value: guest.instansi!),
+                          _InfoRow(
+                            label: AppConstants.labelInstansi,
+                            value: guest.instansi!,
+                          ),
                         _InfoRow(
                           label: AppConstants.labelCheckInTime,
                           value: _formatDateTime(guest.checkInTime),
@@ -222,7 +231,10 @@ class _DurationCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(AppConstants.visitDuration, style: AppTextStyles.caption),
+                const Text(
+                  AppConstants.visitDuration,
+                  style: AppTextStyles.caption,
+                ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   durationStr,

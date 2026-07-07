@@ -114,7 +114,10 @@ class ConfirmationScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                     ),
-                    child: const Text(AppConstants.backButton, style: AppTextStyles.button),
+                    child: const Text(
+                      AppConstants.backButton,
+                      style: AppTextStyles.button,
+                    ),
                   ),
                 ),
               ],

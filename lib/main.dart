@@ -8,9 +8,7 @@ import 'app.dart';
 /// Firebase Messaging background handler.
 /// Must be a top-level function (not in a class).
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(
-  RemoteMessage message,
-) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   // ignore: avoid_print
   print('Background message: ${message.messageId}');

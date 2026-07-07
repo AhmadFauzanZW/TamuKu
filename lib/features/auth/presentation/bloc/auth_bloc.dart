@@ -16,9 +16,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required AuthRepository authRepository,
     required SharedPreferences prefs,
-  })  : _authRepository = authRepository,
-        _prefs = prefs,
-        super(AuthInitial()) {
+  }) : _authRepository = authRepository,
+       _prefs = prefs,
+       super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
     on<GoogleSignInRequested>(_onGoogleSignInRequested);
     on<LogoutRequested>(_onLogoutRequested);

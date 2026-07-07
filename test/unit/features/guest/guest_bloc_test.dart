@@ -14,7 +14,8 @@ import 'package:tamuku/features/notification/domain/repositories/notification_re
 
 class MockGuestRepository extends Mock implements GuestRepository {}
 
-class MockNotificationRepository extends Mock implements NotificationRepository {}
+class MockNotificationRepository extends Mock
+    implements NotificationRepository {}
 
 class FakeGuest extends Fake implements GuestEntity {}
 
@@ -128,26 +129,24 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestLoaded] on success',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const LoadGuests(tLocationId)),
       expect: () => [
         isA<GuestLoading>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'guests',
-          tGuestList,
-        ),
+        isA<GuestLoaded>().having((s) => s.guests, 'guests', tGuestList),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestError] on failure',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => const Left(ServerFailure()));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const LoadGuests(tLocationId)),
@@ -168,21 +167,24 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestOperationSuccess] on success',
       build: () {
-        when(() => repository.checkIn(any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => repository.checkIn(any()),
+        ).thenAnswer((_) async => const Right(null));
         return GuestBloc(
           repository: repository,
           notificationRepository: notificationRepository,
         );
       },
-      act: (bloc) => bloc.add(CheckInRequested(
-        name: tGuest.name,
-        phone: tGuest.phone,
-        email: tGuest.email,
-        keperluan: tGuest.keperluan,
-        instansi: tGuest.instansi,
-        locationId: tGuest.locationId,
-      )),
+      act: (bloc) => bloc.add(
+        CheckInRequested(
+          name: tGuest.name,
+          phone: tGuest.phone,
+          email: tGuest.email,
+          keperluan: tGuest.keperluan,
+          instansi: tGuest.instansi,
+          locationId: tGuest.locationId,
+        ),
+      ),
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestOperationSuccess>().having(
@@ -196,89 +198,95 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestError] on failure',
       build: () {
-        when(() => repository.checkIn(any()))
-            .thenAnswer((_) async => const Left(ServerFailure()));
+        when(
+          () => repository.checkIn(any()),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
         return GuestBloc(
           repository: repository,
           notificationRepository: notificationRepository,
         );
       },
-      act: (bloc) => bloc.add(CheckInRequested(
-        name: tGuest.name,
-        phone: tGuest.phone,
-        keperluan: tGuest.keperluan,
-        locationId: tGuest.locationId,
-      )),
-      expect: () => [
-        isA<GuestLoading>(),
-        isA<GuestError>(),
-      ],
+      act: (bloc) => bloc.add(
+        CheckInRequested(
+          name: tGuest.name,
+          phone: tGuest.phone,
+          keperluan: tGuest.keperluan,
+          locationId: tGuest.locationId,
+        ),
+      ),
+      expect: () => [isA<GuestLoading>(), isA<GuestError>()],
     );
 
     blocTest<GuestBloc, GuestState>(
       'sends Telegram notification after successful check-in when hostPhone provided',
       build: () {
-        when(() => repository.checkIn(any()))
-            .thenAnswer((_) async => const Right(null));
-        when(() => notificationRepository.sendTelegramMessage(
-              phoneNumber: any(named: 'phoneNumber'),
-              guestName: any(named: 'guestName'),
-              locationName: any(named: 'locationName'),
-              checkInTime: any(named: 'checkInTime'),
-            )).thenAnswer((_) async {});
+        when(
+          () => repository.checkIn(any()),
+        ).thenAnswer((_) async => const Right(null));
+        when(
+          () => notificationRepository.sendTelegramMessage(
+            phoneNumber: any(named: 'phoneNumber'),
+            guestName: any(named: 'guestName'),
+            locationName: any(named: 'locationName'),
+            checkInTime: any(named: 'checkInTime'),
+          ),
+        ).thenAnswer((_) async {});
         return GuestBloc(
           repository: repository,
           notificationRepository: notificationRepository,
         );
       },
-      act: (bloc) => bloc.add(CheckInRequested(
-        name: tGuest.name,
-        phone: tGuest.phone,
-        keperluan: tGuest.keperluan,
-        locationId: tGuest.locationId,
-        hostPhone: '081234567890',
-      )),
-      expect: () => [
-        isA<GuestLoading>(),
-        isA<GuestOperationSuccess>(),
-      ],
+      act: (bloc) => bloc.add(
+        CheckInRequested(
+          name: tGuest.name,
+          phone: tGuest.phone,
+          keperluan: tGuest.keperluan,
+          locationId: tGuest.locationId,
+          hostPhone: '081234567890',
+        ),
+      ),
+      expect: () => [isA<GuestLoading>(), isA<GuestOperationSuccess>()],
       verify: (_) {
-        verify(() => notificationRepository.sendTelegramMessage(
-              phoneNumber: any(named: 'phoneNumber'),
-              guestName: any(named: 'guestName'),
-              locationName: any(named: 'locationName'),
-              checkInTime: any(named: 'checkInTime'),
-            )).called(1);
+        verify(
+          () => notificationRepository.sendTelegramMessage(
+            phoneNumber: any(named: 'phoneNumber'),
+            guestName: any(named: 'guestName'),
+            locationName: any(named: 'locationName'),
+            checkInTime: any(named: 'checkInTime'),
+          ),
+        ).called(1);
       },
     );
 
     blocTest<GuestBloc, GuestState>(
       'does NOT send notification when hostPhone is null',
       build: () {
-        when(() => repository.checkIn(any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => repository.checkIn(any()),
+        ).thenAnswer((_) async => const Right(null));
         return GuestBloc(
           repository: repository,
           notificationRepository: notificationRepository,
         );
       },
-      act: (bloc) => bloc.add(CheckInRequested(
-        name: tGuest.name,
-        phone: tGuest.phone,
-        keperluan: tGuest.keperluan,
-        locationId: tGuest.locationId,
-      )),
-      expect: () => [
-        isA<GuestLoading>(),
-        isA<GuestOperationSuccess>(),
-      ],
+      act: (bloc) => bloc.add(
+        CheckInRequested(
+          name: tGuest.name,
+          phone: tGuest.phone,
+          keperluan: tGuest.keperluan,
+          locationId: tGuest.locationId,
+        ),
+      ),
+      expect: () => [isA<GuestLoading>(), isA<GuestOperationSuccess>()],
       verify: (_) {
-        verifyNever(() => notificationRepository.sendTelegramMessage(
-              phoneNumber: any(named: 'phoneNumber'),
-              guestName: any(named: 'guestName'),
-              locationName: any(named: 'locationName'),
-              checkInTime: any(named: 'checkInTime'),
-            ));
+        verifyNever(
+          () => notificationRepository.sendTelegramMessage(
+            phoneNumber: any(named: 'phoneNumber'),
+            guestName: any(named: 'guestName'),
+            locationName: any(named: 'locationName'),
+            checkInTime: any(named: 'checkInTime'),
+          ),
+        );
       },
     );
   });
@@ -289,8 +297,9 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestOperationSuccess] on success',
       build: () {
-        when(() => repository.checkOut(any(), any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => repository.checkOut(any(), any()),
+        ).thenAnswer((_) async => const Right(null));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const CheckOutRequested(tGuestId)),
@@ -307,8 +316,9 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestError] on failure',
       build: () {
-        when(() => repository.checkOut(any(), any()))
-            .thenAnswer((_) async => const Left(NetworkFailure()));
+        when(
+          () => repository.checkOut(any(), any()),
+        ).thenAnswer((_) async => const Left(NetworkFailure()));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const CheckOutRequested(tGuestId)),
@@ -329,8 +339,9 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestOperationSuccess] on success',
       build: () {
-        when(() => repository.deleteGuest(tGuestId))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => repository.deleteGuest(tGuestId),
+        ).thenAnswer((_) async => const Right(null));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const DeleteGuest(tGuestId)),
@@ -347,15 +358,13 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits [GuestLoading, GuestError] on failure',
       build: () {
-        when(() => repository.deleteGuest(tGuestId))
-            .thenAnswer((_) async => const Left(ServerFailure()));
+        when(
+          () => repository.deleteGuest(tGuestId),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
         return GuestBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const DeleteGuest(tGuestId)),
-      expect: () => [
-        isA<GuestLoading>(),
-        isA<GuestError>(),
-      ],
+      expect: () => [isA<GuestLoading>(), isA<GuestError>()],
     );
   });
 
@@ -365,53 +374,38 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'loads guests then filters by name query',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
         // Wait for LoadGuests to complete
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const SearchGuests('Budi'));
       },
       expect: () => [
         isA<GuestLoading>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests.length,
-          'guests count',
-          2,
-        ),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'filtered guests',
-          [tGuest],
-        ),
+        isA<GuestLoaded>().having((s) => s.guests.length, 'guests count', 2),
+        isA<GuestLoaded>().having((s) => s.guests, 'filtered guests', [tGuest]),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'empty query restores all guests',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         // Search for non-matching then clear
         bloc.add(const SearchGuests('xyz'));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const SearchGuests(''));
       },
       expect: () => [
@@ -422,11 +416,7 @@ void main() {
           'empty filtered',
           <GuestEntity>[],
         ),
-        isA<GuestLoaded>().having(
-          (s) => s.guests.length,
-          'restored all',
-          2,
-        ),
+        isA<GuestLoaded>().having((s) => s.guests.length, 'restored all', 2),
       ],
     );
   });
@@ -437,101 +427,77 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'emits GuestLoaded with only checked-in guests when filter is Check-In',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const FilterGuests('Check-In'));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'checked-in only',
-          [tCheckedInGuest2, tCheckedInGuest1],
-        ).having(
-          (s) => s.activeFilter,
-          'activeFilter',
-          'Check-In',
-        ),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'checked-in only', [
+              tCheckedInGuest2,
+              tCheckedInGuest1,
+            ])
+            .having((s) => s.activeFilter, 'activeFilter', 'Check-In'),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'emits GuestLoaded with only checked-out guests when filter is Selesai',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const FilterGuests('Selesai'));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'checked-out only',
-          [tCheckedOutGuest],
-        ).having(
-          (s) => s.activeFilter,
-          'activeFilter',
-          'Selesai',
-        ),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'checked-out only', [tCheckedOutGuest])
+            .having((s) => s.activeFilter, 'activeFilter', 'Selesai'),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'emits GuestLoaded with all guests when filter is Semua',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         // First apply a filter, then reset to Semua
         bloc.add(const FilterGuests('Check-In'));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const FilterGuests('Semua'));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests.length,
-          'filtered count',
-          2,
-        ),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'all guests restored',
-          [tCheckedInGuest2, tCheckedInGuest1, tCheckedOutGuest],
-        ).having(
-          (s) => s.activeFilter,
-          'activeFilter',
-          'Semua',
-        ),
+        isA<GuestLoaded>().having((s) => s.guests.length, 'filtered count', 2),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'all guests restored', [
+              tCheckedInGuest2,
+              tCheckedInGuest1,
+              tCheckedOutGuest,
+            ])
+            .having((s) => s.activeFilter, 'activeFilter', 'Semua'),
       ],
     );
   });
@@ -542,8 +508,9 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'sorts guests by date descending (newest first)',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) {
@@ -551,75 +518,65 @@ void main() {
       },
       expect: () => [
         isA<GuestLoading>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'sorted by date desc',
-          [tCheckedInGuest2, tCheckedInGuest1, tCheckedOutGuest],
-        ).having(
-          (s) => s.sortType,
-          'sortType',
-          SortType.byDateDesc,
-        ),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'sorted by date desc', [
+              tCheckedInGuest2,
+              tCheckedInGuest1,
+              tCheckedOutGuest,
+            ])
+            .having((s) => s.sortType, 'sortType', SortType.byDateDesc),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'sorts guests by date ascending (oldest first)',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const SortGuests(SortType.byDateAsc));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'sorted by date asc',
-          [tCheckedOutGuest, tCheckedInGuest1, tCheckedInGuest2],
-        ).having(
-          (s) => s.sortType,
-          'sortType',
-          SortType.byDateAsc,
-        ),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'sorted by date asc', [
+              tCheckedOutGuest,
+              tCheckedInGuest1,
+              tCheckedInGuest2,
+            ])
+            .having((s) => s.sortType, 'sortType', SortType.byDateAsc),
       ],
     );
 
     blocTest<GuestBloc, GuestState>(
       'sorts guests by name alphabetically (A-Z)',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const SortGuests(SortType.byNameAsc));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'sorted by name A-Z',
-          [tCheckedOutGuest, tCheckedInGuest1, tCheckedInGuest2],
-        ).having(
-          (s) => s.sortType,
-          'sortType',
-          SortType.byNameAsc,
-        ),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'sorted by name A-Z', [
+              tCheckedOutGuest,
+              tCheckedInGuest1,
+              tCheckedInGuest2,
+            ])
+            .having((s) => s.sortType, 'sortType', SortType.byNameAsc),
       ],
     );
   });
@@ -630,44 +587,29 @@ void main() {
     blocTest<GuestBloc, GuestState>(
       'applies both filter and sort together',
       build: () {
-        when(() => repository.getGuests(tLocationId))
-            .thenAnswer((_) async => Right(tMixedGuestList));
+        when(
+          () => repository.getGuests(tLocationId),
+        ).thenAnswer((_) async => Right(tMixedGuestList));
         return GuestBloc(repository: repository);
       },
       act: (bloc) async {
         bloc.add(const LoadGuests(tLocationId));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const FilterGuests('Check-In'));
-        await expectLater(
-          bloc.stream,
-          emitsThrough(isA<GuestLoaded>()),
-        );
+        await expectLater(bloc.stream, emitsThrough(isA<GuestLoaded>()));
         bloc.add(const SortGuests(SortType.byDateAsc));
       },
       expect: () => [
         isA<GuestLoading>(),
         isA<GuestLoaded>(),
-        isA<GuestLoaded>().having(
-          (s) => s.guests.length,
-          'filtered count',
-          2,
-        ),
-        isA<GuestLoaded>().having(
-          (s) => s.guests,
-          'checked-in sorted asc',
-          [tCheckedInGuest1, tCheckedInGuest2],
-        ).having(
-          (s) => s.activeFilter,
-          'activeFilter',
-          'Check-In',
-        ).having(
-          (s) => s.sortType,
-          'sortType',
-          SortType.byDateAsc,
-        ),
+        isA<GuestLoaded>().having((s) => s.guests.length, 'filtered count', 2),
+        isA<GuestLoaded>()
+            .having((s) => s.guests, 'checked-in sorted asc', [
+              tCheckedInGuest1,
+              tCheckedInGuest2,
+            ])
+            .having((s) => s.activeFilter, 'activeFilter', 'Check-In')
+            .having((s) => s.sortType, 'sortType', SortType.byDateAsc),
       ],
     );
   });

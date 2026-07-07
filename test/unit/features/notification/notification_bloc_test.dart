@@ -66,59 +66,71 @@ void main() {
 
   group('SendTelegramNotification', () {
     setUp(() {
-      registerFallbackValue(const SendTelegramNotification(
-        phoneNumber: '',
-        guestName: '',
-        locationName: '',
-        checkInTime: '',
-      ));
+      registerFallbackValue(
+        const SendTelegramNotification(
+          phoneNumber: '',
+          guestName: '',
+          locationName: '',
+          checkInTime: '',
+        ),
+      );
     });
 
     blocTest<NotificationBloc, NotificationState>(
       'emits [NotificationSent] on success',
       build: () {
-        when(() => mockRepo.sendTelegramMessage(
-              phoneNumber: any(named: 'phoneNumber'),
-              guestName: any(named: 'guestName'),
-              locationName: any(named: 'locationName'),
-              checkInTime: any(named: 'checkInTime'),
-            )).thenAnswer((_) async {});
+        when(
+          () => mockRepo.sendTelegramMessage(
+            phoneNumber: any(named: 'phoneNumber'),
+            guestName: any(named: 'guestName'),
+            locationName: any(named: 'locationName'),
+            checkInTime: any(named: 'checkInTime'),
+          ),
+        ).thenAnswer((_) async {});
         return NotificationBloc(notificationRepository: mockRepo);
       },
-      act: (bloc) => bloc.add(const SendTelegramNotification(
-        phoneNumber: '081234567890',
-        guestName: 'Budi Santoso',
-        locationName: 'Kantor Desa Cakrawala',
-        checkInTime: '2026-07-07 10:00',
-      )),
+      act: (bloc) => bloc.add(
+        const SendTelegramNotification(
+          phoneNumber: '081234567890',
+          guestName: 'Budi Santoso',
+          locationName: 'Kantor Desa Cakrawala',
+          checkInTime: '2026-07-07 10:00',
+        ),
+      ),
       expect: () => [isA<NotificationSent>()],
       verify: (_) {
-        verify(() => mockRepo.sendTelegramMessage(
-              phoneNumber: '081234567890',
-              guestName: 'Budi Santoso',
-              locationName: 'Kantor Desa Cakrawala',
-              checkInTime: '2026-07-07 10:00',
-            )).called(1);
+        verify(
+          () => mockRepo.sendTelegramMessage(
+            phoneNumber: '081234567890',
+            guestName: 'Budi Santoso',
+            locationName: 'Kantor Desa Cakrawala',
+            checkInTime: '2026-07-07 10:00',
+          ),
+        ).called(1);
       },
     );
 
     blocTest<NotificationBloc, NotificationState>(
       'emits [NotificationError] when sendTelegramMessage throws',
       build: () {
-        when(() => mockRepo.sendTelegramMessage(
-              phoneNumber: any(named: 'phoneNumber'),
-              guestName: any(named: 'guestName'),
-              locationName: any(named: 'locationName'),
-              checkInTime: any(named: 'checkInTime'),
-            )).thenThrow(Exception('Telegram API error'));
+        when(
+          () => mockRepo.sendTelegramMessage(
+            phoneNumber: any(named: 'phoneNumber'),
+            guestName: any(named: 'guestName'),
+            locationName: any(named: 'locationName'),
+            checkInTime: any(named: 'checkInTime'),
+          ),
+        ).thenThrow(Exception('Telegram API error'));
         return NotificationBloc(notificationRepository: mockRepo);
       },
-      act: (bloc) => bloc.add(const SendTelegramNotification(
-        phoneNumber: '081234567890',
-        guestName: 'Budi',
-        locationName: 'Kantor',
-        checkInTime: '2026-07-07 10:00',
-      )),
+      act: (bloc) => bloc.add(
+        const SendTelegramNotification(
+          phoneNumber: '081234567890',
+          guestName: 'Budi',
+          locationName: 'Kantor',
+          checkInTime: '2026-07-07 10:00',
+        ),
+      ),
       expect: () => [isA<NotificationError>()],
     );
   });

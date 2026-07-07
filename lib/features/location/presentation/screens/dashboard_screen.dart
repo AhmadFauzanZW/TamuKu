@@ -76,7 +76,8 @@ class DashboardScreen extends StatelessWidget {
                     Expanded(
                       child: StatCard(
                         icon: Icons.people,
-                        value: snapshot.connectionState == ConnectionState.waiting
+                        value:
+                            snapshot.connectionState == ConnectionState.waiting
                             ? '...'
                             : totalCount.toString(),
                         label: AppConstants.statTodayGuests,
@@ -87,7 +88,8 @@ class DashboardScreen extends StatelessWidget {
                     Expanded(
                       child: StatCard(
                         icon: Icons.door_sliding,
-                        value: snapshot.connectionState == ConnectionState.waiting
+                        value:
+                            snapshot.connectionState == ConnectionState.waiting
                             ? '...'
                             : activeCount.toString(),
                         label: AppConstants.statActiveGuests,
@@ -240,5 +242,3 @@ class DashboardScreen extends StatelessWidget {
     });
   }
 }
-
-

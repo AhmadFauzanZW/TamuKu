@@ -26,18 +26,22 @@ class ExcelExportService {
     List<GuestEntity> guests, {
     String? locationName,
   }) async {
-    final guestMaps = guests.map((g) => <String, dynamic>{
-      'name': g.name,
-      'phone': Formatters.formatPhone(g.phone),
-      'email': g.email ?? '',
-      'keperluan': g.keperluan.toValue(),
-      'instansi': g.instansi ?? '',
-      'checkInTime': Formatters.dateTime.format(g.checkInTime),
-      'checkOutTime': g.checkOutTime != null
-          ? Formatters.dateTime.format(g.checkOutTime!)
-          : '-',
-      'status': _statusLabel(g.status),
-    }).toList();
+    final guestMaps = guests
+        .map(
+          (g) => <String, dynamic>{
+            'name': g.name,
+            'phone': Formatters.formatPhone(g.phone),
+            'email': g.email ?? '',
+            'keperluan': g.keperluan.toValue(),
+            'instansi': g.instansi ?? '',
+            'checkInTime': Formatters.dateTime.format(g.checkInTime),
+            'checkOutTime': g.checkOutTime != null
+                ? Formatters.dateTime.format(g.checkOutTime!)
+                : '-',
+            'status': _statusLabel(g.status),
+          },
+        )
+        .toList();
 
     final filepath = await _apiClient.exportExcel(
       guests: guestMaps,

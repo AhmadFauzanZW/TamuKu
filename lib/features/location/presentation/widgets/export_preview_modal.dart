@@ -28,8 +28,7 @@ class ExportPreviewModal extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
@@ -59,8 +58,10 @@ class ExportPreviewModal extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            AppConstants.previewTotalRows
-                                .replaceAll('%d', '${guests.length}'),
+                            AppConstants.previewTotalRows.replaceAll(
+                              '%d',
+                              '${guests.length}',
+                            ),
                             style: AppTextStyles.caption.copyWith(
                               color: AppColors.textSecondaryOf(context),
                             ),
@@ -91,29 +92,34 @@ class ExportPreviewModal extends StatelessWidget {
                       ),
                       columns: const [
                         DataColumn(
-                          label: Text('No.',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(
+                            'No.',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         DataColumn(
-                          label: Text('Nama',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(
+                            'Nama',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         DataColumn(
-                          label: Text('Keperluan',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(
+                            'Keperluan',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         DataColumn(
-                          label: Text('Status',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(
+                            'Status',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         DataColumn(
-                          label: Text('Waktu',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(
+                            'Waktu',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                       rows: List.generate(guests.length, (i) {
@@ -121,37 +127,50 @@ class ExportPreviewModal extends StatelessWidget {
                         final isCheckedIn =
                             guest.status == GuestStatus.checkedIn;
                         final timeStr = _formatTime(guest);
-                        return DataRow(cells: [
-                          DataCell(Text('${i + 1}')),
-                          DataCell(Text(guest.name,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500))),
-                          DataCell(Text(guest.keperluan.toValue())),
-                          DataCell(
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: isCheckedIn
-                                    ? AppColors.warningBg
-                                    : AppColors.successBg,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                isCheckedIn ? 'Aktif' : 'Pulang',
-                                style: TextStyle(
-                                  color: isCheckedIn
-                                      ? AppColors.warning
-                                      : AppColors.success,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                        return DataRow(
+                          cells: [
+                            DataCell(Text('${i + 1}')),
+                            DataCell(
+                              Text(
+                                guest.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
-                          ),
-                          DataCell(Text(timeStr,
-                              style: const TextStyle(fontSize: 12))),
-                        ]);
+                            DataCell(Text(guest.keperluan.toValue())),
+                            DataCell(
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isCheckedIn
+                                      ? AppColors.warningBg
+                                      : AppColors.successBg,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  isCheckedIn ? 'Aktif' : 'Pulang',
+                                  style: TextStyle(
+                                    color: isCheckedIn
+                                        ? AppColors.warning
+                                        : AppColors.success,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                timeStr,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        );
                       }),
                     ),
                   ),
@@ -169,28 +188,26 @@ class ExportPreviewModal extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: () async {
                           try {
-                            await getIt<ExcelExportService>()
-                                .exportAndShare(guests);
+                            await getIt<ExcelExportService>().exportAndShare(
+                              guests,
+                            );
                             if (context.mounted) Navigator.pop(context);
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        AppConstants.exportFailed)),
+                                  content: Text(AppConstants.exportFailed),
+                                ),
                               );
                             }
                           }
                         },
                         icon: const Icon(Icons.save_outlined),
-                        label:
-                            const Text(AppConstants.previewSave),
+                        label: const Text(AppConstants.previewSave),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary900,
-                          side: const BorderSide(
-                              color: AppColors.primary900),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 14),
+                          side: const BorderSide(color: AppColors.primary900),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: AppRadius.mdBorder,
                           ),
@@ -202,27 +219,26 @@ class ExportPreviewModal extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
-                            await getIt<ExcelExportService>()
-                                .exportAndShare(guests);
+                            await getIt<ExcelExportService>().exportAndShare(
+                              guests,
+                            );
                             if (context.mounted) Navigator.pop(context);
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        AppConstants.exportFailed)),
+                                  content: Text(AppConstants.exportFailed),
+                                ),
                               );
                             }
                           }
                         },
                         icon: const Icon(Icons.share_outlined),
-                        label:
-                            const Text(AppConstants.previewShare),
+                        label: const Text(AppConstants.previewShare),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary900,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: AppRadius.mdBorder,
                           ),
