@@ -2,18 +2,23 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/routes/app_router.dart';
 import 'core/services/sync_queue_service.dart';
 import 'core/theme/app_theme.dart';
 import 'injection_container.dart' as di;
+import 'shared/blocs/settings/settings_cubit.dart';
+import 'shared/blocs/settings/settings_state.dart';
 import 'shared/widgets/connectivity_banner.dart';
 
 /// Root application widget for TamuKu.
 ///
 /// Wraps [MaterialApp] with connectivity listener that shows
-/// [ConnectivityBanner] and triggers sync when back online.
+/// [ConnectivityBanner], triggers sync when back online, and
+/// toggles [ThemeMode] based on [SettingsCubit] state.
 class TamuKuApp extends StatefulWidget {
   /// Creates a [TamuKuApp].
   const TamuKuApp({super.key});
@@ -51,22 +56,31 @@ class _TamuKuAppState extends State<TamuKuApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      builder: (context, child) {
-        return Column(
-          children: [
-            const ConnectivityBanner(),
-            Expanded(child: child ?? const SizedBox.shrink()),
-          ],
-        );
-      },
-      initialRoute: AppRoutes.login,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+    return BlocProvider(
+      create: (_) => SettingsCubit(prefs: di.getIt<SharedPreferences>()),
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, settingsState) {
+          return MaterialApp(
+            title: AppConstants.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: settingsState.darkMode
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            builder: (context, child) {
+              return Column(
+                children: [
+                  const ConnectivityBanner(),
+                  Expanded(child: child ?? const SizedBox.shrink()),
+                ],
+              );
+            },
+            initialRoute: AppRoutes.login,
+            onGenerateRoute: AppRouter.onGenerateRoute,
+          );
+        },
+      ),
     );
   }
 }

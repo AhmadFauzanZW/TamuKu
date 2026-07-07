@@ -15,18 +15,17 @@ import '../../data/services/csv_export_service.dart';
 /// Admin settings screen.
 ///
 /// Shows the location profile, preference toggles (dark mode +
-/// Telegram notifications) backed by [SettingsCubit], a CSV export
-/// action, and a logout button that dispatches [LogoutRequested].
+/// Telegram notifications) backed by [SettingsCubit] from the app-level
+/// [BlocProvider], a CSV export action, and a logout button
+/// that dispatches [LogoutRequested].
 class SettingsScreen extends StatelessWidget {
+  /// Creates a [SettingsScreen].
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => SettingsCubit(prefs: getIt())),
-        BlocProvider(create: (_) => getIt<AuthBloc>()),
-      ],
+    return BlocProvider(
+      create: (_) => getIt<AuthBloc>(),
       child: const SettingsView(),
     );
   }

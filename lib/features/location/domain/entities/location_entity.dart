@@ -98,6 +98,29 @@ class LocationEntity extends Equatable {
         isActive: map['isActive'] as bool? ?? true,
       );
 
+  /// Returns a copy with optional field overrides.
+  LocationEntity copyWith({
+    String? locationId,
+    String? name,
+    String? address,
+    String? adminId,
+    String? hostPhone,
+    String? qrCodeValue,
+    DateTime? createdAt,
+    bool? isActive,
+  }) {
+    return LocationEntity(
+      locationId: locationId ?? this.locationId,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      adminId: adminId ?? this.adminId,
+      hostPhone: hostPhone ?? this.hostPhone,
+      qrCodeValue: qrCodeValue ?? this.qrCodeValue,
+      createdAt: createdAt ?? this.createdAt,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
   @override
   List<Object> get props => [
         locationId,

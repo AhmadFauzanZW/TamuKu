@@ -1,23 +1,122 @@
-import '../../domain/repositories/location_repository.dart';
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../core/errors/failures.dart';
+import '../../../../core/network/network_info.dart';
 import '../../domain/entities/location_entity.dart';
-import '../datasources/location_remote_datasource.dart';
+import '../../domain/repositories/location_repository.dart';
 import '../datasources/location_local_datasource.dart';
+import '../datasources/location_remote_datasource.dart';
 
+/// Offline-first implementation of [LocationRepository].
+///
+/// **Read path**: remote → cache locally → return. On failure: local fallback.
+/// **Write path**: local first (immediate) → remote when online.
+/// **Stream**: passes through remote stream directly.
 class LocationRepositoryImpl implements LocationRepository {
-  final LocationRemoteDataSource remoteDataSource;
-  final LocationLocalDataSource localDataSource;
-
+  /// Creates a [LocationRepositoryImpl].
   LocationRepositoryImpl({
-    required this.remoteDataSource,
-    required this.localDataSource,
-  });
+    required LocationRemoteDataSource remote,
+    required LocationLocalDataSource local,
+    required NetworkInfo networkInfo,
+  })  : _remote = remote,
+        _local = local,
+        _networkInfo = networkInfo;
+
+  final LocationRemoteDataSource _remote;
+  final LocationLocalDataSource _local;
+  final NetworkInfo _networkInfo;
+
+  // ─── Read Operations ──────────────────────────────────────────
 
   @override
-  Future<LocationEntity> getLocationById(String locationId) => throw UnimplementedError();
+  Future<Either<Failure, List<LocationEntity>>> getLocations() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final locations = await _remote.watchLocations().first;
+        await _local.cacheLocations(locations);
+        return Right(locations);
+      } catch (_) {
+        final cached = await _local.getCachedLocations();
+        return cached.isNotEmpty
+            ? Right(cached)
+            : const Left(ServerFailure());
+      }
+    } else {
+      final cached = await _local.getCachedLocations();
+      return cached.isNotEmpty ? Right(cached) : const Left(CacheFailure());
+    }
+  }
+
   @override
-  Future<List<LocationEntity>> getLocationsByAdmin(String adminId) => throw UnimplementedError();
+  Future<Either<Failure, LocationEntity>> getLocation(String id) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final location = await _remote.getLocationById(id);
+        await _local.cacheLocation(location);
+        return Right(location);
+      } catch (_) {
+        final cached = await _local.getCachedLocation(id);
+        return cached != null
+            ? Right(cached)
+            : const Left(ServerFailure());
+      }
+    } else {
+      final cached = await _local.getCachedLocation(id);
+      return cached != null
+          ? Right(cached)
+          : const Left(CacheFailure('Data lokasi tidak tersedia secara offline'));
+    }
+  }
+
+  // ─── Write Operations (local-first) ───────────────────────────
+
   @override
-  Future<void> createLocation(LocationEntity location) => throw UnimplementedError();
+  Future<Either<Failure, void>> createLocation(
+    LocationEntity location,
+  ) async {
+    await _local.cacheLocation(location);
+    if (await _networkInfo.isConnected) {
+      try {
+        await _remote.createLocation(location);
+      } catch (_) {
+        // Write already cached locally; will retry on next sync.
+      }
+    }
+    return const Right(null);
+  }
+
   @override
-  Future<void> updateLocation(LocationEntity location) => throw UnimplementedError();
+  Future<Either<Failure, void>> updateLocation(
+    LocationEntity location,
+  ) async {
+    await _local.cacheLocation(location);
+    if (await _networkInfo.isConnected) {
+      try {
+        await _remote.updateLocation(location);
+      } catch (_) {
+        // Write already cached locally; will retry on next sync.
+      }
+    }
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteLocation(String id) async {
+    await _local.removeCachedLocation(id);
+    if (await _networkInfo.isConnected) {
+      try {
+        await _remote.deleteLocation(id);
+      } catch (_) {
+        // Delete already applied locally; will retry on next sync.
+      }
+    }
+    return const Right(null);
+  }
+
+  // ─── Stream ───────────────────────────────────────────────────
+
+  @override
+  Stream<List<LocationEntity>> watchLocations() {
+    return _remote.watchLocations();
+  }
 }

@@ -16,6 +16,11 @@ import 'features/guest/data/repositories/guest_repository_impl.dart';
 import 'features/guest/domain/repositories/guest_repository.dart';
 import 'features/guest/presentation/bloc/guest_bloc.dart';
 import 'features/guest/presentation/bloc/guest_form_bloc.dart';
+import 'features/location/data/datasources/location_local_datasource.dart';
+import 'features/location/data/datasources/location_remote_datasource.dart';
+import 'features/location/data/repositories/location_repository_impl.dart';
+import 'features/location/domain/repositories/location_repository.dart';
+import 'features/location/presentation/bloc/location_bloc.dart';
 import 'features/location/data/services/csv_export_service.dart';
 import 'features/notification/data/repositories/notification_repository_impl.dart';
 import 'features/notification/domain/repositories/notification_repository.dart';
@@ -35,6 +40,7 @@ Future<void> init() async {
   // ─── External ───────────────────────────────────────────────────
   await Hive.initFlutter();
   final guestBox = await Hive.openBox<String>(AppConstants.boxNameGuests);
+  final locationBox = await Hive.openBox<String>(AppConstants.boxNameLocations);
   final syncBox = await Hive.openBox<String>(AppConstants.boxNameSyncQueue);
   final authBox = await Hive.openBox<String>(AppConstants.boxNameAuth);
 
@@ -48,6 +54,12 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<GuestLocalDataSource>(
     () => GuestLocalDataSourceImpl(box: guestBox),
+  );
+  getIt.registerLazySingleton<LocationRemoteDataSource>(
+    () => LocationRemoteDataSourceImpl(),
+  );
+  getIt.registerLazySingleton<LocationLocalDataSource>(
+    () => LocationLocalDataSourceImpl(box: locationBox),
   );
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(),
@@ -71,6 +83,14 @@ Future<void> init() async {
       local: getIt<GuestLocalDataSource>(),
       networkInfo: getIt<NetworkInfo>(),
       syncQueue: getIt<SyncQueueService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<LocationRepository>(
+    () => LocationRepositoryImpl(
+      remote: getIt<LocationRemoteDataSource>(),
+      local: getIt<LocationLocalDataSource>(),
+      networkInfo: getIt<NetworkInfo>(),
     ),
   );
 
@@ -98,5 +118,8 @@ Future<void> init() async {
     () => NotificationBloc(
       notificationRepository: getIt<NotificationRepository>(),
     ),
+  );
+  getIt.registerFactory(
+    () => LocationBloc(repository: getIt<LocationRepository>()),
   );
 }

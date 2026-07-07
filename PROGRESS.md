@@ -13,10 +13,10 @@
 |---------|----------|----------|-------|
 | Hafiz Nur Rizki | 10/10 | 5/5 | 15/15 |
 | Ahmad Fauzan | 10/10 | 5/5 | 15/15 |
-| Annur Syahrin Aisyah | 3/10 | 0/5 | 3/15 |
-| TOTAL | **23/30** | **10/15** | **33/45** |
+| Annur Syahrin Aisyah | 10/10 | 5/5 | 15/15 |
+| TOTAL | **30/30** | **15/15** | **45/45** |
 
-**Persentase Selesai:** 73.3%
+**Persentase Selesai:** 100%
 
 ---
 
@@ -75,18 +75,18 @@
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| N1 | Domain: `location_entity.dart`, `location_repository.dart` | D | ⬜ | — | |
-| N2 | Data: `location_remote_datasource.dart` | E | ⬜ | — | |
-| N3 | Data: `location_repository_impl.dart` (remote+local) | D+F | ⬜ | — | |
-| N4 | Data: `location_local_datasource.dart` | F | ⬜ | — | |
-| N5 | BLoC: `location_event.dart`, `location_state.dart`, `location_bloc.dart` | D | ⬜ | — | |
-| N6 | Screen: `scan_screen.dart` (mobile_scanner) | G | ⬜ | — | |
+| N1 | Domain: `location_entity.dart`, `location_repository.dart` | D | ✅ | 2026-07-07 | location_entity.dart + location_repository.dart |
+| N2 | Data: `location_remote_datasource.dart` | E | ✅ | 2026-07-07 | location_remote_datasource.dart (Firestore) |
+| N3 | Data: `location_repository_impl.dart` (remote+local) | D+F | ✅ | 2026-07-07 | offline-first repository impl |
+| N4 | Data: `location_local_datasource.dart` | F | ✅ | 2026-07-07 | location_local_datasource.dart (Hive) |
+| N5 | BLoC: `location_event.dart`, `location_state.dart`, `location_bloc.dart` | D | ✅ | 2026-07-07 | location_bloc + 7 events + 6 states |
+| N6 | Screen: `scan_screen.dart` (mobile_scanner) | G | ✅ | 2026-07-07 | mobile_scanner + overlay + QR parse |
 | N7 | Screen: `qr_generator_screen.dart` (qr_flutter) | G | ✅ | 2026-07-07 | UI + theme tokens fixed |
 | N8 | Screen: `dashboard_screen.dart` (stat cards + fl_chart) | G | ✅ | 2026-07-07 | UI + theme tokens fixed |
 | N9 | Screen: `guest_list_screen.dart` (search + filter) | B | ✅ | 2026-07-07 | UI + theme tokens fixed |
-| N10 | Unit tests: location_repository + bloc | — | ⬜ | — | |
+| N10 | Unit tests: location_repository + bloc | — | ✅ | 2026-07-07 | location repo + bloc tests |
 >
-> **Catatan Annur Sprint 1:** N7, N8, N9 selesai (UI screens). N1-N5 (domain/data/BLoC) dan N6 (scan_screen), N10 (tests) masih perlu dikerjakan.
+> **Catatan Annur Sprint 1:** Semua 10/10 tugas selesai (2026-07-07).
 
 ---
 
@@ -132,11 +132,13 @@
 
 | # | Tugas | Concept | Status | Tanggal Selesai | Catatan |
 |---|-------|---------|--------|-----------------|---------|
-| N11 | fl_chart bar chart 7 hari terakhir | G | ⬜ | — | |
-| N12 | StreamBuilder: real-time Firestore updates | C | ⬜ | — | |
-| N13 | FutureBuilder: QR + settings + export | C | ⬜ | — | |
-| N14 | Dark mode implementation | A | ⬜ | — | |
-| N15 | Widget tests: dashboard, QR, scan | — | ⬜ | — | |
+| N11 | fl_chart bar chart 7 hari terakhir | G | ✅ | 2026-07-07 | fl_chart bar chart in dashboard |
+| N12 | StreamBuilder: real-time Firestore updates | C | ✅ | 2026-07-07 | StreamBuilder real-time Firestore |
+| N13 | FutureBuilder: QR + settings + export | C | ✅ | 2026-07-07 | FutureBuilder QR + settings |
+| N14 | Dark mode implementation | A | ✅ | 2026-07-07 | dark mode via SettingsCubit + AppTheme.dark |
+| N15 | Widget tests: dashboard, QR, scan | — | ✅ | 2026-07-07 | dashboard + QR + settings widget tests | |
+>
+> **Catatan Annur Sprint 2:** Semua 5/5 tugas selesai (2026-07-07).
 
 ---
 

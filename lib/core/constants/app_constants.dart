@@ -96,6 +96,9 @@ abstract final class AppConstants {
   /// Hive box name for cached guest data
   static const String boxNameGuests = 'guests';
 
+  /// Hive box name for cached location data
+  static const String boxNameLocations = 'locations';
+
   /// Hive box name for sync queue operations
   static const String boxNameSyncQueue = 'sync_queue';
 
