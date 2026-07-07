@@ -59,8 +59,10 @@ class LocationLocalDataSourceImpl implements LocationLocalDataSource {
     return ids
         .map((id) => _locationBox.get(id))
         .where((raw) => raw != null)
-        .map((raw) =>
-            LocationEntity.fromMap(jsonDecode(raw!) as Map<String, dynamic>))
+        .map(
+          (raw) =>
+              LocationEntity.fromMap(jsonDecode(raw!) as Map<String, dynamic>),
+        )
         .toList();
   }
 
@@ -83,8 +85,7 @@ class LocationLocalDataSourceImpl implements LocationLocalDataSource {
 
   @override
   Future<void> cacheLocation(LocationEntity location) async {
-    await _locationBox.put(
-        location.locationId, jsonEncode(location.toMap()));
+    await _locationBox.put(location.locationId, jsonEncode(location.toMap()));
 
     final ids = _allIds();
     if (!ids.contains(location.locationId)) {

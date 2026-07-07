@@ -11,8 +11,7 @@ import 'package:tamuku/features/location/domain/entities/location_entity.dart';
 
 // ─── Mocks ──────────────────────────────────────────────────────
 
-class MockRemoteDataSource extends Mock
-    implements LocationRemoteDataSource {}
+class MockRemoteDataSource extends Mock implements LocationRemoteDataSource {}
 
 class MockLocalDataSource extends Mock implements LocationLocalDataSource {}
 
@@ -21,15 +20,15 @@ class MockNetworkInfo extends Mock implements NetworkInfo {}
 // ─── Fixtures ───────────────────────────────────────────────────
 
 LocationEntity _testLocation({String id = 'loc1'}) => LocationEntity(
-      locationId: id,
-      name: 'Kantor Cakrawala',
-      address: 'Jl. Merdeka No. 10',
-      adminId: 'admin1',
-      hostPhone: '081234567890',
-      qrCodeValue: 'qr_$id',
-      createdAt: DateTime(2025, 1, 1),
-      isActive: true,
-    );
+  locationId: id,
+  name: 'Kantor Cakrawala',
+  address: 'Jl. Merdeka No. 10',
+  adminId: 'admin1',
+  hostPhone: '081234567890',
+  qrCodeValue: 'qr_$id',
+  createdAt: DateTime(2025, 1, 1),
+  isActive: true,
+);
 
 void main() {
   late LocationRepositoryImpl repository;
@@ -53,10 +52,10 @@ void main() {
   group('getLocation', () {
     test('returns LocationEntity on remote success (online)', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemote.getLocationById('loc1'))
-          .thenAnswer((_) async => _testLocation());
-      when(() => mockLocal.cacheLocation(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRemote.getLocationById('loc1'),
+      ).thenAnswer((_) async => _testLocation());
+      when(() => mockLocal.cacheLocation(any())).thenAnswer((_) async {});
 
       final result = await repository.getLocation('loc1');
 
@@ -68,19 +67,24 @@ void main() {
 
     test('returns CacheFailure when offline and no cache', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      when(() => mockLocal.getCachedLocation('loc1'))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockLocal.getCachedLocation('loc1'),
+      ).thenAnswer((_) async => null);
 
       final result = await repository.getLocation('loc1');
 
       expect(result, isA<Left<Failure, LocationEntity>>());
-      result.fold((l) => expect(l, isA<CacheFailure>()), (r) => fail('Should not be Right'));
+      result.fold(
+        (l) => expect(l, isA<CacheFailure>()),
+        (r) => fail('Should not be Right'),
+      );
     });
 
     test('returns cached location when offline', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      when(() => mockLocal.getCachedLocation('loc1'))
-          .thenAnswer((_) async => _testLocation());
+      when(
+        () => mockLocal.getCachedLocation('loc1'),
+      ).thenAnswer((_) async => _testLocation());
 
       final result = await repository.getLocation('loc1');
 
@@ -91,10 +95,10 @@ void main() {
   group('getLocations', () {
     test('returns list from remote when online', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemote.watchLocations())
-          .thenAnswer((_) => Stream.value([_testLocation()]));
-      when(() => mockLocal.cacheLocations(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRemote.watchLocations(),
+      ).thenAnswer((_) => Stream.value([_testLocation()]));
+      when(() => mockLocal.cacheLocations(any())).thenAnswer((_) async {});
 
       final result = await repository.getLocations();
 
@@ -106,10 +110,10 @@ void main() {
 
     test('returns ServerFailure on remote error when online', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemote.watchLocations())
-          .thenAnswer((_) => Stream.error(Exception('fail')));
-      when(() => mockLocal.getCachedLocations())
-          .thenAnswer((_) async => []);
+      when(
+        () => mockRemote.watchLocations(),
+      ).thenAnswer((_) => Stream.error(Exception('fail')));
+      when(() => mockLocal.getCachedLocations()).thenAnswer((_) async => []);
 
       final result = await repository.getLocations();
 
@@ -120,10 +124,8 @@ void main() {
   group('createLocation', () {
     test('caches locally and writes to remote when online', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockLocal.cacheLocation(any()))
-          .thenAnswer((_) async {});
-      when(() => mockRemote.createLocation(any()))
-          .thenAnswer((_) async {});
+      when(() => mockLocal.cacheLocation(any())).thenAnswer((_) async {});
+      when(() => mockRemote.createLocation(any())).thenAnswer((_) async {});
 
       final result = await repository.createLocation(_testLocation());
 
@@ -134,8 +136,7 @@ void main() {
 
     test('caches locally only when offline', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      when(() => mockLocal.cacheLocation(any()))
-          .thenAnswer((_) async {});
+      when(() => mockLocal.cacheLocation(any())).thenAnswer((_) async {});
 
       final result = await repository.createLocation(_testLocation());
 
@@ -147,10 +148,10 @@ void main() {
   group('deleteLocation', () {
     test('removes from local and remote when online', () async {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockLocal.removeCachedLocation('loc1'))
-          .thenAnswer((_) async {});
-      when(() => mockRemote.deleteLocation('loc1'))
-          .thenAnswer((_) async {});
+      when(
+        () => mockLocal.removeCachedLocation('loc1'),
+      ).thenAnswer((_) async {});
+      when(() => mockRemote.deleteLocation('loc1')).thenAnswer((_) async {});
 
       final result = await repository.deleteLocation('loc1');
 

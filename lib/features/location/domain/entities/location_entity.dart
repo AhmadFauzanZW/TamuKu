@@ -65,38 +65,38 @@ class LocationEntity extends Equatable {
 
   /// Serializes to a Firestore-compatible map.
   Map<String, dynamic> toFirestore() => {
-        AppConstants.fieldName: name,
-        AppConstants.fieldAddress: address,
-        AppConstants.fieldAdminId: adminId,
-        AppConstants.fieldHostPhone: hostPhone,
-        'qrCodeValue': qrCodeValue,
-        'createdAt': Timestamp.fromDate(createdAt),
-        'isActive': isActive,
-      };
+    AppConstants.fieldName: name,
+    AppConstants.fieldAddress: address,
+    AppConstants.fieldAdminId: adminId,
+    AppConstants.fieldHostPhone: hostPhone,
+    'qrCodeValue': qrCodeValue,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'isActive': isActive,
+  };
 
   /// Serializes to a JSON-compatible map (for local storage).
   Map<String, dynamic> toMap() => {
-        'locationId': locationId,
-        'name': name,
-        'address': address,
-        'adminId': adminId,
-        'hostPhone': hostPhone,
-        'qrCodeValue': qrCodeValue,
-        'createdAt': createdAt.toIso8601String(),
-        'isActive': isActive,
-      };
+    'locationId': locationId,
+    'name': name,
+    'address': address,
+    'adminId': adminId,
+    'hostPhone': hostPhone,
+    'qrCodeValue': qrCodeValue,
+    'createdAt': createdAt.toIso8601String(),
+    'isActive': isActive,
+  };
 
   /// Deserializes from a JSON map.
   factory LocationEntity.fromMap(Map<String, dynamic> map) => LocationEntity(
-        locationId: map['locationId'] as String,
-        name: map['name'] as String,
-        address: map['address'] as String? ?? '',
-        adminId: map['adminId'] as String? ?? '',
-        hostPhone: map['hostPhone'] as String? ?? '',
-        qrCodeValue: map['qrCodeValue'] as String? ?? '',
-        createdAt: DateTime.parse(map['createdAt'] as String),
-        isActive: map['isActive'] as bool? ?? true,
-      );
+    locationId: map['locationId'] as String,
+    name: map['name'] as String,
+    address: map['address'] as String? ?? '',
+    adminId: map['adminId'] as String? ?? '',
+    hostPhone: map['hostPhone'] as String? ?? '',
+    qrCodeValue: map['qrCodeValue'] as String? ?? '',
+    createdAt: DateTime.parse(map['createdAt'] as String),
+    isActive: map['isActive'] as bool? ?? true,
+  );
 
   /// Returns a copy with optional field overrides.
   LocationEntity copyWith({
@@ -123,13 +123,13 @@ class LocationEntity extends Equatable {
 
   @override
   List<Object> get props => [
-        locationId,
-        name,
-        address,
-        adminId,
-        hostPhone,
-        qrCodeValue,
-        createdAt,
-        isActive,
-      ];
+    locationId,
+    name,
+    address,
+    adminId,
+    hostPhone,
+    qrCodeValue,
+    createdAt,
+    isActive,
+  ];
 }

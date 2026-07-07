@@ -33,10 +33,7 @@ class LocationsLoaded extends LocationState {
   /// Active guest list filter (default: 'Semua').
   final String selectedFilter;
 
-  const LocationsLoaded(
-    this.locations, {
-    this.selectedFilter = 'Semua',
-  });
+  const LocationsLoaded(this.locations, {this.selectedFilter = 'Semua'});
   @override
   List<Object> get props => [locations, selectedFilter];
 }

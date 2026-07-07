@@ -17,11 +17,7 @@ class VisitChart extends StatelessWidget {
   final List<String> dayLabels;
 
   /// Creates a [VisitChart].
-  const VisitChart({
-    super.key,
-    required this.visits,
-    required this.dayLabels,
-  });
+  const VisitChart({super.key, required this.visits, required this.dayLabels});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +54,12 @@ class VisitChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 32,
-                interval: _computeMaxY() > 0 ? (_computeMaxY() / 4).ceilToDouble().clamp(1, double.infinity) : 1,
+                interval: _computeMaxY() > 0
+                    ? (_computeMaxY() / 4).ceilToDouble().clamp(
+                        1,
+                        double.infinity,
+                      )
+                    : 1,
                 getTitlesWidget: (value, meta) {
                   if (value == meta.max || value % 1 != 0) {
                     return const SizedBox.shrink();
@@ -103,10 +104,8 @@ class VisitChart extends StatelessWidget {
             horizontalInterval: _computeMaxY() > 0
                 ? (_computeMaxY() / 4).ceilToDouble().clamp(1, double.infinity)
                 : 1,
-            getDrawingHorizontalLine: (value) => const FlLine(
-              color: AppColors.border,
-              strokeWidth: 0.5,
-            ),
+            getDrawingHorizontalLine: (value) =>
+                const FlLine(color: AppColors.border, strokeWidth: 0.5),
           ),
           barGroups: List.generate(visits.length, (i) {
             return BarChartGroupData(

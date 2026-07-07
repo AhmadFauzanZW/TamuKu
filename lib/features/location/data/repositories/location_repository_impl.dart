@@ -18,9 +18,9 @@ class LocationRepositoryImpl implements LocationRepository {
     required LocationRemoteDataSource remote,
     required LocationLocalDataSource local,
     required NetworkInfo networkInfo,
-  })  : _remote = remote,
-        _local = local,
-        _networkInfo = networkInfo;
+  }) : _remote = remote,
+       _local = local,
+       _networkInfo = networkInfo;
 
   final LocationRemoteDataSource _remote;
   final LocationLocalDataSource _local;
@@ -37,9 +37,7 @@ class LocationRepositoryImpl implements LocationRepository {
         return Right(locations);
       } catch (_) {
         final cached = await _local.getCachedLocations();
-        return cached.isNotEmpty
-            ? Right(cached)
-            : const Left(ServerFailure());
+        return cached.isNotEmpty ? Right(cached) : const Left(ServerFailure());
       }
     } else {
       final cached = await _local.getCachedLocations();
@@ -56,24 +54,22 @@ class LocationRepositoryImpl implements LocationRepository {
         return Right(location);
       } catch (_) {
         final cached = await _local.getCachedLocation(id);
-        return cached != null
-            ? Right(cached)
-            : const Left(ServerFailure());
+        return cached != null ? Right(cached) : const Left(ServerFailure());
       }
     } else {
       final cached = await _local.getCachedLocation(id);
       return cached != null
           ? Right(cached)
-          : const Left(CacheFailure('Data lokasi tidak tersedia secara offline'));
+          : const Left(
+              CacheFailure('Data lokasi tidak tersedia secara offline'),
+            );
     }
   }
 
   // ─── Write Operations (local-first) ───────────────────────────
 
   @override
-  Future<Either<Failure, void>> createLocation(
-    LocationEntity location,
-  ) async {
+  Future<Either<Failure, void>> createLocation(LocationEntity location) async {
     await _local.cacheLocation(location);
     if (await _networkInfo.isConnected) {
       try {
@@ -86,9 +82,7 @@ class LocationRepositoryImpl implements LocationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateLocation(
-    LocationEntity location,
-  ) async {
+  Future<Either<Failure, void>> updateLocation(LocationEntity location) async {
     await _local.cacheLocation(location);
     if (await _networkInfo.isConnected) {
       try {

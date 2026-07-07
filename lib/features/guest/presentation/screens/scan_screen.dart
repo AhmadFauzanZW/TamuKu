@@ -19,10 +19,7 @@ class ScanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ScanCubit(),
-      child: const _ScanBody(),
-    );
+    return BlocProvider(create: (_) => ScanCubit(), child: const _ScanBody());
   }
 }
 
@@ -65,9 +62,7 @@ class _ScanBody extends StatelessWidget {
                     horizontal: AppSpacing.xl,
                     vertical: AppSpacing.md,
                   ),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.xl,
-                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
                   decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: AppRadius.mdBorder,
@@ -155,10 +150,7 @@ class _ScannerOverlayPainter extends CustomPainter {
       ..addRRect(cutout)
       ..fillType = PathFillType.evenOdd;
 
-    canvas.drawPath(
-      path,
-      Paint()..color = Colors.black.withValues(alpha: 0.4),
-    );
+    canvas.drawPath(path, Paint()..color = Colors.black.withValues(alpha: 0.4));
 
     // Corner borders
     final borderPaint = Paint()

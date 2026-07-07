@@ -17,15 +17,15 @@ class MockLocationRepository extends Mock implements LocationRepository {}
 // ─── Fixtures ───────────────────────────────────────────────────
 
 LocationEntity _testLocation({String id = 'loc1'}) => LocationEntity(
-      locationId: id,
-      name: 'Kantor Cakrawala',
-      address: 'Jl. Merdeka No. 10',
-      adminId: 'admin1',
-      hostPhone: '081234567890',
-      qrCodeValue: 'qr_$id',
-      createdAt: DateTime(2025, 1, 1),
-      isActive: true,
-    );
+  locationId: id,
+  name: 'Kantor Cakrawala',
+  address: 'Jl. Merdeka No. 10',
+  adminId: 'admin1',
+  hostPhone: '081234567890',
+  qrCodeValue: 'qr_$id',
+  createdAt: DateTime(2025, 1, 1),
+  isActive: true,
+);
 
 void main() {
   late LocationBloc bloc;
@@ -44,29 +44,25 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationsLoaded] on success',
       build: () {
-        when(() => mockRepo.getLocations())
-            .thenAnswer((_) async => Right([_testLocation()]));
+        when(
+          () => mockRepo.getLocations(),
+        ).thenAnswer((_) async => Right([_testLocation()]));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(const LoadLocations()),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationsLoaded>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationsLoaded>()],
     );
 
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationError] on failure',
       build: () {
-        when(() => mockRepo.getLocations())
-            .thenAnswer((_) async => const Left(ServerFailure()));
+        when(
+          () => mockRepo.getLocations(),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(const LoadLocations()),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationError>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationError>()],
     );
   });
 
@@ -74,15 +70,13 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationLoaded] on success',
       build: () {
-        when(() => mockRepo.getLocation('loc1'))
-            .thenAnswer((_) async => Right(_testLocation()));
+        when(
+          () => mockRepo.getLocation('loc1'),
+        ).thenAnswer((_) async => Right(_testLocation()));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(const LoadLocation('loc1')),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationLoaded>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationLoaded>()],
     );
   });
 
@@ -90,20 +84,20 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationOperationSuccess] on success',
       build: () {
-        when(() => mockRepo.createLocation(any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockRepo.createLocation(any()),
+        ).thenAnswer((_) async => const Right(null));
         return LocationBloc(repository: mockRepo);
       },
-      act: (bloc) => bloc.add(const CreateLocation(
-        name: 'New Location',
-        address: 'Jl. Baru',
-        adminId: 'admin1',
-        hostPhone: '081234567890',
-      )),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationOperationSuccess>(),
-      ],
+      act: (bloc) => bloc.add(
+        const CreateLocation(
+          name: 'New Location',
+          address: 'Jl. Baru',
+          adminId: 'admin1',
+          hostPhone: '081234567890',
+        ),
+      ),
+      expect: () => [isA<LocationLoading>(), isA<LocationOperationSuccess>()],
     );
   });
 
@@ -111,15 +105,13 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationOperationSuccess] on success',
       build: () {
-        when(() => mockRepo.updateLocation(any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockRepo.updateLocation(any()),
+        ).thenAnswer((_) async => const Right(null));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(UpdateLocation(_testLocation())),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationOperationSuccess>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationOperationSuccess>()],
     );
   });
 
@@ -127,29 +119,25 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationOperationSuccess] on success',
       build: () {
-        when(() => mockRepo.deleteLocation('loc1'))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockRepo.deleteLocation('loc1'),
+        ).thenAnswer((_) async => const Right(null));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(const DeleteLocation('loc1')),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationOperationSuccess>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationOperationSuccess>()],
     );
 
     blocTest<LocationBloc, LocationState>(
       'emits [LocationLoading, LocationError] on failure',
       build: () {
-        when(() => mockRepo.deleteLocation('loc1'))
-            .thenAnswer((_) async => const Left(ServerFailure('Gagal hapus')));
+        when(
+          () => mockRepo.deleteLocation('loc1'),
+        ).thenAnswer((_) async => const Left(ServerFailure('Gagal hapus')));
         return LocationBloc(repository: mockRepo);
       },
       act: (bloc) => bloc.add(const DeleteLocation('loc1')),
-      expect: () => [
-        isA<LocationLoading>(),
-        isA<LocationError>(),
-      ],
+      expect: () => [isA<LocationLoading>(), isA<LocationError>()],
     );
   });
 }

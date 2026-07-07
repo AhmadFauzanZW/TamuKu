@@ -16,8 +16,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   /// Creates a [LocationBloc] with the given [repository].
   LocationBloc({required LocationRepository repository})
-      : _repository = repository,
-        super(LocationInitial()) {
+    : _repository = repository,
+      super(LocationInitial()) {
     on<LoadLocation>(_onLoadLocation);
     on<LoadLocations>(_onLoadLocations);
     on<CreateLocation>(_onCreateLocation);
@@ -132,10 +132,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   ) {
     final current = state;
     if (current is LocationsLoaded) {
-      emit(LocationsLoaded(
-        current.locations,
-        selectedFilter: event.filter,
-      ));
+      emit(LocationsLoaded(current.locations, selectedFilter: event.filter));
     }
   }
 

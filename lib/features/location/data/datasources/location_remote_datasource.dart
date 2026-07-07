@@ -31,7 +31,7 @@ abstract class LocationRemoteDataSource {
 class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
   /// Creates a [LocationRemoteDataSourceImpl] with optional [FirebaseFirestore] override.
   LocationRemoteDataSourceImpl({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 

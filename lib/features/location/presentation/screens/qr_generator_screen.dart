@@ -54,9 +54,7 @@ class QrGeneratorScreen extends StatelessWidget {
             child: Center(
               child: Card(
                 elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: AppRadius.lgBorder,
-                ),
+                shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
                 child: Padding(
                   padding: const EdgeInsets.all(AppSpacing.xl),
                   child: Column(

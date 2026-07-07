@@ -79,8 +79,7 @@ class DashboardScreen extends StatelessWidget {
                   children: [
                     _StatCard(
                       title: AppConstants.statTodayGuests,
-                      value: snapshot.connectionState ==
-                              ConnectionState.waiting
+                      value: snapshot.connectionState == ConnectionState.waiting
                           ? '...'
                           : totalCount.toString(),
                       icon: Icons.people,
@@ -89,8 +88,7 @@ class DashboardScreen extends StatelessWidget {
                     const SizedBox(width: AppSpacing.md),
                     _StatCard(
                       title: AppConstants.statActiveGuests,
-                      value: snapshot.connectionState ==
-                              ConnectionState.waiting
+                      value: snapshot.connectionState == ConnectionState.waiting
                           ? '...'
                           : activeCount.toString(),
                       icon: Icons.door_sliding,
@@ -100,10 +98,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
-                const Text(
-                  AppConstants.chartTitle,
-                  style: AppTextStyles.h3,
-                ),
+                const Text(AppConstants.chartTitle, style: AppTextStyles.h3),
                 const SizedBox(height: AppSpacing.md),
 
                 // fl_chart Bar Chart
@@ -217,15 +212,13 @@ class DashboardScreen extends StatelessWidget {
     final counts = List<double>.filled(7, 0);
     for (final doc in docs) {
       final data = doc.data();
-      final checkInTime =
-          (data[AppConstants.fieldCheckInTime] as Timestamp?)?.toDate();
+      final checkInTime = (data[AppConstants.fieldCheckInTime] as Timestamp?)
+          ?.toDate();
       if (checkInTime == null) continue;
       final diff = DateTime(now.year, now.month, now.day)
-          .difference(DateTime(
-            checkInTime.year,
-            checkInTime.month,
-            checkInTime.day,
-          ))
+          .difference(
+            DateTime(checkInTime.year, checkInTime.month, checkInTime.day),
+          )
           .inDays;
       if (diff >= 0 && diff < 7) {
         counts[6 - diff]++;
