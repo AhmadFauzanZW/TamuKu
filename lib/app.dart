@@ -69,11 +69,19 @@ class _TamuKuAppState extends State<TamuKuApp> {
                 ? ThemeMode.dark
                 : ThemeMode.light,
             builder: (context, child) {
-              return Column(
-                children: [
-                  const ConnectivityBanner(),
-                  Expanded(child: child ?? const SizedBox.shrink()),
-                ],
+              return MediaQuery(
+                data: MediaQuery.of(context),
+                child: Stack(
+                  children: [
+                    child ?? const SizedBox.shrink(),
+                    const Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: ConnectivityBanner(),
+                    ),
+                  ],
+                ),
               );
             },
             initialRoute: AppRoutes.login,

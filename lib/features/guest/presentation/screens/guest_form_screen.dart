@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../injection_container.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../shared/services/api_client.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -64,7 +66,10 @@ class _GuestFormViewState extends State<GuestFormView> {
 
   // ── Submit ─────────────────────────────────────────────────────
 
-  void _onSubmit() {
+  bool _submitting = false;
+
+  Future<void> _onSubmit() async {
+    if (_submitting) return;
     if (!_formKey.currentState!.validate()) return;
     final fs = context.read<GuestFormBloc>().state;
     if (fs.keperluan == null) {
@@ -80,6 +85,31 @@ class _GuestFormViewState extends State<GuestFormView> {
       locationId = args['locationId'] as String? ?? '';
       hostPhone = args['hostPhone'] as String?;
     }
+
+    // Upload photo to S3 via presigned URL (non-blocking on failure)
+    String? photoUrl;
+    if (fs.photo != null) {
+      try {
+        final apiClient = getIt<ApiClient>();
+        final ext = fs.photo!.path.split('.').last.toLowerCase();
+        final mime = ext == 'png' ? 'image/png' : 'image/jpeg';
+        final uploadData = await apiClient.getUploadUrl(mime);
+        final bytes = await fs.photo!.readAsBytes();
+        final putRes = await http.put(
+          Uri.parse(uploadData['uploadUrl']!),
+          body: bytes,
+          headers: {'Content-Type': mime},
+        );
+        if (putRes.statusCode == 200) {
+          photoUrl = uploadData['fileUrl'];
+        }
+      } catch (_) {
+        // Photo upload failed — continue without photo
+      }
+    }
+
+    _submitting = true;
+    if (!mounted) return;
     context.read<GuestBloc>().add(CheckInRequested(
           name: _nameCtrl.text.trim(),
           phone: _phoneCtrl.text.trim(),
@@ -90,7 +120,7 @@ class _GuestFormViewState extends State<GuestFormView> {
           instansi: _instansiCtrl.text.trim().isEmpty
               ? null
               : _instansiCtrl.text.trim(),
-          photoUrl: fs.photo?.path,
+          photoUrl: photoUrl,
           locationId: locationId,
           hostPhone: hostPhone,
         ));
@@ -147,7 +177,6 @@ class _GuestFormViewState extends State<GuestFormView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Formulir Tamu'),
         backgroundColor: AppColors.primary900,
@@ -167,10 +196,11 @@ class _GuestFormViewState extends State<GuestFormView> {
                   Text(
                     'Silakan isi data kunjungan Anda',
                     style: AppTextStyles.bodyLarge
-                        .copyWith(color: AppColors.textSecondary),
+                        .copyWith(color: AppColors.textSecondaryOf(context)),
                   ),
                   const SizedBox(height: 24),
                   _field(
+                    context: context,
                     ctrl: _nameCtrl,
                     label: AppConstants.nameLabel,
                     validator: Validators.validateName,
@@ -178,6 +208,7 @@ class _GuestFormViewState extends State<GuestFormView> {
                   ),
                   const SizedBox(height: 16),
                   _field(
+                    context: context,
                     ctrl: _phoneCtrl,
                     label: AppConstants.phoneLabel,
                     keyboard: TextInputType.phone,
@@ -185,6 +216,7 @@ class _GuestFormViewState extends State<GuestFormView> {
                   ),
                   const SizedBox(height: 16),
                   _field(
+                    context: context,
                     ctrl: _emailCtrl,
                     label: 'Email (opsional)',
                     keyboard: TextInputType.emailAddress,
@@ -194,6 +226,7 @@ class _GuestFormViewState extends State<GuestFormView> {
                   _buildKeperluanDropdown(),
                   const SizedBox(height: 16),
                   _field(
+                    context: context,
                     ctrl: _instansiCtrl,
                     label: AppConstants.instansiLabel,
                     capitalization: TextCapitalization.words,
@@ -240,7 +273,7 @@ class _GuestFormViewState extends State<GuestFormView> {
       builder: (context, state) {
         return DropdownButtonFormField<Keperluan>(
           initialValue: state.keperluan,
-          decoration: _dec(AppConstants.keperluanLabel),
+          decoration: _dec(context, AppConstants.keperluanLabel),
           items: Keperluan.values
               .map((k) => DropdownMenuItem(value: k, child: Text(k.toValue())))
               .toList(),
@@ -260,6 +293,7 @@ class _GuestFormViewState extends State<GuestFormView> {
   // ── Helpers ────────────────────────────────────────────────────
 
   Widget _field({
+    required BuildContext context,
     required TextEditingController ctrl,
     required String label,
     TextInputType? keyboard,
@@ -270,25 +304,25 @@ class _GuestFormViewState extends State<GuestFormView> {
       controller: ctrl,
       keyboardType: keyboard,
       textCapitalization: capitalization,
-      decoration: _dec(label),
+      decoration: _dec(context, label),
       validator: validator,
     );
   }
 
-  InputDecoration _dec(String label) {
+  InputDecoration _dec(BuildContext context, String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+      labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondaryOf(context)),
       filled: true,
-      fillColor: AppColors.surface,
+      fillColor: AppColors.surfaceOf(context),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.borderOf(context)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.borderOf(context)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

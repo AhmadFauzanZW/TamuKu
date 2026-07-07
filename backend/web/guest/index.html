@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TamuKu — Buku Tamu Digital</title>
+  <link rel="icon" type="image/png" href="/guest/favicon.png">
+  <style>
+    /* === RESET & BASE === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #1B5E20;
+      --primary-light: #4CAF50;
+      --primary-bg: #E8F5E9;
+      --surface: #FFFFFF;
+      --background: #F5F5F5;
+      --text: #212121;
+      --text-secondary: #757575;
+      --border: #E0E0E0;
+      --error: #D32F2F;
+      --error-bg: #FFEBEE;
+      --success: #388E3C;
+      --success-bg: #E8F5E9;
+      --warning: #F57C00;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+    }
+
+    /* === HEADER === */
+    .header {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 13px; opacity: 0.85; }
+
+    /* === CONTENT === */
+    .content {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px 16px;
+      flex: 1;
+    }
+
+    /* === CARDS === */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    /* === FORM === */
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-group label .required { color: var(--error); }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(27,94,32,0.1);
+    }
+    .form-group input.error, .form-group select.error {
+      border-color: var(--error);
+    }
+    .form-group .error-text {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    .form-group input.error + .error-text,
+    .form-group select.error + .error-text {
+      display: block;
+    }
+
+    /* === BUTTONS === */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:not(:disabled):hover {
+      background: #154218;
+    }
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+    .btn-outline:not(:disabled):hover {
+      background: var(--primary-bg);
+    }
+
+    /* === STATUS BADGES === */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-success { background: var(--success-bg); color: var(--success); }
+    .badge-warning { background: #FFF3E0; color: var(--warning); }
+
+    /* === LOADING === */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .spinner-dark {
+      border-color: rgba(0,0,0,0.1);
+      border-top-color: var(--primary);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* === CONFIRMATION === */
+    .confirmation {
+      text-align: center;
+      padding: 30px 20px;
+    }
+    .confirmation .icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--success-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .confirmation .icon svg {
+      width: 36px;
+      height: 36px;
+      color: var(--success);
+    }
+    .confirmation h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .confirmation p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label { color: var(--text-secondary); }
+    .info-row .value { font-weight: 500; }
+
+    /* === HIDDEN === */
+    .hidden { display: none !important; }
+
+    /* === CHECKOUT === */
+    .checkout-card {
+      text-align: center;
+    }
+    .checkout-card .guest-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 12px 0 4px;
+    }
+    .checkout-card .guest-detail {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .duration-box {
+      background: var(--primary-bg);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+    .duration-box .time {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .duration-box .label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>&#127977; TamuKu</h1>
+    <p>Buku Tamu Digital</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- LOADING STATE -->
+    <div id="loading" class="card" style="text-align: center; padding: 40px;">
+      <div class="spinner spinner-dark" style="margin: 0 auto 12px;"></div>
+      <p style="color: var(--text-secondary);">Memuat data lokasi...</p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div id="error-state" class="card hidden" style="text-align: center; padding: 30px;">
+      <p style="font-size: 40px; margin-bottom: 12px;">&#9888;&#65039;</p>
+      <h3 style="margin-bottom: 8px;">Terjadi Kesalahan</h3>
+      <p id="error-message" style="color: var(--text-secondary); font-size: 14px;"></p>
+    </div>
+
+    <!-- CHECK-IN FORM -->
+    <div id="checkin-form" class="hidden">
+      <!-- Location Info -->
+      <div class="card">
+        <div class="card-title">&#128205; Lokasi</div>
+        <div id="location-name" style="font-weight: 600; font-size: 16px; margin-bottom: 4px;"></div>
+        <div id="location-address" style="color: var(--text-secondary); font-size: 13px;"></div>
+      </div>
+
+      <!-- Guest Form -->
+      <div class="card">
+        <div class="card-title">&#128203; Data Diri</div>
+        <form id="guest-form" novalidate>
+          <div class="form-group">
+            <label>Nama Lengkap <span class="required">*</span></label>
+            <input type="text" id="name" placeholder="Masukkan nama lengkap" required>
+            <div class="error-text">Nama wajib diisi</div>
+          </div>
+          <div class="form-group">
+            <label>No. WhatsApp <span class="required">*</span></label>
+            <input type="tel" id="phone" placeholder="081234567890" required>
+            <div class="error-text">Nomor WhatsApp wajib diisi</div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="email@example.com (opsional)">
+          </div>
+          <div class="form-group">
+            <label>Instansi / Perusahaan</label>
+            <input type="text" id="instansi" placeholder="Nama instansi (opsional)">
+          </div>
+          <div class="form-group">
+            <label>Keperluan <span class="required">*</span></label>
+            <select id="keperluan" required>
+              <option value="">Pilih keperluan</option>
+              <option value="Meeting">Meeting</option>
+              <option value="Personal">Personal</option>
+              <option value="Kantor">Kantor</option>
+              <option value="Pengiriman">Pengiriman</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+            <div class="error-text">Keperluan wajib dipilih</div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            <span id="submit-text">Check In</span>
+            <div id="submit-spinner" class="spinner hidden"></div>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- CHECK-IN CONFIRMATION -->
+    <div id="checkin-confirmation" class="card hidden">
+      <div class="confirmation">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2>Berhasil Check In!</h2>
+        <p>Selamat datang di lokasi kami</p>
+        <div class="card" style="text-align: left; margin-bottom: 0;">
+          <div class="info-row">
+            <span class="label">Nama</span>
+            <span class="value" id="confirm-name"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Keperluan</span>
+            <span class="value" id="confirm-keperluan"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Waktu Masuk</span>
+            <span class="value" id="confirm-time"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKOUT VIEW -->
+    <div id="checkout-view" class="card hidden">
+      <div class="checkout-card">
+        <div class="icon" style="width: 56px; height: 56px; margin-bottom: 0;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </div>
+        <div class="guest-name" id="checkout-name"></div>
+        <div class="guest-detail" id="checkout-keperluan"></div>
+        <div class="duration-box">
+          <div class="time" id="checkout-duration">--</div>
+          <div class="label">Durasi Kunjungan</div>
+        </div>
+        <div class="info-row">
+          <span class="label">Masuk</span>
+          <span class="value" id="checkout-checkin-time"></span>
+        </div>
+        <button class="btn btn-primary" id="checkout-btn" style="margin-top: 16px;">
+          <span id="checkout-text">Check Out</span>
+          <div id="checkout-spinner" class="spinner hidden"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- CHECKOUT CONFIRMATION -->
+    <div id="checkout-confirmation" class="card hidden">
+      <div class="confirmation">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2>Berhasil Check Out!</h2>
+        <p>Terima kasih telah berkunjung</p>
+        <div class="info-row">
+          <span class="label">Waktu Keluar</span>
+          <span class="value" id="checkout-confirm-time"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat mode for simplicity) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // Firebase Config — same project as Flutter app
+    // ═══════════════════════════════════════════════════════════════
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9KsNkbl3UZZKkPW_gynHFCf--liiYOYA",
+      authDomain: "tamuku-6360f.firebaseapp.com",
+      projectId: "tamuku-6360f",
+      storageBucket: "tamuku-6360f.firebasestorage.app",
+      messagingSenderId: "762093911458",
+      appId: "1:762093911458:web:placeholder"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ═══════════════════════════════════════════════════════════════
+    // State
+    // ═══════════════════════════════════════════════════════════════
+    let locationId = '';
+    let hostPhone = '';
+    let locationData = null;
+    let existingGuestId = null;
+
+    // ═══════════════════════════════════════════════════════════════
+    // Init — parse URL params and load location
+    // ═══════════════════════════════════════════════════════════════
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      locationId = params.get('loc');
+      hostPhone = params.get('phone') || '';
+      const guestId = params.get('guest');
+
+      if (!locationId) {
+        showError('URL tidak valid. Silakan scan ulang QR code.');
+        return;
+      }
+
+      try {
+        const locDoc = await db.collection('locations').doc(locationId).get();
+        if (!locDoc.exists) {
+          showError('Lokasi tidak ditemukan. Silakan hubungi admin.');
+          return;
+        }
+        locationData = locDoc.data();
+
+        if (guestId) {
+          await loadGuestForCheckout(guestId);
+        } else {
+          showCheckInForm();
+        }
+      } catch (err) {
+        console.error('Init error:', err);
+        showError('Gagal memuat data. Periksa koneksi internet Anda.');
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Check-In Flow
+    // ═══════════════════════════════════════════════════════════════
+    function showCheckInForm() {
+      hide('loading');
+      show('checkin-form');
+      document.getElementById('location-name').textContent = locationData.name || '-';
+      document.getElementById('location-address').textContent = locationData.address || '-';
+    }
+
+    document.getElementById('guest-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const instansi = document.getElementById('instansi').value.trim();
+      const keperluan = document.getElementById('keperluan').value;
+
+      let valid = true;
+      if (!name) { setError('name'); valid = false; } else { clearError('name'); }
+      if (!phone) { setError('phone'); valid = false; } else { clearError('phone'); }
+      if (!keperluan) { setError('keperluan'); valid = false; } else { clearError('keperluan'); }
+      if (!valid) return;
+
+      const btn = document.getElementById('submit-btn');
+      const text = document.getElementById('submit-text');
+      const spinner = document.getElementById('submit-spinner');
+      btn.disabled = true;
+      text.textContent = 'Memproses...';
+      spinner.classList.remove('hidden');
+
+      try {
+        const now = firebase.firestore.FieldValue.serverTimestamp();
+        const guestRef = await db.collection('guests').add({
+          name: name,
+          phone: phone,
+          email: email || null,
+          instansi: instansi || null,
+          keperluan: keperluan,
+          photoUrl: null,
+          locationId: locationId,
+          checkInTime: now,
+          checkOutTime: null,
+          hostPhone: hostPhone || locationData.hostPhone || null,
+          status: 'checked_in',
+        });
+
+        hide('checkin-form');
+        show('checkin-confirmation');
+        document.getElementById('confirm-name').textContent = name;
+        document.getElementById('confirm-keperluan').textContent = keperluan;
+        document.getElementById('confirm-time').textContent = formatTime(new Date());
+
+        triggerNotification(name, hostPhone || locationData.hostPhone);
+      } catch (err) {
+        console.error('Check-in error:', err);
+        alert('Gagal check in. Silakan coba lagi.');
+        btn.disabled = false;
+        text.textContent = 'Check In';
+        spinner.classList.add('hidden');
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Check-Out Flow
+    // ═══════════════════════════════════════════════════════════════
+    async function loadGuestForCheckout(guestId) {
+      try {
+        const guestDoc = await db.collection('guests').doc(guestId).get();
+        if (!guestDoc.exists) {
+          showError('Data tamu tidak ditemukan.');
+          return;
+        }
+        const guest = guestDoc.data();
+        
+        if (guest.status === 'checked_out') {
+          hide('loading');
+          show('checkout-confirmation');
+          document.getElementById('checkout-confirm-time').textContent = 
+            guest.checkOutTime ? formatTime(guest.checkOutTime.toDate()) : '-';
+          return;
+        }
+
+        existingGuestId = guestId;
+        hide('loading');
+        show('checkout-view');
+        document.getElementById('checkout-name').textContent = guest.name;
+        document.getElementById('checkout-keperluan').textContent = guest.keperluan;
+        
+        const checkInTime = guest.checkInTime.toDate();
+        document.getElementById('checkout-checkin-time').textContent = formatTime(checkInTime);
+        updateDuration(checkInTime);
+        
+        setInterval(() => updateDuration(checkInTime), 60000);
+      } catch (err) {
+        console.error('Load guest error:', err);
+        showError('Gagal memuat data tamu.');
+      }
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', async () => {
+      if (!existingGuestId) return;
+      
+      const btn = document.getElementById('checkout-btn');
+      const text = document.getElementById('checkout-text');
+      const spinner = document.getElementById('checkout-spinner');
+      btn.disabled = true;
+      text.textContent = 'Memproses...';
+      spinner.classList.remove('hidden');
+
+      try {
+        await db.collection('guests').doc(existingGuestId).update({
+          checkOutTime: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'checked_out',
+        });
+
+        hide('checkout-view');
+        show('checkout-confirmation');
+        document.getElementById('checkout-confirm-time').textContent = formatTime(new Date());
+      } catch (err) {
+        console.error('Check-out error:', err);
+        alert('Gagal check out. Silakan coba lagi.');
+        btn.disabled = false;
+        text.textContent = 'Check Out';
+        spinner.classList.add('hidden');
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Notification (fire-and-forget)
+    // ═══════════════════════════════════════════════════════════════
+    async function triggerNotification(guestName, phone) {
+      try {
+        await fetch('/api/guests/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            guestName,
+            locationName: locationData.name,
+            hostPhone: phone,
+            checkInTime: new Date().toISOString(),
+          }),
+        });
+      } catch (err) {
+        console.warn('Notification failed:', err);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Helpers
+    // ═══════════════════════════════════════════════════════════════
+    function show(id) { document.getElementById(id).classList.remove('hidden'); }
+    function hide(id) { document.getElementById(id).classList.add('hidden'); }
+    
+    function showError(msg) {
+      hide('loading');
+      show('error-state');
+      document.getElementById('error-message').textContent = msg;
+    }
+
+    function setError(fieldId) {
+      document.getElementById(fieldId).classList.add('error');
+    }
+    function clearError(fieldId) {
+      document.getElementById(fieldId).classList.remove('error');
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' WIB';
+    }
+
+    function updateDuration(checkInTime) {
+      const now = new Date();
+      const diff = now - checkInTime;
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      document.getElementById('checkout-duration').textContent = 
+        hours > 0 ? `${hours}j ${minutes}m` : `${minutes} menit`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Start
+    // ═══════════════════════════════════════════════════════════════
+    init();
+  </script>
+</body>
+</html>

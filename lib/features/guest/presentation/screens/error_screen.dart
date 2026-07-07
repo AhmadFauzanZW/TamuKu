@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -10,16 +11,13 @@ import '../../../../core/theme/app_text_styles.dart';
 /// Shows a red error icon, message, and "Coba Lagi" button to pop.
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});
-  static const String _defaultTitle = 'Terjadi Kesalahan';
-  static const String _defaultMessage = 'Silakan coba lagi.';
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
-    final message = (args is String) ? args : _defaultMessage;
+    final message = (args is String) ? args : AppConstants.errorMessage;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -45,7 +43,7 @@ class ErrorScreen extends StatelessWidget {
 
                 // ── Title ──
                 const Text(
-                  _defaultTitle,
+                  AppConstants.errorTitle,
                   style: AppTextStyles.h2,
                   textAlign: TextAlign.center,
                 ),
@@ -55,7 +53,7 @@ class ErrorScreen extends StatelessWidget {
                 Text(
                   message,
                   style: AppTextStyles.body.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.textSecondaryOf(context),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -74,7 +72,7 @@ class ErrorScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                     ),
-                    child: const Text('Coba Lagi'),
+                    child: const Text(AppConstants.retryButton),
                   ),
                 ),
               ],

@@ -22,6 +22,7 @@ import 'features/location/data/repositories/location_repository_impl.dart';
 import 'features/location/domain/repositories/location_repository.dart';
 import 'features/location/presentation/bloc/location_bloc.dart';
 import 'features/location/data/services/csv_export_service.dart';
+import 'features/location/data/services/excel_export_service.dart';
 import 'features/notification/data/repositories/notification_repository_impl.dart';
 import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/bloc/notification_bloc.dart';
@@ -107,12 +108,23 @@ Future<void> init() async {
 
   // ─── Services ────────────────────────────────────────────────────
   getIt.registerLazySingleton<CsvExportService>(() => const CsvExportService());
+  getIt.registerLazySingleton<ExcelExportService>(
+    () => ExcelExportService(apiClient: getIt<ApiClient>()),
+  );
 
   // ─── BLoCs ──────────────────────────────────────────────────────
-  getIt.registerFactory(() => GuestBloc(repository: getIt<GuestRepository>()));
+  getIt.registerFactory(
+    () => GuestBloc(
+      repository: getIt<GuestRepository>(),
+      notificationRepository: getIt<NotificationRepository>(),
+    ),
+  );
   getIt.registerFactory(() => GuestFormBloc());
   getIt.registerFactory(
-    () => AuthBloc(authRepository: getIt<AuthRepository>()),
+    () => AuthBloc(
+      authRepository: getIt<AuthRepository>(),
+      prefs: getIt<SharedPreferences>(),
+    ),
   );
   getIt.registerFactory(
     () => NotificationBloc(

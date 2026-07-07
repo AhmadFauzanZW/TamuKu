@@ -155,6 +155,17 @@
 
 ---
 
+## Phase 2: Integration Fixes (2026-07-07)
+
+- [x] Fix dashboard stat card overflow
+- [x] Connect guest list to real Firestore data via GuestBloc
+- [x] Fix dark mode across all screens
+- [x] Fix GlobalKey error on dark mode toggle
+- [x] Replace CSV export with formatted Excel + preview modal
+- [x] Add search, filter, and sort to guest list
+
+---
+
 ## Keterangan Status
 
 | Simbol | Arti |

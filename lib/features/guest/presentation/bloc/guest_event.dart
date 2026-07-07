@@ -107,3 +107,35 @@ class SearchGuests extends GuestEvent {
   @override
   List<Object> get props => [query];
 }
+
+/// Sort type for guest list.
+enum SortType {
+  /// Sort by check-in date, newest first.
+  byDateDesc,
+  /// Sort by check-in date, oldest first.
+  byDateAsc,
+  /// Sort by guest name alphabetically.
+  byNameAsc,
+}
+
+/// Filters guests by status (Semua / Check-In / Selesai).
+
+class FilterGuests extends GuestEvent {
+  /// The filter value: 'Semua', 'Check-In', or 'Selesai'.
+  final String filter;
+
+  const FilterGuests(this.filter);
+  @override
+  List<Object> get props => [filter];
+}
+
+/// Sorts guests by different criteria.
+
+class SortGuests extends GuestEvent {
+  /// The sort type to apply.
+  final SortType sortType;
+
+  const SortGuests(this.sortType);
+  @override
+  List<Object> get props => [sortType];
+}

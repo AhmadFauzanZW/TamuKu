@@ -18,7 +18,6 @@ class ConfirmationScreen extends StatelessWidget {
     final guest = ModalRoute.of(context)!.settings.arguments as GuestEntity;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -59,10 +58,10 @@ class ConfirmationScreen extends StatelessWidget {
                 // ── Guest Info Card ──
                 Card(
                   elevation: 0,
-                  color: AppColors.surface,
+                  color: AppColors.surfaceOf(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.lg),
-                    side: const BorderSide(color: AppColors.border),
+                    side: BorderSide(color: AppColors.borderOf(context)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -70,13 +69,13 @@ class ConfirmationScreen extends StatelessWidget {
                       children: [
                         _InfoRow(
                           icon: Icons.person_outline,
-                          label: 'Nama',
+                          label: AppConstants.labelName,
                           value: guest.name,
                         ),
                         const Divider(height: AppSpacing.xl),
                         _InfoRow(
                           icon: Icons.work_outline,
-                          label: 'Keperluan',
+                          label: AppConstants.labelKeperluan,
                           value: guest.keperluan.toValue(),
                         ),
                         if (guest.instansi != null &&
@@ -84,14 +83,14 @@ class ConfirmationScreen extends StatelessWidget {
                           const Divider(height: AppSpacing.xl),
                           _InfoRow(
                             icon: Icons.business_outlined,
-                            label: 'Instansi',
+                            label: AppConstants.labelInstansi,
                             value: guest.instansi!,
                           ),
                         ],
                         const Divider(height: AppSpacing.xl),
                         _InfoRow(
                           icon: Icons.access_time,
-                          label: 'Waktu Check-in',
+                          label: AppConstants.labelCheckInTime,
                           value: _formatTime(guest.checkInTime),
                         ),
                       ],
@@ -115,7 +114,7 @@ class ConfirmationScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                     ),
-                    child: const Text('Kembali', style: AppTextStyles.button),
+                    child: const Text(AppConstants.backButton, style: AppTextStyles.button),
                   ),
                 ),
               ],
@@ -152,7 +151,7 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: AppColors.textSecondary),
+        Icon(icon, size: 20, color: AppColors.textSecondaryOf(context)),
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(

@@ -35,7 +35,6 @@ class _CheckoutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(AppConstants.checkoutTitle),
         backgroundColor: AppColors.primary900,
@@ -91,28 +90,28 @@ class _CheckoutView extends StatelessWidget {
                 // ── Guest Info Card ──
                 Card(
                   elevation: 0,
-                  color: AppColors.surface,
+                  color: AppColors.surfaceOf(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.lg),
-                    side: const BorderSide(color: AppColors.border),
+                    side: BorderSide(color: AppColors.borderOf(context)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Data Tamu', style: AppTextStyles.h3),
+                        const Text(AppConstants.guestDataTitle, style: AppTextStyles.h3),
                         const SizedBox(height: AppSpacing.md),
-                        _InfoRow(label: 'Nama', value: guest.name),
+                        _InfoRow(label: AppConstants.labelName, value: guest.name),
                         _InfoRow(
-                          label: 'Keperluan',
+                          label: AppConstants.labelKeperluan,
                           value: guest.keperluan.toValue(),
                         ),
                         if (guest.instansi != null &&
                             guest.instansi!.isNotEmpty)
-                          _InfoRow(label: 'Instansi', value: guest.instansi!),
+                          _InfoRow(label: AppConstants.labelInstansi, value: guest.instansi!),
                         _InfoRow(
-                          label: 'Waktu Check-in',
+                          label: AppConstants.labelCheckInTime,
                           value: _formatDateTime(guest.checkInTime),
                         ),
                       ],
@@ -163,7 +162,7 @@ class _CheckoutView extends StatelessWidget {
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           Text(
-                            'Tamu sudah check-out',
+                            AppConstants.alreadyCheckedOut,
                             style: AppTextStyles.body.copyWith(
                               color: AppColors.primary700,
                               fontWeight: FontWeight.w500,
@@ -223,7 +222,7 @@ class _DurationCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Durasi Kunjungan', style: AppTextStyles.caption),
+                const Text(AppConstants.visitDuration, style: AppTextStyles.caption),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   durationStr,

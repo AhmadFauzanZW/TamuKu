@@ -1,5 +1,8 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -8,46 +11,26 @@ import '../../../../core/theme/app_text_styles.dart';
 
 /// Layar generator QR Code lokasi untuk check-in tamu.
 ///
-/// Uses [FutureBuilder] to load the location data before rendering
-/// the QR code. Falls back to a demo location ID if no data is available.
+/// Reads the real locationId from [SharedPreferences] (set during
+/// admin login) and renders a scannable QR code.
 class QrGeneratorScreen extends StatelessWidget {
   /// Creates a [QrGeneratorScreen].
   const QrGeneratorScreen({super.key});
 
-  static const _demoLocationId = 'abc123_kantor_cakrawala';
-
-  /// Simulates loading location data from the repository.
-  /// In production this would call [LocationRepository.getLocation].
-  Future<String> _loadLocationId() async {
-    // TODO: Replace with actual LocationBloc state or repository call.
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    return _demoLocationId;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final locationId = GetIt.instance<SharedPreferences>()
+            .getString(AppConstants.keyLocationId) ??
+        '';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           AppConstants.qrGeneratorTitle,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.primary900,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<String>(
-        future: _loadLocationId(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(AppSpacing.xl),
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          final locationId = snapshot.data ?? _demoLocationId;
+      body: Builder(
+        builder: (context) {
 
           return Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -73,7 +56,7 @@ class QrGeneratorScreen extends StatelessWidget {
                       const SizedBox(height: AppSpacing.xl),
 
                       QrImageView(
-                        data: locationId,
+                        data: '${AppConstants.guestWebUrl}?loc=$locationId',
                         version: QrVersions.auto,
                         size: 200.0,
                         gapless: false,
@@ -90,8 +73,14 @@ class QrGeneratorScreen extends StatelessWidget {
                       const SizedBox(height: AppSpacing.xl),
 
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: hubungkan ke share_plus
+                        onPressed: () async {
+                          final qrUrl = '${AppConstants.guestWebUrl}?loc=$locationId';
+                          await SharePlus.instance.share(
+                            ShareParams(
+                              text: 'Scan QR TamuKu untuk check-in:\n$qrUrl',
+                              subject: 'TamuKu QR Code',
+                            ),
+                          );
                         },
                         icon: const Icon(Icons.share, color: Colors.white),
                         label: const Text(

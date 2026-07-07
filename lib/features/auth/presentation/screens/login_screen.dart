@@ -89,7 +89,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -228,28 +227,24 @@ class _LoginViewState extends State<LoginView> {
       child: OutlinedButton.icon(
         onPressed: isLoading
             ? null
-            : () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(AppConstants.googleNotAvailable),
-                  ),
-                );
-              },
+            : () => context.read<AuthBloc>().add(
+                  const GoogleSignInRequested(),
+                ),
         icon: const Icon(
           Icons.g_mobiledata,
           size: 28,
           color: AppColors.accentBlue,
         ),
-        label: const Text(
+        label: Text(
           AppConstants.loginWithGoogle,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
+            color: AppColors.textSecondaryOf(context),
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: AppColors.borderOf(context)),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.xlBorder),
         ),
       ),
@@ -272,10 +267,10 @@ class _LogoHeader extends StatelessWidget {
             color: AppColors.primary50,
             borderRadius: AppRadius.xlBorder,
           ),
-          child: const Icon(
+          child: Icon(
             Icons.how_to_reg_rounded,
             size: 44,
-            color: AppColors.primary700,
+            color: AppColors.primary700Of(context),
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -293,14 +288,14 @@ class _OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Expanded(child: Divider(color: AppColors.border)),
-        Padding(
+        Expanded(child: Divider(color: AppColors.borderOf(context))),
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(AppConstants.orDivider, style: AppTextStyles.caption),
         ),
-        Expanded(child: Divider(color: AppColors.border)),
+        Expanded(child: Divider(color: AppColors.borderOf(context))),
       ],
     );
   }

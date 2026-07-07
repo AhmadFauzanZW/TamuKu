@@ -79,6 +79,23 @@ abstract final class AppConstants {
   static const String actionGuestList = 'Daftar Tamu';
   static const String actionQRCode = 'QR Code';
   static const String actionExportCSV = 'Export CSV';
+
+  // ─── Export ────────────────────────────────────────────────────────
+  static const String actionExportExcel = 'Export Excel';
+  static const String exportSuccess = 'Berhasil mengekspor data tamu';
+  static const String exportNoData = 'Tidak ada data untuk diekspor';
+
+  // ─── Sort ──────────────────────────────────────────────────────────
+  static const String sortNewest = 'Terbaru';
+  static const String sortOldest = 'Terlama';
+  static const String sortByName = 'Nama A-Z';
+
+  // ─── Preview ───────────────────────────────────────────────────────
+  static const String previewTitle = 'Pratinjau Data Tamu';
+  static const String previewSave = 'Simpan';
+  static const String previewShare = 'Bagikan';
+  static const String previewClose = 'Tutup';
+  static const String previewTotalRows = 'Total: %d data tamu';
   static const String nameRequired = 'Nama wajib diisi';
   static const String nameTooShort = 'Nama minimal 2 karakter';
   static const String phoneRequired = 'No. WhatsApp wajib diisi';
@@ -121,10 +138,55 @@ abstract final class AppConstants {
   /// Ganti dengan URL production setelah deploy
   static const String backendBaseUrl = 'http://localhost:3000';
 
+  /// API key untuk backend authentication (x-api-key header)
+  /// Harus sama dengan API_KEY di backend .env
+  static const String backendApiKey = 'tamuku-dev-key-2026';
+
   // ─── Firebase / Auth ────────────────────────────────────────────────
   /// Google Sign-In Web Client ID dari Firebase Console
   static const String googleWebClientId =
       '762093911458-u891nq74tvdh8jcg9n8p40ieq1oitolg.apps.googleusercontent.com';
+
+  // ─── Checkout Screen Strings ────────────────────────────────────
+  /// Guest data card title on checkout screen
+  static const String guestDataTitle = 'Data Tamu';
+
+  /// Duration card title on checkout screen
+  static const String visitDuration = 'Durasi Kunjungan';
+
+  /// Already checked-out status text
+  static const String alreadyCheckedOut = 'Tamu sudah check-out';
+
+  /// Label: Nama
+  static const String labelName = 'Nama';
+
+  /// Label: Keperluan
+  static const String labelKeperluan = 'Keperluan';
+
+  /// Label: Instansi
+  static const String labelInstansi = 'Instansi';
+
+  /// Label: Waktu Check-in
+  static const String labelCheckInTime = 'Waktu Check-in';
+
+  // ─── Error Screen Strings ───────────────────────────────────────
+  /// Error screen default title
+  static const String errorTitle = 'Terjadi Kesalahan';
+
+  /// Error screen default message
+  static const String errorMessage = 'Silakan coba lagi.';
+
+  /// Retry button text
+  static const String retryButton = 'Coba Lagi';
+
+  // ─── Confirmation Screen Strings ────────────────────────────────
+  /// Back button text
+  static const String backButton = 'Kembali';
+
+  // ─── Web Guest URL ────────────────────────────────────────────────
+  /// Base URL for the web-based guest check-in page
+  /// Served by Contabo backend at /guest/
+  static const String guestWebUrl = 'https://tamuku.app/guest';
 
   // ─── Telegram ────────────────────────────────────────────────────
   /// Telegram Bot username (tanpa @)

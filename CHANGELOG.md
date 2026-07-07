@@ -10,16 +10,29 @@ Semua perubahan tercatat di sini, diurutkan dari yang terbaru. Setiap entri haru
 
 ---
 
-## [Unreleased]
+## [Unreleased] - 2026-07-07
 
-### Ditambahkan
-- (belum ada)
+### Added
+- Excel export with formatted .xlsx (green headers, alternating rows, borders, auto-width)
+- Export preview modal with DataTable, Save + Share buttons
+- Guest list filter by status (Semua/Check-In/Selesai)
+- Guest list sort by date (newest/oldest) and name (A-Z)
+- Guest list search with 300ms debounce
+- Theme-aware color helpers in AppColors (backgroundOf, surfaceOf, textPrimaryOf, etc.)
+- Dark semantic colors (success, warning, info) for dark mode
 
-### Diubah
-- (belum ada)
+### Fixed
+- Dashboard stat card overflow on small screens (replaced private _StatCard with shared StatCard)
+- Dark mode not applying across screens (removed hardcoded AppColors, added dark ThemeData)
+- GlobalKey error when toggling dark mode (app.dart builder: Column → Stack)
+- Guest list showing hardcoded dummy data (now connected to GuestBloc + Firestore)
+- Export sending empty data (now loads real guests from Firestore)
+- Settings screen exporting CSV (now exports formatted Excel)
 
-### Diperbaiki
-- (belum ada)
+### Changed
+- Replaced CSV export with Excel (.xlsx) format
+- AppTextStyles now color-agnostic (colors injected by ThemeData)
+- All screens use theme-aware colors instead of hardcoded AppColors
 
 ---
 

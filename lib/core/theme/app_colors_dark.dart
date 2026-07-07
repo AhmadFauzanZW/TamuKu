@@ -19,4 +19,12 @@ abstract final class AppColorsDark {
   static const Color accentRedLight = Color(0xFF3E2020);
   static const Color accentAmber = Color(0xFFFFD54F);
   static const Color accentAmberLight = Color(0xFF3E3520);
+
+  // ─── Semantic colors (dark) ──────────────────────────────────────
+  static const Color success = Color(0xFF66BB6A);
+  static const Color successBg = Color(0xFF1B3A1D);
+  static const Color warning = Color(0xFFFFD54F);
+  static const Color warningBg = Color(0xFF3E3520);
+  static const Color info = Color(0xFF42A5F5);
+  static const Color infoBg = Color(0xFF1A2A3E);
 }

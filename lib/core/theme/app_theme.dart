@@ -154,24 +154,24 @@ abstract final class AppTheme {
     brightness: Brightness.dark,
     colorScheme: const ColorScheme.dark(
       primary: AppColorsDark.primary900,
-      onPrimary: Colors.black,
+      onPrimary: Colors.white,
       secondary: AppColorsDark.primary700,
-      onSecondary: Colors.black,
+      onSecondary: Colors.white,
       surface: AppColorsDark.surface,
       onSurface: AppColorsDark.textPrimary,
       error: AppColorsDark.accentRed,
-      onError: Colors.black,
+      onError: Colors.white,
       outline: AppColorsDark.border,
     ),
     scaffoldBackgroundColor: AppColorsDark.background,
-    textTheme: const TextTheme(
-      displayLarge: AppTextStyles.display,
-      headlineLarge: AppTextStyles.h1,
-      headlineMedium: AppTextStyles.h2,
-      titleMedium: AppTextStyles.h3,
-      bodyLarge: AppTextStyles.bodyLarge,
-      bodyMedium: AppTextStyles.body,
-      labelSmall: AppTextStyles.caption,
+    textTheme: TextTheme(
+      displayLarge: AppTextStyles.display.copyWith(color: AppColorsDark.textPrimary),
+      headlineLarge: AppTextStyles.h1.copyWith(color: AppColorsDark.textPrimary),
+      headlineMedium: AppTextStyles.h2.copyWith(color: AppColorsDark.textPrimary),
+      titleMedium: AppTextStyles.h3.copyWith(color: AppColorsDark.textPrimary),
+      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColorsDark.textPrimary),
+      bodyMedium: AppTextStyles.body.copyWith(color: AppColorsDark.textPrimary),
+      labelSmall: AppTextStyles.caption.copyWith(color: AppColorsDark.textSecondary),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColorsDark.primary900,
@@ -187,21 +187,20 @@ abstract final class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColorsDark.primary900,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         minimumSize: const Size(double.infinity, 52),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.xl),
         ),
-        textStyle: AppTextStyles.button.copyWith(color: Colors.black),
+        textStyle: AppTextStyles.button,
         elevation: 1,
       ),
     ),
     cardTheme: CardThemeData(
-      color: AppColorsDark.surfaceVariant,
-      elevation: 0,
+      color: AppColorsDark.surface,
+      elevation: 1,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(color: AppColorsDark.border, width: 1),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       margin: const EdgeInsets.symmetric(
@@ -226,6 +225,7 @@ abstract final class AppTheme {
         borderSide: const BorderSide(color: AppColorsDark.primary900, width: 2),
       ),
       hintStyle: AppTextStyles.body.copyWith(color: AppColorsDark.textDisabled),
+      labelStyle: AppTextStyles.body.copyWith(color: AppColorsDark.textSecondary),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: Colors.transparent,
@@ -238,15 +238,15 @@ abstract final class AppTheme {
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return AppColorsDark.primary700;
+          return Colors.white;
         }
-        return AppColorsDark.border;
+        return AppColorsDark.textDisabled;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return AppColorsDark.primary50;
+          return AppColorsDark.primary900;
         }
-        return AppColorsDark.borderLight;
+        return AppColorsDark.surfaceVariant;
       }),
     ),
     dividerTheme: const DividerThemeData(
@@ -256,7 +256,7 @@ abstract final class AppTheme {
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColorsDark.primary900,
-      foregroundColor: Colors.black,
+      foregroundColor: Colors.white,
       elevation: 3,
       shape: CircleBorder(),
     ),

@@ -92,10 +92,25 @@ class _ScanBody extends StatelessWidget {
     final raw = barcode.rawValue!;
     context.read<ScanCubit>().markScanned();
 
-    // QR format: "locationId|hostPhone" or just "locationId"
-    final parts = raw.split('|');
-    final locationId = parts.first.trim();
-    final hostPhone = parts.length > 1 ? parts[1].trim() : null;
+    String locationId;
+    String? hostPhone;
+
+    if (raw.startsWith('http')) {
+      // URL format: https://tamuku.app/guest?loc=xxx&phone=yyy
+      try {
+        final uri = Uri.parse(raw);
+        locationId = uri.queryParameters['loc'] ?? '';
+        hostPhone = uri.queryParameters['phone'];
+      } catch (_) {
+        _showErrorDialog(context);
+        return;
+      }
+    } else {
+      // Legacy format: "locationId|hostPhone" or just "locationId"
+      final parts = raw.split('|');
+      locationId = parts.first.trim();
+      hostPhone = parts.length > 1 ? parts[1].trim() : null;
+    }
 
     if (locationId.isNotEmpty) {
       Navigator.of(context).pushReplacementNamed(

@@ -60,13 +60,45 @@ class ApiClient {
     }
   }
 
+  /// Calls the backend Excel export endpoint and returns the file path.
+  Future<String> exportExcel({
+    required List<Map<String, dynamic>> guests,
+    String? locationName,
+  }) async {
+    final response = await _httpClient.post(
+      Uri.parse('${AppConstants.backendBaseUrl}/api/export/excel'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': AppConstants.backendApiKey,
+      },
+      body: jsonEncode({
+        'guests': guests,
+        'locationName': locationName,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Export gagal: ${response.statusCode}');
+    }
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    if (data['success'] != true) {
+      throw Exception(data['error'] ?? 'Export gagal');
+    }
+
+    return data['data']['path'] as String;
+  }
+
   Future<Map<String, dynamic>> _httpPost(
     String path, {
     required Map<String, dynamic> body,
   }) async {
     final response = await _httpClient.post(
       Uri.parse('${AppConstants.backendBaseUrl}$path'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': AppConstants.backendApiKey,
+      },
       body: jsonEncode(body),
     );
     if (response.statusCode != 200) {

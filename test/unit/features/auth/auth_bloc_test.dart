@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamuku/core/errors/exceptions.dart';
 import 'package:tamuku/features/auth/domain/entities/user_entity.dart';
 import 'package:tamuku/features/auth/domain/repositories/auth_repository.dart';
@@ -11,6 +12,7 @@ import 'package:tamuku/features/auth/presentation/bloc/auth_state.dart';
 // ─── Mocks ────────────────────────────────────────────────────────
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 // ─── Fixtures ─────────────────────────────────────────────────────
 
@@ -25,13 +27,15 @@ const tPassword = 'rahasia123';
 
 void main() {
   late MockAuthRepository repository;
+  late MockSharedPreferences prefs;
 
   setUp(() {
     repository = MockAuthRepository();
+    prefs = MockSharedPreferences();
   });
 
   test('initial state is AuthInitial', () {
-    final bloc = AuthBloc(authRepository: repository);
+    final bloc = AuthBloc(authRepository: repository, prefs: prefs);
     expect(bloc.state, isA<AuthInitial>());
     bloc.close();
   });
@@ -46,7 +50,7 @@ void main() {
             password: any(named: 'password'),
           ),
         ).thenAnswer((_) async => tUser);
-        return AuthBloc(authRepository: repository);
+        return AuthBloc(authRepository: repository, prefs: prefs);
       },
       act: (bloc) =>
           bloc.add(const LoginRequested(email: tEmail, password: tPassword)),
@@ -65,7 +69,7 @@ void main() {
             password: any(named: 'password'),
           ),
         ).thenThrow(const AuthException('Email atau password salah.'));
-        return AuthBloc(authRepository: repository);
+        return AuthBloc(authRepository: repository, prefs: prefs);
       },
       act: (bloc) =>
           bloc.add(const LoginRequested(email: tEmail, password: tPassword)),
@@ -77,12 +81,16 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'calls signOut and emits AuthInitial',
       build: () {
+        when(() => prefs.remove(any())).thenAnswer((_) async => true);
         when(() => repository.signOut()).thenAnswer((_) async {});
-        return AuthBloc(authRepository: repository);
+        return AuthBloc(authRepository: repository, prefs: prefs);
       },
       act: (bloc) => bloc.add(const LogoutRequested()),
       expect: () => [isA<AuthInitial>()],
-      verify: (_) => verify(() => repository.signOut()).called(1),
+      verify: (_) {
+        verify(() => prefs.remove('locationId')).called(1);
+        verify(() => repository.signOut()).called(1);
+      },
     );
   });
 }

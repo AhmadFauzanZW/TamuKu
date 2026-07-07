@@ -7,6 +7,7 @@ import '../../../../core/routes/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/stat_card.dart';
 import '../widgets/visit_chart.dart';
 
 /// Dashboard admin menampilkan ringkasan tamu, grafik kunjungan,
@@ -34,12 +35,7 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          AppConstants.dashboardTitle,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(AppConstants.dashboardTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -77,22 +73,26 @@ class DashboardScreen extends StatelessWidget {
                 // Stat Cards
                 Row(
                   children: [
-                    _StatCard(
-                      title: AppConstants.statTodayGuests,
-                      value: snapshot.connectionState == ConnectionState.waiting
-                          ? '...'
-                          : totalCount.toString(),
-                      icon: Icons.people,
-                      iconColor: AppColors.accentBlue,
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.people,
+                        value: snapshot.connectionState == ConnectionState.waiting
+                            ? '...'
+                            : totalCount.toString(),
+                        label: AppConstants.statTodayGuests,
+                        iconColor: AppColors.accentBlue,
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.md),
-                    _StatCard(
-                      title: AppConstants.statActiveGuests,
-                      value: snapshot.connectionState == ConnectionState.waiting
-                          ? '...'
-                          : activeCount.toString(),
-                      icon: Icons.door_sliding,
-                      iconColor: AppColors.warning,
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.door_sliding,
+                        value: snapshot.connectionState == ConnectionState.waiting
+                            ? '...'
+                            : activeCount.toString(),
+                        label: AppConstants.statActiveGuests,
+                        iconColor: AppColors.warning,
+                      ),
                     ),
                   ],
                 ),
@@ -128,9 +128,11 @@ class DashboardScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushNamed(AppRoutes.guestList);
                       },
-                      child: const Text(
+                      child: Text(
                         AppConstants.dashboardViewAll,
-                        style: TextStyle(color: AppColors.primary900),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
                   ],
@@ -170,6 +172,7 @@ class DashboardScreen extends StatelessWidget {
                           ? DateFormat('HH:mm', 'id_ID').format(checkInTime)
                           : '-';
 
+                      final cs = Theme.of(context).colorScheme;
                       return Card(
                         margin: const EdgeInsets.symmetric(
                           vertical: AppSpacing.sm,
@@ -179,16 +182,16 @@ class DashboardScreen extends StatelessWidget {
                           borderRadius: AppRadius.lgBorder,
                         ),
                         child: ListTile(
-                          leading: const CircleAvatar(
-                            backgroundColor: AppColors.primary900,
-                            child: Icon(Icons.person, color: Colors.white),
+                          leading: CircleAvatar(
+                            backgroundColor: cs.primary.withValues(alpha: 0.1),
+                            child: Icon(Icons.person, color: cs.primary),
                           ),
                           title: Text(name),
                           subtitle: Text('Keperluan: $keperluan'),
                           trailing: Text(
                             '$timeStr WIB',
-                            style: const TextStyle(
-                              color: Colors.grey,
+                            style: TextStyle(
+                              color: AppColors.textSecondaryOf(context),
                               fontSize: 12,
                             ),
                           ),
@@ -238,47 +241,4 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-/// Modular stat card widget for the dashboard.
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color iconColor;
 
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Card(
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: iconColor.withValues(alpha: 0.1),
-                child: Icon(icon, color: iconColor),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: AppTextStyles.caption),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(value, style: AppTextStyles.h2),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

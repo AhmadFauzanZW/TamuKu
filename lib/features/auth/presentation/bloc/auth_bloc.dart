@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -8,10 +11,14 @@ import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final SharedPreferences _prefs;
 
-  AuthBloc({required AuthRepository authRepository})
-    : _authRepository = authRepository,
-      super(AuthInitial()) {
+  AuthBloc({
+    required AuthRepository authRepository,
+    required SharedPreferences prefs,
+  })  : _authRepository = authRepository,
+        _prefs = prefs,
+        super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
     on<GoogleSignInRequested>(_onGoogleSignInRequested);
     on<LogoutRequested>(_onLogoutRequested);
@@ -33,6 +40,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) {
     if (event.user != null) {
       emit(Authenticated(event.user!));
+      // Ensure locationId is stored (may be missing from older sessions)
+      _fetchAndStoreLocationId(event.user!.uid);
     }
   }
 
@@ -47,6 +56,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       emit(Authenticated(user));
+
+      // Fetch and store the admin's locationId
+      await _fetchAndStoreLocationId(user.uid);
     } on AuthException catch (e) {
       emit(AuthError(e.message));
     } catch (_) {
@@ -62,6 +74,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final user = await _authRepository.signInWithGoogle();
       emit(Authenticated(user));
+
+      // Fetch and store the admin's locationId
+      await _fetchAndStoreLocationId(user.uid);
     } on AuthException catch (e) {
       emit(AuthError(e.message));
     } catch (_) {
@@ -73,8 +88,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     LogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
+    await _prefs.remove(AppConstants.keyLocationId);
     await _authRepository.signOut();
     emit(AuthInitial());
+  }
+
+  /// Queries Firestore for the admin's locations and stores the first
+  /// locationId in SharedPreferences. Silently fails if no locations found.
+  Future<void> _fetchAndStoreLocationId(String adminId) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection(AppConstants.locationsCollection)
+          .where(AppConstants.fieldAdminId, isEqualTo: adminId)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final locationId = snapshot.docs.first.id;
+        await _prefs.setString(AppConstants.keyLocationId, locationId);
+      }
+    } catch (_) {
+      // Silently fail — guest list will show empty state
+    }
   }
 }
 

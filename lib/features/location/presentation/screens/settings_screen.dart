@@ -1,5 +1,7 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -8,18 +10,13 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../guest/domain/entities/guest_entity.dart';
 import '../../../../shared/blocs/settings/settings_cubit.dart';
 import '../../../../shared/blocs/settings/settings_state.dart';
-import '../../data/services/csv_export_service.dart';
+import '../widgets/export_preview_modal.dart';
 
-/// Admin settings screen.
-///
-/// Shows the location profile, preference toggles (dark mode +
-/// Telegram notifications) backed by [SettingsCubit] from the app-level
-/// [BlocProvider], a CSV export action, and a logout button
-/// that dispatches [LogoutRequested].
+/// Admin settings screen with location profile, preferences, export, logout.
 class SettingsScreen extends StatelessWidget {
-  /// Creates a [SettingsScreen].
   const SettingsScreen({super.key});
 
   @override
@@ -39,12 +36,8 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(AppConstants.settingsTitle),
-        backgroundColor: AppColors.primary900,
-        foregroundColor: Colors.white,
-        elevation: 0,
       ),
       body: SafeArea(
         child: ListView(
@@ -72,64 +65,92 @@ class SettingsView extends StatelessWidget {
   }
 }
 
-/// Card listing the read-only location profile fields.
+/// Card listing the location profile fields — loaded from Firestore.
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard();
 
   @override
   Widget build(BuildContext context) {
+    final locationId =
+        getIt<SharedPreferences>().getString(AppConstants.keyLocationId);
+
+    if (locationId == null || locationId.isEmpty) {
+      return _profileShell(
+        child: const Padding(
+          padding: EdgeInsets.all(AppSpacing.lg),
+          child: Text('Tidak ada lokasi yang dipilih', style: AppTextStyles.body),
+        ),
+      );
+    }
+
+    return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      future: FirebaseFirestore.instance
+          .collection(AppConstants.locationsCollection)
+          .doc(locationId)
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _profileShell(
+            child: const Padding(
+              padding: EdgeInsets.all(AppSpacing.lg),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        }
+
+        final data = snapshot.data?.data();
+        final name = data?[AppConstants.fieldName] as String? ?? '-';
+        final address = data?[AppConstants.fieldAddress] as String? ?? '-';
+        final phone = data?[AppConstants.fieldHostPhone] as String? ?? '-';
+
+        return Card(
+          elevation: 1,
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
+          child: Column(
+            children: [
+              _ProfileTile(icon: Icons.location_on_outlined, label: AppConstants.locationNameLabel, value: name),
+              Divider(height: 1, color: AppColors.borderOf(context)),
+              _ProfileTile(icon: Icons.map_outlined, label: AppConstants.addressLabel, value: address),
+              Divider(height: 1, color: AppColors.borderOf(context)),
+              _ProfileTile(icon: Icons.phone_outlined, label: AppConstants.hostPhoneLabel, value: phone),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Reusable card shell to reduce duplication between loading/empty states.
+  static Widget _profileShell({required Widget child}) {
     return Card(
       elevation: 1,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
-      child: const Column(
-        children: [
-          _ProfileTile(
-            icon: Icons.location_on_outlined,
-            label: AppConstants.locationNameLabel,
-            value: 'Kantor Desa Cakrawala',
-          ),
-          Divider(height: 1, color: AppColors.border),
-          _ProfileTile(
-            icon: Icons.map_outlined,
-            label: AppConstants.addressLabel,
-            value: 'Jl. Merdeka No. 10, Bandung',
-          ),
-          Divider(height: 1, color: AppColors.border),
-          _ProfileTile(
-            icon: Icons.phone_outlined,
-            label: AppConstants.hostPhoneLabel,
-            value: '+6281234567890',
-          ),
-        ],
-      ),
+      child: child,
     );
   }
 }
 
-/// Single profile row displaying a label and its current value.
+/// Single profile row — label + value.
 class _ProfileTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
 
-  const _ProfileTile({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
+  const _ProfileTile({required this.icon, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary700),
+      leading: Icon(icon, color: AppColors.primary700Of(context)),
       title: Text(label, style: AppTextStyles.caption),
       subtitle: Text(value, style: AppTextStyles.bodyLarge),
     );
   }
 }
 
-/// Card holding the dark mode and notification toggle switches.
+/// Card holding dark mode and notification toggle switches.
 class _PreferencesCard extends StatelessWidget {
   const _PreferencesCard();
 
@@ -145,29 +166,17 @@ class _PreferencesCard extends StatelessWidget {
           return Column(
             children: [
               SwitchListTile(
-                secondary: const Icon(
-                  Icons.notifications_outlined,
-                  color: AppColors.primary700,
-                ),
-                title: const Text(
-                  AppConstants.whatsappNotificationLabel,
-                  style: AppTextStyles.bodyLarge,
-                ),
-                activeThumbColor: AppColors.primary700,
+                secondary: Icon(Icons.notifications_outlined, color: AppColors.primary700Of(context)),
+                title: const Text(AppConstants.whatsappNotificationLabel, style: AppTextStyles.bodyLarge),
+                activeThumbColor: AppColors.primary700Of(context),
                 value: state.notificationsEnabled,
                 onChanged: cubit.setNotifications,
               ),
-              const Divider(height: 1, color: AppColors.border),
+              Divider(height: 1, color: AppColors.borderOf(context)),
               SwitchListTile(
-                secondary: const Icon(
-                  Icons.dark_mode_outlined,
-                  color: AppColors.primary700,
-                ),
-                title: const Text(
-                  AppConstants.darkModeLabel,
-                  style: AppTextStyles.bodyLarge,
-                ),
-                activeThumbColor: AppColors.primary700,
+                secondary: Icon(Icons.dark_mode_outlined, color: AppColors.primary700Of(context)),
+                title: const Text(AppConstants.darkModeLabel, style: AppTextStyles.bodyLarge),
+                activeThumbColor: AppColors.primary700Of(context),
                 value: state.darkMode,
                 onChanged: cubit.setDarkMode,
               ),
@@ -179,14 +188,36 @@ class _PreferencesCard extends StatelessWidget {
   }
 }
 
-/// Full-width button that builds and shares the guest CSV export.
+/// Loads guest data and shows Excel export preview.
 class _ExportButton extends StatelessWidget {
   const _ExportButton();
 
   Future<void> _onExport(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     try {
-      await getIt<CsvExportService>().exportAndShare(const []);
+      final snapshot = await FirebaseFirestore.instance
+          .collection(AppConstants.guestsCollection)
+          .orderBy(AppConstants.fieldCheckInTime, descending: true)
+          .get();
+      final guests = snapshot.docs
+          .map((doc) => GuestEntity.fromFirestore(doc))
+          .toList();
+      if (guests.isEmpty) {
+        messenger.showSnackBar(
+          const SnackBar(content: Text(AppConstants.exportNoData)),
+        );
+        return;
+      }
+      if (context.mounted) {
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (_) => ExportPreviewModal(guests: guests),
+        );
+      }
     } catch (_) {
       messenger.showSnackBar(
         const SnackBar(content: Text(AppConstants.exportFailed)),
@@ -202,10 +233,7 @@ class _ExportButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: () => _onExport(context),
         icon: const Icon(Icons.download_outlined),
-        label: const Text(
-          AppConstants.actionExportCSV,
-          style: AppTextStyles.button,
-        ),
+        label: const Text(AppConstants.actionExportExcel, style: AppTextStyles.button),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary900,
           foregroundColor: Colors.white,
@@ -216,7 +244,7 @@ class _ExportButton extends StatelessWidget {
   }
 }
 
-/// Full-width destructive button that confirms then logs the admin out.
+/// Confirms then logs the admin out.
 class _LogoutButton extends StatelessWidget {
   const _LogoutButton();
 
@@ -242,9 +270,7 @@ class _LogoutButton extends StatelessWidget {
         ],
       ),
     );
-    if (confirmed ?? false) {
-      authBloc.add(const LogoutRequested());
-    }
+    if (confirmed ?? false) authBloc.add(const LogoutRequested());
   }
 
   @override

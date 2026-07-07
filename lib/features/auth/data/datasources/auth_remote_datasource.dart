@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/utils/user_mapper.dart';
 
@@ -63,7 +65,36 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> signInWithGoogle() async {
-    throw const AuthException('Login dengan Google belum tersedia');
+    try {
+      final googleUser = await GoogleSignIn(
+        scopes: ['email'],
+        clientId: AppConstants.googleWebClientId,
+      ).signIn();
+
+      if (googleUser == null) {
+        throw const AuthException('Login Google dibatalkan.');
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      final user = userCredential.user;
+      if (user == null) {
+        throw const AuthException('Gagal masuk dengan Google.');
+      }
+
+      return UserMapper.toMap(user);
+    } on AuthException {
+      rethrow;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException('Gagal masuk dengan Google: ${e.message}');
+    } catch (_) {
+      throw const AuthException('Terjadi kesalahan saat login Google.');
+    }
   }
 
   @override
