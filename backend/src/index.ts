@@ -15,12 +15,7 @@ import { apiKeyGuard } from './middleware/api-key-guard';
 
 const app = new Elysia()
   .use(cors({
-    origin: [
-      'http://localhost:5173',           // Admin web (Vite dev)
-      'http://localhost:3000',           // Same origin (production)
-      'https://tamuku.chronaxis.site',   // Production (main domain)
-      'https://admin.tamuku.chronaxis.site', // Production admin web subdomain
-    ],
+    origin: config.corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-api-key'],
   }))
