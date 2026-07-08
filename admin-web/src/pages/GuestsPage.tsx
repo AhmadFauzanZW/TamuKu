@@ -53,6 +53,7 @@ export function GuestsPage() {
           keperluan: d.data().keperluan ?? 'Lainnya',
           instansi: d.data().instansi ?? '',
           photoUrl: d.data().photoUrl ?? '',
+          checkOutPhotoUrl: d.data().checkOutPhotoUrl ?? '',
           locationId: d.data().locationId ?? '',
           checkInTime: d.data().checkInTime?.toDate?.() ?? new Date(),
           checkOutTime: d.data().checkOutTime?.toDate?.() ?? null,
@@ -138,6 +139,28 @@ export function GuestsPage() {
       <DataTable
         columns={[
           {
+            key: 'photoUrl',
+            header: 'Foto',
+            render: (g) => (
+              <div className="flex items-center gap-2">
+                {g.photoUrl ? (
+                  <img
+                    src={g.photoUrl}
+                    alt={g.name}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-green-100"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-700 font-semibold text-sm">
+                    {g.name?.substring(0, 2).toUpperCase()}
+                  </div>
+                )}
+              </div>
+            ),
+          },
+          {
             key: 'name',
             header: 'Nama',
             render: (g) => <span className="font-medium">{g.name}</span>,
@@ -157,7 +180,14 @@ export function GuestsPage() {
           {
             key: 'checkOutTime',
             header: 'Pulang',
-            render: (g) => formatDateWIB(g.checkOutTime),
+            render: (g) => (
+              <span className="inline-flex items-center gap-1">
+                {formatDateWIB(g.checkOutTime)}
+                {g.checkOutPhotoUrl && (
+                  <span title="Foto check-out tersedia" className="text-xs">📸</span>
+                )}
+              </span>
+            ),
           },
           {
             key: 'status',

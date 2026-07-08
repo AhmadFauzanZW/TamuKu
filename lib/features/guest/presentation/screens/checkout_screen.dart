@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,6 +87,10 @@ class _CheckoutView extends StatelessWidget {
                   ),
                 if (guest.checkOutTime != null)
                   const SizedBox(height: AppSpacing.lg),
+
+                // ── Photos Section ──
+                _PhotosSection(guest: guest),
+                const SizedBox(height: AppSpacing.lg),
 
                 // ── Guest Info Card ──
                 Card(
@@ -196,6 +201,110 @@ class _CheckoutView extends StatelessWidget {
         '${dt.year} '
         '${dt.hour.toString().padLeft(2, '0')}:'
         '${dt.minute.toString().padLeft(2, '0')}';
+  }
+}
+
+/// Displays check-in and check-out photos for the guest.
+///
+/// Shows check-in photo at the top. If checkout has occurred,
+/// shows check-out photo below it. Uses [CachedNetworkImage]
+/// with a rounded border and fallback placeholder.
+class _PhotosSection extends StatelessWidget {
+  final GuestEntity guest;
+  const _PhotosSection({required this.guest});
+
+  @override
+  Widget build(BuildContext context) {
+    final checkInUrl = guest.checkInPhotoUrl ?? guest.photoUrl;
+    final checkOutUrl = guest.checkOutPhotoUrl;
+    final hasCheckIn = checkInUrl != null && checkInUrl.isNotEmpty;
+    final hasCheckOut = checkOutUrl != null && checkOutUrl.isNotEmpty;
+
+    if (!hasCheckIn && !hasCheckOut) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (hasCheckIn) ...[
+          const Text('Foto Check-in', style: AppTextStyles.h3),
+          const SizedBox(height: AppSpacing.sm),
+          _PhotoCard(imageUrl: checkInUrl, label: 'Check-in'),
+        ],
+        if (hasCheckIn && hasCheckOut) const SizedBox(height: AppSpacing.lg),
+        if (hasCheckOut) ...[
+          const Text('Foto Check-out', style: AppTextStyles.h3),
+          const SizedBox(height: AppSpacing.sm),
+          _PhotoCard(imageUrl: checkOutUrl, label: 'Check-out'),
+        ],
+      ],
+    );
+  }
+}
+
+/// Single photo card with rounded border and label.
+///
+/// Displays a [CachedNetworkImage] inside a rounded container
+/// with a green border and a small label chip at the bottom-left.
+class _PhotoCard extends StatelessWidget {
+  final String imageUrl;
+  final String label;
+
+  const _PhotoCard({required this.imageUrl, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primary100, width: 3),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(13),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (_, _) => Container(
+                  color: AppColors.primary50,
+                  child: const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                errorWidget: (_, _, _) => Container(
+                  color: AppColors.primary50,
+                  child: const Icon(
+                    Icons.broken_image_outlined,
+                    color: AppColors.primary500,
+                    size: 48,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary900.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                label,
+                style: AppTextStyles.caption.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

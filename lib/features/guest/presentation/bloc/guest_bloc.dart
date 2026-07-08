@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/guest_entity.dart';
@@ -138,13 +139,16 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
     WatchGuestsStarted event,
     Emitter<GuestState> emit,
   ) {
+    emit(GuestLoading());
     _guestsSubscription?.cancel();
-    _guestsSubscription = _repository.watchGuests(event.locationId).listen((
-      guests,
-    ) {
-      _allGuests = guests;
-      add(_GuestsUpdated(guests));
-    });
+    _guestsSubscription =
+        _repository.watchGuests(event.locationId).listen((guests) {
+          _allGuests = guests;
+          add(_GuestsUpdated(guests));
+        })..onError((error) {
+          debugPrint('Guest stream error: $error');
+          emit(GuestError('Gagal memuat data tamu: $error'));
+        });
   }
 
   /// Handles real-time guest list updates from the stream.

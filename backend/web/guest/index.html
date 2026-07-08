@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>TamuKu — Buku Tamu Digital</title>
-  <link rel="icon" type="image/png" href="/guest/favicon.png">
+  <!-- <link rel="icon" type="image/png" href="/guest/favicon.png"> -->
   <style>
     /* ═══════════════════════════════════════════════════════════
        RESET & DESIGN TOKENS (DESIGN.md exact)
@@ -805,7 +805,7 @@
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30" transform="rotate(90, 40, 40)"/></svg>
           </div>
           <img class="success-photo hidden" id="cok-photo" src="" alt="Foto Tamu">
           <h2>Berhasil Check In!</h2>
@@ -869,7 +869,7 @@
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30" transform="rotate(90, 40, 40)"/></svg>
           </div>
           <img class="success-photo hidden" id="cok2-photo" src="" alt="Foto Check Out">
           <h2>Berhasil Check Out!</h2>
@@ -938,6 +938,7 @@
     let checkoutPhotoFile = null;
     let cameraTarget = null;
     let cameraStream = null;
+    let existingGuestPhotoUrl = null;
 
     const $ = (id) => document.getElementById(id);
     const ALL_VIEWS = ['view-loading', 'view-error', 'view-main', 'view-checkin-ok', 'view-checkout', 'view-checkout-ok'];
@@ -1134,6 +1135,23 @@
       const btn = $('btn-submit');
       btn.classList.add('loading'); btn.disabled = true;
 
+      // Guardrail: prevent double check-in
+      try {
+        const existingCheckin = await db.collection('guests')
+          .where('phone', '==', phone)
+          .where('locationId', '==', locationId)
+          .where('status', '==', 'checked_in')
+          .limit(1)
+          .get();
+        if (!existingCheckin.empty) {
+          showToast('Anda sudah melakukan check-in. Silakan check out terlebih dahulu.');
+          btn.classList.remove('loading'); btn.disabled = false;
+          return;
+        }
+      } catch (err) {
+        console.warn('Guardrail check failed, proceeding:', err);
+      }
+
       try {
         const finalKeperluan = keperluan === 'Lainnya' ? lainnya : keperluan;
         const photoUrl = await uploadPhoto(checkinPhotoFile);
@@ -1235,6 +1253,7 @@
         }
 
         existingGuestId = guestId;
+        existingGuestPhotoUrl = guest.photoUrl || guest.checkInPhotoUrl || null;
         $('co-name').textContent = guest.name;
         $('co-keperluan').textContent = guest.keperluan;
         $('co-instansi').textContent = guest.instansi || '';
@@ -1266,7 +1285,9 @@
         const photoUrl = await uploadPhoto(checkoutPhotoFile);
         await db.collection('guests').doc(existingGuestId).update({
           checkOutTime: firebase.firestore.FieldValue.serverTimestamp(),
-          checkOutPhotoUrl: photoUrl, status: 'checked_out',
+          checkOutPhotoUrl: photoUrl,
+          photoUrl: existingGuestPhotoUrl,
+          status: 'checked_out',
         });
 
         if (durationInterval) clearInterval(durationInterval);
@@ -1327,6 +1348,7 @@
     function resetToMain() {
       if (durationInterval) clearInterval(durationInterval);
       existingGuestId = null;
+      existingGuestPhotoUrl = null;
       checkoutPhotoFile = null;
       checkinPhotoFile = null;
 

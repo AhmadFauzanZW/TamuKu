@@ -96,6 +96,12 @@ class GuestEntity extends Equatable {
   /// URL to the guest's photo (optional).
   final String? photoUrl;
 
+  /// URL to the check-in photo (optional).
+  final String? checkInPhotoUrl;
+
+  /// URL to the check-out photo (optional).
+  final String? checkOutPhotoUrl;
+
   /// Foreign key referencing the visited location.
   final String locationId;
 
@@ -121,6 +127,8 @@ class GuestEntity extends Equatable {
     this.keperluanLainnya,
     this.instansi,
     this.photoUrl,
+    this.checkInPhotoUrl,
+    this.checkOutPhotoUrl,
     required this.locationId,
     required this.checkInTime,
     this.checkOutTime,
@@ -144,6 +152,8 @@ class GuestEntity extends Equatable {
       keperluanLainnya: data[AppConstants.fieldKeperluanLainnya] as String?,
       instansi: data[AppConstants.fieldInstansi] as String?,
       photoUrl: data[AppConstants.fieldPhotoUrl] as String?,
+      checkInPhotoUrl: data[AppConstants.fieldCheckInPhotoUrl] as String?,
+      checkOutPhotoUrl: data[AppConstants.fieldCheckOutPhotoUrl] as String?,
       locationId: data[AppConstants.fieldLocationId] as String,
       checkInTime: (data[AppConstants.fieldCheckInTime] as Timestamp).toDate(),
       checkOutTime: data[AppConstants.fieldCheckOutTime] != null
@@ -165,6 +175,8 @@ class GuestEntity extends Equatable {
     AppConstants.fieldKeperluanLainnya: keperluanLainnya,
     AppConstants.fieldInstansi: instansi,
     AppConstants.fieldPhotoUrl: photoUrl,
+    AppConstants.fieldCheckInPhotoUrl: checkInPhotoUrl,
+    AppConstants.fieldCheckOutPhotoUrl: checkOutPhotoUrl,
     AppConstants.fieldLocationId: locationId,
     AppConstants.fieldCheckInTime: Timestamp.fromDate(checkInTime),
     AppConstants.fieldCheckOutTime: checkOutTime != null
@@ -184,6 +196,8 @@ class GuestEntity extends Equatable {
     AppConstants.fieldKeperluanLainnya: keperluanLainnya,
     AppConstants.fieldInstansi: instansi,
     AppConstants.fieldPhotoUrl: photoUrl,
+    AppConstants.fieldCheckInPhotoUrl: checkInPhotoUrl,
+    AppConstants.fieldCheckOutPhotoUrl: checkOutPhotoUrl,
     AppConstants.fieldLocationId: locationId,
     AppConstants.fieldCheckInTime: checkInTime.toIso8601String(),
     AppConstants.fieldCheckOutTime: checkOutTime?.toIso8601String(),
@@ -204,6 +218,8 @@ class GuestEntity extends Equatable {
       keperluanLainnya: map[AppConstants.fieldKeperluanLainnya] as String?,
       instansi: map[AppConstants.fieldInstansi] as String?,
       photoUrl: map[AppConstants.fieldPhotoUrl] as String?,
+      checkInPhotoUrl: map[AppConstants.fieldCheckInPhotoUrl] as String?,
+      checkOutPhotoUrl: map[AppConstants.fieldCheckOutPhotoUrl] as String?,
       locationId: map[AppConstants.fieldLocationId] as String,
       checkInTime: DateTime.parse(map[AppConstants.fieldCheckInTime] as String),
       checkOutTime: map[AppConstants.fieldCheckOutTime] != null
@@ -224,6 +240,8 @@ class GuestEntity extends Equatable {
     Keperluan? keperluan,
     String? instansi,
     String? photoUrl,
+    String? checkInPhotoUrl,
+    String? checkOutPhotoUrl,
     String? locationId,
     DateTime? checkInTime,
     DateTime? checkOutTime,
@@ -239,6 +257,8 @@ class GuestEntity extends Equatable {
       keperluan: keperluan ?? this.keperluan,
       instansi: instansi ?? this.instansi,
       photoUrl: photoUrl ?? this.photoUrl,
+      checkInPhotoUrl: checkInPhotoUrl ?? this.checkInPhotoUrl,
+      checkOutPhotoUrl: checkOutPhotoUrl ?? this.checkOutPhotoUrl,
       locationId: locationId ?? this.locationId,
       checkInTime: checkInTime ?? this.checkInTime,
       checkOutTime: checkOutTime ?? this.checkOutTime,
@@ -257,6 +277,8 @@ class GuestEntity extends Equatable {
     keperluan,
     instansi,
     photoUrl,
+    checkInPhotoUrl,
+    checkOutPhotoUrl,
     locationId,
     checkInTime,
     checkOutTime,

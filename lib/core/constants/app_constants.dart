@@ -15,6 +15,8 @@ abstract final class AppConstants {
   static const String fieldKeperluanLainnya = 'keperluanLainnya';
   static const String fieldInstansi = 'instansi';
   static const String fieldPhotoUrl = 'photoUrl';
+  static const String fieldCheckInPhotoUrl = 'checkInPhotoUrl';
+  static const String fieldCheckOutPhotoUrl = 'checkOutPhotoUrl';
   static const String fieldLocationId = 'locationId';
   static const String fieldCheckInTime = 'checkInTime';
   static const String fieldCheckOutTime = 'checkOutTime';

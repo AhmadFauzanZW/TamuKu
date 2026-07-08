@@ -230,6 +230,49 @@ class _BodyState extends State<_Body> {
                   ),
                 );
               }
+              if (state is GuestError) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: AppColors.accentRed,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textSecondaryOf(context),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        FilledButton.icon(
+                          onPressed: () {
+                            final locId =
+                                context.read<GuestBloc>().state is GuestError
+                                ? getIt<SharedPreferences>().getString(
+                                    AppConstants.keyLocationId,
+                                  )
+                                : '';
+                            if (locId!.isNotEmpty) {
+                              context.read<GuestBloc>().add(
+                                WatchGuestsStarted(locId),
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Coba Lagi'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
               return const SizedBox.shrink();
             },
           ),

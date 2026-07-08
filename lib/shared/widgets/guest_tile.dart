@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -42,13 +43,9 @@ class GuestTile extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.primary50,
-                child: Text(
-                  initials,
-                  style: AppTextStyles.h3.copyWith(color: AppColors.primary700),
-                ),
+              _GuestAvatar(
+                photoUrl: guest.photoUrl ?? guest.checkInPhotoUrl,
+                initials: initials,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -145,6 +142,61 @@ class _KeperluanBadge extends StatelessWidget {
           fontWeight: FontWeight.w500,
           color: AppColors.primary700,
         ),
+      ),
+    );
+  }
+}
+
+/// Displays guest photo with fallback to initials avatar.
+///
+/// Uses [CachedNetworkImage] for efficient image loading with cache.
+/// Shows initials [CircleAvatar] when [photoUrl] is null or fails to load.
+class _GuestAvatar extends StatelessWidget {
+  final String? photoUrl;
+  final String initials;
+
+  const _GuestAvatar({required this.photoUrl, required this.initials});
+
+  @override
+  Widget build(BuildContext context) {
+    if (photoUrl == null || photoUrl!.isEmpty) {
+      return _InitialsAvatar(initials: initials);
+    }
+
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.primary100, width: 3),
+      ),
+      child: ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: photoUrl!,
+          fit: BoxFit.cover,
+          width: 40,
+          height: 40,
+          placeholder: (_, __) => _InitialsAvatar(initials: initials),
+          errorWidget: (_, __, ___) => _InitialsAvatar(initials: initials),
+        ),
+      ),
+    );
+  }
+}
+
+/// CircleAvatar showing guest initials as photo fallback.
+class _InitialsAvatar extends StatelessWidget {
+  final String initials;
+  const _InitialsAvatar({required this.initials});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 20,
+      backgroundColor: AppColors.primary50,
+      child: Text(
+        initials,
+        style: AppTextStyles.h3.copyWith(color: AppColors.primary700),
       ),
     );
   }
