@@ -4,14 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   doc,
   getDoc,
-  setDoc,
   updateDoc,
-  serverTimestamp,
 } from 'firebase/firestore';
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-} from 'firebase/auth';
+
 import { db } from '../config/firebase';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
@@ -21,6 +16,9 @@ import { PageLoader } from '../components/ui/LoadingSpinner';
 import { showToast } from '../components/ui/Toast';
 import { ArrowLeft, Save } from 'lucide-react';
 import { Role, roleLabels } from '../lib/roles';
+
+const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+const API_KEY = import.meta.env.VITE_API_KEY || 'tamuku-dev-key-2026';
 
 export function HostFormPage() {
   const navigate = useNavigate();
@@ -89,32 +87,37 @@ export function HostFormPage() {
         });
         showToast('success', 'Host berhasil diperbarui');
       } else {
-        // Create Firebase Auth account
-        const app = getAuth();
-        const cred = await createUserWithEmailAndPassword(app, email.trim(), password);
-
-        // Create host doc — document ID must be the Auth UID
-        // so useAuth() can look it up via doc(db, 'hosts', user.uid)
-        await setDoc(doc(db, 'hosts', cred.user.uid), {
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          photoUrl: null,
-          locations: [],
-          role,
-          isActive,
-          createdAt: serverTimestamp(),
-          lastLogin: null,
+        // Create host via backend API (Admin SDK — no auto sign-in)
+        const res = await fetch(`${API_URL}/api/hosts`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY,
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            password,
+            role,
+            isActive,
+          }),
         });
+
+        const result = await res.json();
+        if (!result.success) {
+          throw new Error(result.error || 'Gagal membuat akun host');
+        }
+
         showToast('success', 'Host berhasil ditambahkan');
       }
       navigate('/hosts');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Gagal menyimpan host';
-      if (msg.includes('email-already-in-use')) {
+      if (msg.includes('email') && msg.includes('sudah')) {
         showToast('error', 'Email sudah digunakan oleh akun lain');
       } else {
-        showToast('error', 'Gagal menyimpan host');
+        showToast('error', msg);
       }
     } finally {
       setSaving(false);

@@ -5,6 +5,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   addDoc,
   updateDoc,
   serverTimestamp,
@@ -13,9 +14,11 @@ import { db } from '../config/firebase';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { Select } from '../components/ui/Select';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { showToast } from '../components/ui/Toast';
 import { ArrowLeft, Save } from 'lucide-react';
+import type { Host } from '../types';
 
 export function LocationFormPage() {
   const navigate = useNavigate();
@@ -30,6 +33,32 @@ export function LocationFormPage() {
   const [adminId, setAdminId] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [hosts, setHosts] = useState<Host[]>([]);
+
+  // Load host list for dropdown
+  useEffect(() => {
+    async function loadHosts() {
+      try {
+        const snap = await getDocs(collection(db, 'hosts'));
+        const data = snap.docs.map((d) => ({
+          hostId: d.id,
+          name: d.data().name ?? '',
+          email: d.data().email ?? '',
+          phone: d.data().phone ?? '',
+          role: d.data().role ?? 'host',
+          locations: d.data().locations ?? [],
+          photoUrl: d.data().photoUrl ?? null,
+          createdAt: d.data().createdAt?.toDate?.() ?? new Date(),
+          lastLogin: d.data().lastLogin?.toDate?.() ?? null,
+          isActive: d.data().isActive ?? true,
+        })) as Host[];
+        setHosts(data);
+      } catch (err) {
+        console.error('Failed to load hosts:', err);
+      }
+    }
+    loadHosts();
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -148,11 +177,15 @@ export function LocationFormPage() {
             error={errors.hostPhone}
           />
 
-          <Input
-            label="Admin ID (opsional)"
-            placeholder="Firebase UID admin"
-            value={adminId}
-            onChange={(e) => setAdminId(e.target.value)}
+<Select
+              label="Admin (opsional)"
+              value={adminId}
+              onChange={(e) => setAdminId(e.target.value)}
+              placeholder="Pilih admin lokasi..."
+              options={hosts.map((h) => ({
+                value: h.hostId,
+                label: `${h.name} (${h.email}) — ${h.role}`,
+              }))}
           />
 
           <div className="flex items-center gap-3">

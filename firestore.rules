@@ -9,9 +9,8 @@ service cloud.firestore {
 
     // Safe role check — handles missing doc without crashing
     function getUserRole() {
-      return isAuth()
-        ? get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.role
-        : '';
+      let host = get(/databases/$(database)/documents/hosts/$(request.auth.uid));
+      return host.data != null ? host.data.role : '';
     }
 
     function isSuperAdmin() {
@@ -28,8 +27,9 @@ service cloud.firestore {
 
     // Safe location management check
     function managesLocation(locId) {
+      let host = get(/databases/$(database)/documents/hosts/$(request.auth.uid));
       return isSuperAdmin()
-        || (isAuth() && locId in get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.locations);
+        || (isAuth() && host.data != null && locId in host.data.locations);
     }
 
     // ── Guests — Tamu ────────────────────────────────────────────────

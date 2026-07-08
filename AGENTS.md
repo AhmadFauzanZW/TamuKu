@@ -672,7 +672,7 @@ This project is designed as a university MVP that doubles as the foundation for 
 | Hafiz Nur Rizki | 24110300038 | Team Member |
 | Ahmad Fauzan | 24110500007 | Team Member (Tech Lead) |
 | Annur Syahrin Aisyah | 24110500014 | Team Member |
-| Hedy Pamungkas, S.T., M.T.I | — | Supervisor |
+| Hedy Pamungkas, S.T., M.T.I | — | Lecturer |
 
 **Course**: Mobile Computing
 **University**: Universitas Cakrawala

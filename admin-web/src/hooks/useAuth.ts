@@ -5,7 +5,7 @@ import {
   signOut as firebaseSignOut,
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import type { Host } from '../types';
 
@@ -16,32 +16,44 @@ interface AuthState {
   error: string | null;
 }
 
+/** Find host document by Auth UID or email fallback. Logs every step. */
 async function findHost(user: User): Promise<Host | null> {
+  console.log(`[Auth] findHost: uid=${user.uid}, email=${user.email}`);
+
   // Strategy 1: Direct lookup by Auth UID
   try {
     const snap = await getDoc(doc(db, 'hosts', user.uid));
+    console.log(`[Auth] UID lookup: exists=${snap.exists()}, id=${snap.id}`);
     if (snap.exists()) {
-      return { hostId: snap.id, ...snap.data() } as Host;
+      const d = snap.data();
+      console.log(`[Auth] Host found by UID: role=${d.role}, email=${d.email}`);
+      return { hostId: snap.id, ...d } as Host;
     }
   } catch (err) {
-    console.warn('Direct host lookup failed:', err);
+    console.error('[Auth] UID lookup FAILED:', err);
   }
 
-  // Strategy 2: Fallback — query by email
+  // Strategy 2: Fallback — scan all hosts, match email case-insensitively
   if (user.email) {
     try {
-      const q = query(collection(db, 'hosts'), where('email', '==', user.email));
-      const querySnap = await getDocs(q);
-      if (!querySnap.empty) {
-        const docSnap = querySnap.docs[0];
-        console.warn(
-          `Host document ID (${docSnap.id}) doesn't match Auth UID (${user.uid}). ` +
-          `Consider running the setup script to fix this.`
-        );
-        return { hostId: docSnap.id, ...docSnap.data() } as Host;
+      const allSnap = await getDocs(collection(db, 'hosts'));
+      console.log(`[Auth] Email fallback: total hosts=${allSnap.size}`);
+
+      const emailLower = user.email.toLowerCase();
+      for (const docSnap of allSnap.docs) {
+        const d = docSnap.data();
+        const hostEmail = d.email ?? '';
+        console.log(`[Auth]  host id=${docSnap.id} email="${hostEmail}" role=${d.role}`);
+        if (hostEmail.toLowerCase() === emailLower) {
+          console.log(`[Auth] MATCH by email! hostId=${docSnap.id}`);
+          return { hostId: docSnap.id, ...d } as Host;
+        }
       }
+
+      console.warn(`[Auth] No host matches email="${user.email}". Host emails:`,
+        allSnap.docs.map(d => d.data().email));
     } catch (err) {
-      console.warn('Email-based host lookup failed:', err);
+      console.error('[Auth] Email fallback FAILED:', err);
     }
   }
 

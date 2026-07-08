@@ -72,8 +72,9 @@ export function LocationsPage() {
   }
 
   useEffect(() => {
+    if (!hostData) return;
     loadLocations();
-  }, []);
+  }, [hostData]);
 
   async function toggleActive(loc: Location) {
     try {

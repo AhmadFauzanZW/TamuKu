@@ -83,8 +83,9 @@ export function HostsPage() {
   }
 
   useEffect(() => {
+    if (!hostData) return;
     loadHosts();
-  }, []);
+  }, [hostData]);
 
   async function toggleActive(host: Host) {
     try {
