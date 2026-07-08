@@ -37,6 +37,9 @@ class CheckInRequested extends GuestEvent {
   /// Purpose of the visit.
   final Keperluan keperluan;
 
+  /// Custom description for "Lainnya" keperluan (optional).
+  final String? keperluanLainnya;
+
   /// Guest's institution or company (optional).
   final String? instansi;
 
@@ -54,6 +57,7 @@ class CheckInRequested extends GuestEvent {
     required this.phone,
     this.email,
     required this.keperluan,
+    this.keperluanLainnya,
     this.instansi,
     this.photoUrl,
     required this.locationId,
@@ -61,7 +65,7 @@ class CheckInRequested extends GuestEvent {
   });
 
   @override
-  List<Object> get props => [name, phone, keperluan, locationId];
+  List<Object> get props => [name, phone, keperluan, locationId, keperluanLainnya ?? ''];
 }
 
 /// Requests a guest check-out by [guestId].

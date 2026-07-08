@@ -8,6 +8,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/routes/app_router.dart';
 import '../../../../injection_container.dart';
 import '../../../guest/domain/entities/guest_entity.dart';
 import '../../../guest/presentation/bloc/guest_bloc.dart';
@@ -102,7 +103,7 @@ class _BodyState extends State<_Body> {
               prefixIcon: const Icon(Icons.search, color: AppColors.primary900),
               border: OutlineInputBorder(
                 borderRadius: AppRadius.mdBorder,
-                borderSide: const BorderSide(color: Colors.grey),
+                borderSide: BorderSide(color: AppColors.textSecondaryOf(context)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: AppRadius.mdBorder,
@@ -145,7 +146,7 @@ class _BodyState extends State<_Body> {
                               selected: s,
                               selectedColor: AppColors.primary900,
                               labelStyle: TextStyle(
-                                color: s ? Colors.white : Colors.black87,
+                                color: s ? Colors.white : AppColors.textPrimaryOf(context),
                                 fontWeight: s
                                     ? FontWeight.bold
                                     : FontWeight.normal,
@@ -233,15 +234,15 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.people_outline,
             size: 64,
-            color: AppColors.textSecondary,
+            color: AppColors.textSecondaryOf(context),
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
             'Belum ada tamu',
-            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondaryOf(context)),
           ),
         ],
       ),
@@ -270,6 +271,12 @@ class _GuestTile extends StatelessWidget {
       elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
       child: ListTile(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            AppRoutes.checkout,
+            arguments: guest,
+          );
+        },
         contentPadding: const EdgeInsets.all(AppSpacing.md),
         leading: const CircleAvatar(
           radius: 24,
@@ -316,12 +323,12 @@ class _GuestTile extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             Text(
               'Keperluan: ${guest.keperluan.toValue()}',
-              style: TextStyle(color: Colors.grey[700]),
+              style: TextStyle(color: AppColors.textSecondaryOf(context)),
             ),
             const SizedBox(height: AppSpacing.xs),
             Row(
               children: [
-                const Icon(Icons.access_time, size: 14, color: Colors.grey),
+                Icon(Icons.access_time, size: 14, color: AppColors.textSecondaryOf(context)),
                 const SizedBox(width: AppSpacing.xs),
                 Text(t, style: AppTextStyles.caption),
               ],

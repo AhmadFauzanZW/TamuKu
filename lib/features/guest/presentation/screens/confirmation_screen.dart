@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../domain/entities/guest_entity.dart';
+// ignore_for_file: depend_on_referenced_packages
 
 /// Check-in success confirmation screen.
 ///
@@ -78,6 +79,16 @@ class ConfirmationScreen extends StatelessWidget {
                           label: AppConstants.labelKeperluan,
                           value: guest.keperluan.toValue(),
                         ),
+                        if (guest.keperluan == Keperluan.lainnya &&
+                            guest.keperluanLainnya != null &&
+                            guest.keperluanLainnya!.isNotEmpty) ...[
+                          const Divider(height: AppSpacing.xl),
+                          _InfoRow(
+                            icon: Icons.notes,
+                            label: 'Deskripsi',
+                            value: guest.keperluanLainnya!,
+                          ),
+                        ],
                         if (guest.instansi != null &&
                             guest.instansi!.isNotEmpty) ...[
                           const Divider(height: AppSpacing.xl),

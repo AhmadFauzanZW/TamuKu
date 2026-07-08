@@ -33,3 +33,12 @@ class KeperluanChanged extends GuestFormEvent {
   @override
   List<Object> get props => [keperluan];
 }
+
+/// User typed custom text for "Lainnya" keperluan.
+class KeperluanLainnyaChanged extends GuestFormEvent {
+  /// Custom description text.
+  final String text;
+  const KeperluanLainnyaChanged(this.text);
+  @override
+  List<Object> get props => [text];
+}

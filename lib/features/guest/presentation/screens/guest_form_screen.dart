@@ -54,6 +54,7 @@ class _GuestFormViewState extends State<GuestFormView> {
   final _phoneCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _instansiCtrl = TextEditingController();
+  final _keperluanLainnyaCtrl = TextEditingController();
 
   @override
   void dispose() {
@@ -61,6 +62,7 @@ class _GuestFormViewState extends State<GuestFormView> {
     _phoneCtrl.dispose();
     _emailCtrl.dispose();
     _instansiCtrl.dispose();
+    _keperluanLainnyaCtrl.dispose();
     super.dispose();
   }
 
@@ -116,6 +118,11 @@ class _GuestFormViewState extends State<GuestFormView> {
         phone: _phoneCtrl.text.trim(),
         email: _emailCtrl.text.trim().isEmpty ? null : _emailCtrl.text.trim(),
         keperluan: fs.keperluan!,
+        keperluanLainnya: fs.keperluan == Keperluan.lainnya
+            ? _keperluanLainnyaCtrl.text.trim().isEmpty
+                ? null
+                : _keperluanLainnyaCtrl.text.trim()
+            : null,
         instansi: _instansiCtrl.text.trim().isEmpty
             ? null
             : _instansiCtrl.text.trim(),
@@ -225,6 +232,7 @@ class _GuestFormViewState extends State<GuestFormView> {
                   ),
                   const SizedBox(height: 16),
                   _buildKeperluanDropdown(),
+                  _buildKeperluanLainnyaField(),
                   const SizedBox(height: 16),
                   _field(
                     context: context,
@@ -285,6 +293,35 @@ class _GuestFormViewState extends State<GuestFormView> {
           },
           validator: (_) =>
               state.keperluan == null ? AppConstants.keperluanRequired : null,
+        );
+      },
+    );
+  }
+
+  // ── "Lainnya" Description ─────────────────────────────────────
+
+  Widget _buildKeperluanLainnyaField() {
+    return BlocBuilder<GuestFormBloc, GuestFormState>(
+      buildWhen: (p, c) => p.keperluan != c.keperluan,
+      builder: (context, state) {
+        if (state.keperluan != Keperluan.lainnya) {
+          return const SizedBox.shrink();
+        }
+        return Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: TextFormField(
+            controller: _keperluanLainnyaCtrl,
+            decoration: _dec(context, 'Deskripsi Keperluan'),
+            maxLines: 3,
+            textCapitalization: TextCapitalization.sentences,
+            validator: (v) {
+              if (state.keperluan == Keperluan.lainnya &&
+                  (v == null || v.trim().isEmpty)) {
+                return 'Deskripsi keperluan wajib diisi';
+              }
+              return null;
+            },
+          ),
         );
       },
     );

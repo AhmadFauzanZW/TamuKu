@@ -12,6 +12,7 @@ abstract final class AppConstants {
   static const String fieldPhone = 'phone';
   static const String fieldEmail = 'email';
   static const String fieldKeperluan = 'keperluan';
+  static const String fieldKeperluanLainnya = 'keperluanLainnya';
   static const String fieldInstansi = 'instansi';
   static const String fieldPhotoUrl = 'photoUrl';
   static const String fieldLocationId = 'locationId';

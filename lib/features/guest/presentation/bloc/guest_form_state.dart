@@ -15,20 +15,25 @@ class GuestFormState extends Equatable {
   /// Selected visit purpose (nullable until user picks one).
   final Keperluan? keperluan;
 
-  const GuestFormState({this.photo, this.keperluan});
+  /// Custom description for "Lainnya" keperluan.
+  final String? keperluanLainnya;
+
+  const GuestFormState({this.photo, this.keperluan, this.keperluanLainnya});
 
   /// Returns a copy with updated fields.
   GuestFormState copyWith({
     File? photo,
     bool clearPhoto = false,
     Keperluan? keperluan,
+    String? keperluanLainnya,
   }) {
     return GuestFormState(
       photo: clearPhoto ? null : (photo ?? this.photo),
       keperluan: keperluan ?? this.keperluan,
+      keperluanLainnya: keperluanLainnya ?? this.keperluanLainnya,
     );
   }
 
   @override
-  List<Object?> get props => [photo, keperluan];
+  List<Object?> get props => [photo, keperluan, keperluanLainnya];
 }

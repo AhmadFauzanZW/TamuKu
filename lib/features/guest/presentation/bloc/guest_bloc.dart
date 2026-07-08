@@ -71,6 +71,7 @@ class GuestBloc extends Bloc<GuestEvent, GuestState> {
       phone: event.phone,
       email: event.email,
       keperluan: event.keperluan,
+      keperluanLainnya: event.keperluanLainnya,
       instansi: event.instansi,
       photoUrl: event.photoUrl,
       locationId: event.locationId,

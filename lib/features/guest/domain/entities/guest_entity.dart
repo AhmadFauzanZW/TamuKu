@@ -87,6 +87,9 @@ class GuestEntity extends Equatable {
   /// Purpose of the visit.
   final Keperluan keperluan;
 
+  /// Custom description for "Lainnya" keperluan (optional).
+  final String? keperluanLainnya;
+
   /// Guest's institution or company (optional).
   final String? instansi;
 
@@ -115,6 +118,7 @@ class GuestEntity extends Equatable {
     required this.phone,
     this.email,
     required this.keperluan,
+    this.keperluanLainnya,
     this.instansi,
     this.photoUrl,
     required this.locationId,
@@ -137,6 +141,7 @@ class GuestEntity extends Equatable {
       keperluan: KeperluanX.fromValue(
         data[AppConstants.fieldKeperluan] as String,
       ),
+      keperluanLainnya: data[AppConstants.fieldKeperluanLainnya] as String?,
       instansi: data[AppConstants.fieldInstansi] as String?,
       photoUrl: data[AppConstants.fieldPhotoUrl] as String?,
       locationId: data[AppConstants.fieldLocationId] as String,
@@ -157,6 +162,7 @@ class GuestEntity extends Equatable {
     AppConstants.fieldPhone: phone,
     AppConstants.fieldEmail: email,
     AppConstants.fieldKeperluan: keperluan.toValue(),
+    AppConstants.fieldKeperluanLainnya: keperluanLainnya,
     AppConstants.fieldInstansi: instansi,
     AppConstants.fieldPhotoUrl: photoUrl,
     AppConstants.fieldLocationId: locationId,
@@ -175,6 +181,7 @@ class GuestEntity extends Equatable {
     AppConstants.fieldPhone: phone,
     AppConstants.fieldEmail: email,
     AppConstants.fieldKeperluan: keperluan.toValue(),
+    AppConstants.fieldKeperluanLainnya: keperluanLainnya,
     AppConstants.fieldInstansi: instansi,
     AppConstants.fieldPhotoUrl: photoUrl,
     AppConstants.fieldLocationId: locationId,
@@ -194,6 +201,7 @@ class GuestEntity extends Equatable {
       keperluan: KeperluanX.fromValue(
         map[AppConstants.fieldKeperluan] as String,
       ),
+      keperluanLainnya: map[AppConstants.fieldKeperluanLainnya] as String?,
       instansi: map[AppConstants.fieldInstansi] as String?,
       photoUrl: map[AppConstants.fieldPhotoUrl] as String?,
       locationId: map[AppConstants.fieldLocationId] as String,
@@ -212,6 +220,7 @@ class GuestEntity extends Equatable {
     String? name,
     String? phone,
     String? email,
+    String? keperluanLainnya,
     Keperluan? keperluan,
     String? instansi,
     String? photoUrl,
@@ -225,6 +234,7 @@ class GuestEntity extends Equatable {
       guestId: guestId ?? this.guestId,
       name: name ?? this.name,
       phone: phone ?? this.phone,
+      keperluanLainnya: keperluanLainnya ?? this.keperluanLainnya,
       email: email ?? this.email,
       keperluan: keperluan ?? this.keperluan,
       instansi: instansi ?? this.instansi,
@@ -242,6 +252,7 @@ class GuestEntity extends Equatable {
     guestId,
     name,
     phone,
+    keperluanLainnya,
     email,
     keperluan,
     instansi,
