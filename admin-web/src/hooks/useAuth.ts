@@ -5,7 +5,7 @@ import {
   signOut as firebaseSignOut,
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import type { Host } from '../types';
 
@@ -14,6 +14,38 @@ interface AuthState {
   hostData: Host | null;
   loading: boolean;
   error: string | null;
+}
+
+async function findHost(user: User): Promise<Host | null> {
+  // Strategy 1: Direct lookup by Auth UID
+  try {
+    const snap = await getDoc(doc(db, 'hosts', user.uid));
+    if (snap.exists()) {
+      return { hostId: snap.id, ...snap.data() } as Host;
+    }
+  } catch (err) {
+    console.warn('Direct host lookup failed:', err);
+  }
+
+  // Strategy 2: Fallback — query by email
+  if (user.email) {
+    try {
+      const q = query(collection(db, 'hosts'), where('email', '==', user.email));
+      const querySnap = await getDocs(q);
+      if (!querySnap.empty) {
+        const docSnap = querySnap.docs[0];
+        console.warn(
+          `Host document ID (${docSnap.id}) doesn't match Auth UID (${user.uid}). ` +
+          `Consider running the setup script to fix this.`
+        );
+        return { hostId: docSnap.id, ...docSnap.data() } as Host;
+      }
+    } catch (err) {
+      console.warn('Email-based host lookup failed:', err);
+    }
+  }
+
+  return null;
 }
 
 export function useAuth() {
@@ -28,10 +60,7 @@ export function useAuth() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const snap = await getDoc(doc(db, 'hosts', user.uid));
-          const hostData = snap.exists()
-            ? ({ hostId: snap.id, ...snap.data() } as Host)
-            : null;
+          const hostData = await findHost(user);
           setState({ user, hostData, loading: false, error: null });
         } catch {
           setState({ user, hostData: null, loading: false, error: null });

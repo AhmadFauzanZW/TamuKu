@@ -2,33 +2,75 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ── Helper Functions ──────────────────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Safe role check — handles missing doc without crashing
+    function getUserRole() {
+      return isAuth()
+        ? get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.role
+        : '';
+    }
+
+    function isSuperAdmin() {
+      return getUserRole() == 'super_admin';
+    }
+
+    function isAdmin() {
+      return getUserRole() == 'admin';
+    }
+
+    function isSuperAdminOrAdmin() {
+      return isSuperAdmin() || isAdmin();
+    }
+
+    // Safe location management check
+    function managesLocation(locId) {
+      return isSuperAdmin()
+        || (isAuth() && locId in get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.locations);
+    }
+
     // ── Guests — Tamu ────────────────────────────────────────────────
     match /guests/{guestId} {
-      // Tamu boleh submit form tanpa login
+      // Guest form submission (no auth required)
       allow create: if true;
-      // Admin yang login bisa baca semua data tamu
-      allow read: if request.auth != null;
-      // Update/hapus hanya yang login
-      allow update, delete: if request.auth != null;
+      // Admin/host can read guests
+      allow read: if isAuth();
+      // Update:
+      //   - Unauthenticated: guest checkout — must set status, checkOutTime, and photoUrl
+      //   - Authenticated: admin/host of the location (full update)
+      allow update: if
+        (!isAuth()
+          && request.resource.data.status == 'checked_out'
+          && request.resource.data.checkOutTime != null
+          && request.resource.data.photoUrl != null)
+        ||
+        (isAuth() && (isSuperAdminOrAdmin() || managesLocation(resource.data.locationId)));
+      // Delete: super_admin only
+      allow delete: if isSuperAdmin();
     }
 
     // ── Locations — Lokasi ───────────────────────────────────────────
     match /locations/{locationId} {
-      // QR code perlu diakses publik (guest scan)
+      // QR code public read (guest scan)
       allow read: if true;
-      // Admin yang login bisa semua operasi write
-      allow write: if request.auth != null;
+      // Create/delete: super_admin only
+      allow create, delete: if isSuperAdmin();
+      // Update: super_admin or admin of the location
+      allow update: if isAuth() && (isSuperAdminOrAdmin() || managesLocation(locationId));
     }
 
     // ── Hosts — Admin/User ───────────────────────────────────────────
     match /hosts/{hostId} {
-      // Admin yang login boleh baca semua host
-      allow read: if request.auth != null;
-      // Bisa update diri sendiri atau siapa saja
-      allow update: if request.auth != null;
-      // Bisa buat host baru
-      allow create: if request.auth != null;
-      // Tidak boleh hapus host
+      // Admin can read all hosts
+      allow read: if isAuth();
+      // Create: super_admin only
+      allow create: if isSuperAdmin();
+      // Update: super_admin, or user updating own profile
+      allow update: if isAuth() && (isSuperAdmin() || request.auth.uid == hostId);
+      // No one can delete hosts
       allow delete: if false;
     }
   }

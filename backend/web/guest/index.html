@@ -12,14 +12,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Primary Palette */
       --primary-900: #1B5E20;
       --primary-700: #2E7D32;
       --primary-500: #43A047;
       --primary-100: #C8E6C9;
       --primary-50: #E8F5E9;
-
-      /* Neutrals */
       --bg: #FAFAF5;
       --surface: #FFFFFF;
       --text: #1A1A1A;
@@ -27,29 +24,20 @@
       --text-disabled: #BDBDBD;
       --border: #E0E0E0;
       --border-light: #F0F0F0;
-
-      /* Accents */
       --red: #D32F2F;
       --red-light: #FFEBEE;
       --amber: #F9A825;
       --success: #2E7D32;
-
-      /* Spacing */
       --s-xs: 4px;
       --s-sm: 8px;
       --s-md: 16px;
       --s-lg: 24px;
       --s-xl: 32px;
-      --s-2xl: 48px;
-
-      /* Radii */
-      --r-sm: 4px;
-      --r-md: 8px;
-      --r-lg: 12px;
-      --r-xl: 16px;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --r-xl: 24px;
       --r-full: 9999px;
-
-      /* Shadows */
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
       --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
       --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
@@ -264,21 +252,62 @@
     .btn-danger { background: var(--red); color: white; }
     .btn-danger:not(:disabled):hover { background: #B71C1C; }
     .btn-outline {
-      background: transparent;
-      color: var(--primary-900);
+      background: transparent; color: var(--primary-900);
       border: 1.5px solid var(--primary-900);
     }
     .btn-outline:not(:disabled):hover { background: var(--primary-50); }
     .btn-spinner {
       width: 20px; height: 20px;
       border: 2.5px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      display: none;
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.6s linear infinite; display: none;
     }
     .btn.loading .btn-text { opacity: 0; }
     .btn.loading .btn-spinner { display: block; position: absolute; }
+
+    /* ═══════════════════════════════════════════════════════════
+       TABS (Check-in / Check-out)
+       ═══════════════════════════════════════════════════════════ */
+    .tab-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+    .tab-btn {
+      flex: 1; height: 42px; border: 1.5px solid var(--border);
+      border-radius: var(--r-xl); background: var(--surface);
+      font-size: 14px; font-weight: 600; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .tab-btn svg { width: 16px; height: 16px; }
+    .tab-btn.active { background: var(--primary-900); color: white; border-color: var(--primary-900); }
+    .tab-btn:not(.active):hover { border-color: var(--primary-500); color: var(--primary-700); }
+
+    /* ═══════════════════════════════════════════════════════════
+       PHONE LOOKUP
+       ═══════════════════════════════════════════════════════════ */
+    .lookup-card { padding: 20px; }
+    .lookup-hint { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5; }
+    .lookup-results { margin-top: 16px; }
+    .lookup-result-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; border: 1.5px solid var(--border);
+      border-radius: var(--r-md); cursor: pointer;
+      transition: border-color 0.2s, background 0.2s; margin-bottom: 8px;
+    }
+    .lookup-result-item:hover { border-color: var(--primary-500); background: var(--primary-50); }
+    .lookup-result-item .lr-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--primary-50); display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+    }
+    .lookup-result-item .lr-avatar svg { width: 20px; height: 20px; color: var(--primary-700); }
+    .lookup-result-item .lr-avatar img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .lookup-result-item .lr-info { flex: 1; min-width: 0; }
+    .lookup-result-item .lr-name {
+      font-size: 15px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .lookup-result-item .lr-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .lookup-result-item .lr-time { font-size: 12px; color: var(--primary-700); font-weight: 600; flex-shrink: 0; }
+    .lookup-empty { text-align: center; padding: 24px; font-size: 14px; color: var(--text-secondary); }
 
     /* ═══════════════════════════════════════════════════════════
        LOADING STATE
@@ -355,6 +384,11 @@
       color: var(--text-secondary);
       margin-bottom: 24px;
     }
+    .success-photo {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; margin: 0 auto 16px;
+      border: 3px solid var(--primary-100);
+    }
     .summary-card {
       background: var(--surface);
       border-radius: var(--r-lg);
@@ -388,8 +422,10 @@
       align-items: center;
       justify-content: center;
       margin: 0 auto 12px;
+      overflow: hidden;
     }
     .checkout-avatar svg { width: 28px; height: 28px; color: var(--primary-700); }
+    .checkout-avatar img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
     .checkout-name {
       font-size: 20px;
       font-weight: 700;
@@ -509,129 +545,160 @@
   <!-- ═══════════ MAIN CONTENT ═══════════ -->
   <main class="content">
 
-    <!-- ─── LOADING STATE ─── -->
+    <!-- ─── LOADING ─── -->
     <div id="view-loading" class="loading-state">
       <div class="loading-spinner"></div>
       <p class="loading-text">Memuat data lokasi...</p>
     </div>
 
-    <!-- ─── ERROR STATE ─── -->
+    <!-- ─── ERROR ─── -->
     <div id="view-error" class="error-state hidden">
       <div class="error-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
       </div>
       <h3>Terjadi Kesalahan</h3>
       <p id="error-message"></p>
       <button class="btn btn-outline" style="max-width:200px;margin:0 auto" onclick="retry()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1 4 1 10 7 10"/>
-          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         Kembali
       </button>
     </div>
 
-    <!-- ─── CHECK-IN FORM ─── -->
-    <div id="view-checkin" class="hidden">
-      <div class="card location-card state-view">
-        <div class="loc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          Lokasi
-        </div>
-        <div class="loc-name" id="location-name"></div>
-        <div class="loc-address" id="location-address"></div>
+    <!-- ─── MAIN VIEW (tabbed) ─── -->
+    <div id="view-main" class="hidden">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-checkin" onclick="switchTab('checkin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Check In
+        </button>
+        <button class="tab-btn" id="tab-checkout" onclick="switchTab('checkout')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Check Out
+        </button>
       </div>
 
-      <div class="card section-card state-view">
-        <div class="section-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="8.5" cy="7" r="4"/>
-            <line x1="20" y1="8" x2="20" y2="14"/>
-            <line x1="23" y1="11" x2="17" y2="11"/>
-          </svg>
-          Data Diri
+      <!-- ── CHECK-IN TAB ── -->
+      <div id="tab-content-checkin">
+        <div class="card location-card state-view">
+          <div class="loc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Lokasi
+          </div>
+          <div class="loc-name" id="location-name"></div>
+          <div class="loc-address" id="location-address"></div>
         </div>
 
-        <form id="guest-form" novalidate>
-          <div class="field" id="field-name">
-            <label>Nama Lengkap <span class="req">*</span></label>
-            <input type="text" id="inp-name" placeholder="Masukkan nama lengkap" autocomplete="name">
-            <div class="field-error">Nama wajib diisi</div>
+        <div class="card section-card state-view">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Data Diri
           </div>
-          <div class="field" id="field-phone">
-            <label>No. WhatsApp <span class="req">*</span></label>
-            <input type="tel" id="inp-phone" placeholder="081234567890" autocomplete="tel">
-            <div class="field-error">Nomor WhatsApp wajib diisi</div>
-          </div>
-          <div class="field" id="field-email">
-            <label>Email</label>
-            <input type="email" id="inp-email" placeholder="email@contoh.com (opsional)" autocomplete="email">
-          </div>
-          <div class="field" id="field-instansi">
-            <label>Instansi / Perusahaan</label>
-            <input type="text" id="inp-instansi" placeholder="Nama instansi (opsional)" autocomplete="organization">
-          </div>
-          <div class="field field-select-wrap" id="field-keperluan">
-            <label>Keperluan <span class="req">*</span></label>
-            <select id="inp-keperluan">
-              <option value="">Pilih keperluan</option>
-              <option value="Meeting">Meeting</option>
-              <option value="Personal">Personal</option>
-              <option value="Kantor">Kantor</option>
-              <option value="Pengiriman">Pengiriman</option>
-              <option value="Lainnya">Lainnya</option>
-            </select>
-            <div class="field-error">Keperluan wajib dipilih</div>
-          </div>
-          <div class="field field-sub" id="field-lainnya">
-            <label>Keperluan Lainnya <span class="req">*</span></label>
-            <input type="text" id="inp-lainnya" placeholder="Sebutkan keperluan Anda">
-            <div class="field-error">Keperluan wajib diisi</div>
-          </div>
+          <form id="guest-form" novalidate>
+            <div class="field" id="field-name">
+              <label>Nama Lengkap <span class="req">*</span></label>
+              <input type="text" id="inp-name" placeholder="Masukkan nama lengkap" autocomplete="name">
+              <div class="field-error">Nama wajib diisi</div>
+            </div>
+            <div class="field" id="field-phone">
+              <label>No. WhatsApp <span class="req">*</span></label>
+              <input type="tel" id="inp-phone" placeholder="081234567890" autocomplete="tel">
+              <div class="field-error">Nomor WhatsApp wajib diisi</div>
+            </div>
+            <div class="field" id="field-email">
+              <label>Email</label>
+              <input type="email" id="inp-email" placeholder="email@contoh.com (opsional)" autocomplete="email">
+            </div>
+            <div class="field" id="field-instansi">
+              <label>Instansi / Perusahaan</label>
+              <input type="text" id="inp-instansi" placeholder="Nama instansi (opsional)" autocomplete="organization">
+            </div>
+            <div class="field field-select-wrap" id="field-keperluan">
+              <label>Keperluan <span class="req">*</span></label>
+              <select id="inp-keperluan">
+                <option value="">Pilih keperluan</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Personal">Personal</option>
+                <option value="Kantor">Kantor</option>
+                <option value="Pengiriman">Pengiriman</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+              <div class="field-error">Keperluan wajib dipilih</div>
+            </div>
+            <div class="field field-sub" id="field-lainnya">
+              <label>Keperluan Lainnya <span class="req">*</span></label>
+              <input type="text" id="inp-lainnya" placeholder="Sebutkan keperluan Anda">
+              <div class="field-error">Keperluan wajib diisi</div>
+            </div>
 
-          <button type="submit" class="btn btn-primary" id="btn-submit">
-            <span class="btn-text">Check In</span>
-            <div class="btn-spinner"></div>
-          </button>
-        </form>
+            <!-- Photo -->
+            <div class="photo-section">
+              <label style="display:block;font-size:14px;font-weight:500;margin-bottom:6px;">Foto <span class="req">*</span></label>
+              <div class="photo-capture" id="checkin-photo-capture" onclick="openCamera('checkin')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <span>Ambil Foto</span>
+                <input type="file" accept="image/*" capture="environment" id="checkin-photo-input">
+                <div class="retake-overlay">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Ganti Foto
+                </div>
+              </div>
+              <div class="field-error" id="field-photo-error" style="margin-top:6px;">Foto wajib diambil</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-submit">
+              <span class="btn-text">Check In</span>
+              <div class="btn-spinner"></div>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── CHECKOUT TAB ── -->
+      <div id="tab-content-checkout" class="hidden">
+        <div class="card lookup-card state-view">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            Cari Data Kunjungan
+          </div>
+          <p class="lookup-hint">Masukkan nomor WhatsApp yang digunakan saat check in untuk melanjutkan proses check out.</p>
+          <form id="lookup-form" novalidate>
+            <div class="field" id="field-lookup-phone">
+              <label>No. WhatsApp <span class="req">*</span></label>
+              <input type="tel" id="inp-lookup-phone" placeholder="081234567890" autocomplete="tel">
+              <div class="field-error">Nomor WhatsApp wajib diisi</div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn-lookup">
+              <span class="btn-text">Cari</span>
+              <div class="btn-spinner"></div>
+            </button>
+          </form>
+          <div id="lookup-results" class="lookup-results hidden"></div>
+        </div>
       </div>
     </div>
 
-    <!-- ─── CHECK-IN CONFIRMATION ─── -->
+    <!-- ─── CHECK-IN SUCCESS ─── -->
     <div id="view-checkin-ok" class="hidden">
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80">
-              <circle class="circle" cx="40" cy="40" r="35"/>
-              <polyline class="check" points="25,42 35,52 55,30"/>
-            </svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
           </div>
+          <img class="success-photo hidden" id="cok-photo" src="" alt="Foto Tamu">
           <h2>Berhasil Check In!</h2>
           <p class="subtitle">Selamat datang di lokasi kami</p>
           <div class="summary-card">
-            <div class="summary-row">
-              <span class="s-label">Nama</span>
-              <span class="s-value" id="cok-name"></span>
-            </div>
-            <div class="summary-row">
-              <span class="s-label">Keperluan</span>
-              <span class="s-value" id="cok-keperluan"></span>
-            </div>
-            <div class="summary-row">
-              <span class="s-label">Waktu Masuk</span>
-              <span class="s-value" id="cok-time"></span>
-            </div>
+            <div class="summary-row"><span class="s-label">Nama</span><span class="s-value" id="cok-name"></span></div>
+            <div class="summary-row"><span class="s-label">Keperluan</span><span class="s-value" id="cok-keperluan"></span></div>
+            <div class="summary-row"><span class="s-label">Waktu Masuk</span><span class="s-value" id="cok-time"></span></div>
           </div>
-          <button class="btn btn-outline mt-md" onclick="resetToCheckIn()">
+          <button class="btn btn-outline mt-md" onclick="resetToMain()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
             Kembali ke Awal
           </button>
@@ -643,11 +710,8 @@
     <div id="view-checkout" class="hidden">
       <div class="card section-card state-view">
         <div class="checkout-header">
-          <div class="checkout-avatar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+          <div class="checkout-avatar" id="co-avatar-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
           <div class="checkout-name" id="co-name"></div>
           <div class="checkout-detail" id="co-keperluan"></div>
@@ -658,10 +722,24 @@
           <div class="duration-time" id="co-duration"></div>
         </div>
         <div class="info-rows">
-          <div class="info-row">
-            <span class="i-label">Waktu Masuk</span>
-            <span class="i-value" id="co-checkin-time"></span>
+          <div class="info-row"><span class="i-label">Waktu Masuk</span><span class="i-value" id="co-checkin-time"></span></div>
+        </div>
+        <!-- Checkout photo -->
+        <div class="photo-section" style="margin-top:16px;">
+          <label style="display:block;font-size:14px;font-weight:500;margin-bottom:6px;">Foto Check Out <span class="req">*</span></label>
+          <div class="photo-capture" id="checkout-photo-capture" onclick="openCamera('checkout')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <span>Ambil Foto</span>
+            <input type="file" accept="image/*" capture="environment" id="checkout-photo-input">
+            <div class="retake-overlay">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Ganti Foto
+            </div>
           </div>
+          <div class="field-error" id="checkout-photo-error" style="margin-top:6px;">Foto wajib diambil</div>
         </div>
         <button class="btn btn-danger mt-md" id="btn-checkout">
           <span class="btn-text">Check Out</span>
@@ -670,29 +748,21 @@
       </div>
     </div>
 
-    <!-- ─── CHECKOUT CONFIRMATION ─── -->
+    <!-- ─── CHECKOUT SUCCESS ─── -->
     <div id="view-checkout-ok" class="hidden">
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80">
-              <circle class="circle" cx="40" cy="40" r="35"/>
-              <polyline class="check" points="25,42 35,52 55,30"/>
-            </svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
           </div>
+          <img class="success-photo hidden" id="cok2-photo" src="" alt="Foto Check Out">
           <h2>Berhasil Check Out!</h2>
           <p class="subtitle">Terima kasih telah berkunjung</p>
           <div class="summary-card">
-            <div class="summary-row">
-              <span class="s-label">Waktu Keluar</span>
-              <span class="s-value" id="cok2-time"></span>
-            </div>
-            <div class="summary-row" id="cok2-duration-row">
-              <span class="s-label">Durasi</span>
-              <span class="s-value" id="cok2-duration"></span>
-            </div>
+            <div class="summary-row"><span class="s-label">Waktu Keluar</span><span class="s-value" id="cok2-time"></span></div>
+            <div class="summary-row" id="cok2-duration-row"><span class="s-label">Durasi</span><span class="s-value" id="cok2-duration"></span></div>
           </div>
-          <button class="btn btn-outline mt-md" onclick="resetToCheckIn()">
+          <button class="btn btn-outline mt-md" onclick="resetToMain()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
             Kembali ke Awal
           </button>
@@ -703,9 +773,21 @@
   </main>
 
   <footer class="footer">TamuKu &middot; Buku Tamu Digital</footer>
-
-  <!-- Error Toast -->
   <div class="toast" id="toast"></div>
+
+  <!-- Camera Modal -->
+  <div class="camera-modal" id="camera-modal">
+    <video id="camera-video" autoplay playsinline></video>
+    <canvas id="camera-canvas"></canvas>
+    <div class="camera-controls">
+      <button class="camera-btn camera-btn-cancel" onclick="closeCamera()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <button class="camera-btn camera-btn-shutter" onclick="capturePhoto()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="4"/></svg>
+      </button>
+    </div>
+  </div>
 
   <!-- ═══════════ FIREBASE SDK ═══════════ -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -735,24 +817,20 @@
     let locationData = null;
     let existingGuestId = null;
     let durationInterval = null;
+    let activeTab = 'checkin';
+    let checkinPhotoFile = null;
+    let checkoutPhotoFile = null;
+    let cameraTarget = null;
+    let cameraStream = null;
 
-    // ═══════════════════════════════════════════════════════════════
-    // DOM Helpers
-    // ═══════════════════════════════════════════════════════════════
     const $ = (id) => document.getElementById(id);
-    const ALL_VIEWS = ['view-loading', 'view-error', 'view-checkin', 'view-checkin-ok', 'view-checkout', 'view-checkout-ok'];
+    const ALL_VIEWS = ['view-loading', 'view-error', 'view-main', 'view-checkin-ok', 'view-checkout', 'view-checkout-ok'];
 
     function showView(id) {
       ALL_VIEWS.forEach(v => $(v).classList.add('hidden'));
-      const el = $(id);
-      el.classList.remove('hidden');
-      // Re-trigger enter animation
-      const anim = el.querySelector('.state-view');
-      if (anim) {
-        anim.style.animation = 'none';
-        anim.offsetHeight; // reflow
-        anim.style.animation = '';
-      }
+      $(id).classList.remove('hidden');
+      const anim = $(id).querySelector('.state-view');
+      if (anim) { anim.style.animation = 'none'; anim.offsetHeight; anim.style.animation = ''; }
     }
 
     function showToast(msg) {
@@ -764,7 +842,114 @@
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // Init — parse URL params and load location
+    // Tab Switching
+    // ═══════════════════════════════════════════════════════════════
+    function switchTab(tab) {
+      activeTab = tab;
+      $('tab-checkin').classList.toggle('active', tab === 'checkin');
+      $('tab-checkout').classList.toggle('active', tab === 'checkout');
+      $('tab-content-checkin').classList.toggle('hidden', tab !== 'checkin');
+      $('tab-content-checkout').classList.toggle('hidden', tab !== 'checkout');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Camera / Photo
+    // ═══════════════════════════════════════════════════════════════
+    async function openCamera(target) {
+      cameraTarget = target;
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false,
+        });
+        $('camera-video').srcObject = cameraStream;
+        $('camera-modal').classList.add('open');
+      } catch (err) {
+        console.warn('Camera API failed, fallback to file input:', err);
+        $(target + '-photo-input').click();
+      }
+    }
+
+    function closeCamera() {
+      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+      $('camera-video').srcObject = null;
+      $('camera-modal').classList.remove('open');
+      cameraTarget = null;
+    }
+
+    function capturePhoto() {
+      const video = $('camera-video');
+      const canvas = $('camera-canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        applyPhoto(new File([blob], 'photo.jpg', { type: 'image/jpeg' }), cameraTarget);
+        closeCamera();
+      }, 'image/jpeg', 0.85);
+    }
+
+    function applyPhoto(file, target) {
+      const capture = $(target + '-photo-capture');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const old = capture.querySelector('img');
+        if (old) old.remove();
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        capture.prepend(img);
+        capture.classList.add('has-photo');
+        if (target === 'checkin') { checkinPhotoFile = file; $('field-photo-error').style.display = 'none'; }
+        else { checkoutPhotoFile = file; $('checkout-photo-error').style.display = 'none'; }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    $('checkin-photo-input').addEventListener('change', function () { if (this.files?.[0]) applyPhoto(this.files[0], 'checkin'); });
+    $('checkout-photo-input').addEventListener('change', function () { if (this.files?.[0]) applyPhoto(this.files[0], 'checkout'); });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Photo Upload (S3 presigned)
+    // ═══════════════════════════════════════════════════════════════
+    async function uploadPhoto(file) {
+      const compressed = await compressImage(file, 800, 0.82);
+      const res = await fetch('/api/guests/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contentType: 'image/jpeg' }),
+      });
+      const { success, data, error } = await res.json();
+      if (!success) throw new Error(error || 'Gagal membuat URL upload');
+      const uploadRes = await fetch(data.uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: compressed });
+      if (!uploadRes.ok) throw new Error('Gagal mengupload foto');
+      return data.fileUrl;
+    }
+
+    function compressImage(file, maxDim, quality) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > maxDim || height > maxDim) {
+              if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+              else { width = Math.round(width * maxDim / height); height = maxDim; }
+            }
+            const c = document.createElement('canvas');
+            c.width = width; c.height = height;
+            c.getContext('2d').drawImage(img, 0, 0, width, height);
+            c.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Init
     // ═══════════════════════════════════════════════════════════════
     async function init() {
       const params = new URLSearchParams(window.location.search);
@@ -772,80 +957,50 @@
       hostPhone = params.get('phone') || '';
       const guestId = params.get('guest');
 
-      if (!locationId) {
-        showError('URL tidak valid. Silakan scan ulang QR code.');
-        return;
-      }
+      if (!locationId) { showError('URL tidak valid. Silakan scan ulang QR code.'); return; }
 
       try {
         const locDoc = await db.collection('locations').doc(locationId).get();
-        if (!locDoc.exists) {
-          showError('Lokasi tidak ditemukan. Silakan hubungi admin.');
-          return;
-        }
+        if (!locDoc.exists) { showError('Lokasi tidak ditemukan. Silakan hubungi admin.'); return; }
         locationData = locDoc.data();
-
-        if (guestId) {
-          await loadGuestForCheckout(guestId);
-        } else {
-          showCheckInForm();
-        }
+        if (guestId) await loadGuestForCheckout(guestId);
+        else showMainView();
       } catch (err) {
         console.error('Init error:', err);
         showError('Gagal memuat data. Periksa koneksi internet Anda.');
       }
     }
 
-    function showError(msg) {
-      $('error-message').textContent = msg;
-      showView('view-error');
-    }
-
-    function retry() {
-      showView('view-loading');
-      locationData = null;
-      existingGuestId = null;
-      init();
-    }
+    function showError(msg) { $('error-message').textContent = msg; showView('view-error'); }
+    function retry() { showView('view-loading'); locationData = null; existingGuestId = null; init(); }
 
     // ═══════════════════════════════════════════════════════════════
     // Check-In Form
     // ═══════════════════════════════════════════════════════════════
-    function showCheckInForm() {
+    function showMainView() {
       $('location-name').textContent = locationData.name || '-';
       $('location-address').textContent = locationData.address || '-';
-      showView('view-checkin');
+      switchTab(activeTab);
+      showView('view-main');
     }
 
-    // Keperluan sub-field toggle
     $('inp-keperluan').addEventListener('change', function () {
       const lainnya = $('field-lainnya');
-      if (this.value === 'Lainnya') {
-        lainnya.classList.add('visible');
-        $('inp-lainnya').focus();
-      } else {
-        lainnya.classList.remove('visible');
-        $('inp-lainnya').value = '';
-        clearFieldError('field-lainnya');
-      }
+      if (this.value === 'Lainnya') { lainnya.classList.add('visible'); $('inp-lainnya').focus(); }
+      else { lainnya.classList.remove('visible'); $('inp-lainnya').value = ''; clearFieldError('field-lainnya'); }
       clearFieldError('field-keperluan');
     });
 
-    // Clear field errors on input
-    ['inp-name', 'inp-phone', 'inp-email', 'inp-instansi', 'inp-lainnya'].forEach(id => {
-      $(id).addEventListener('input', function () {
-        const field = this.closest('.field');
-        if (field) clearFieldError(field.id);
-      });
+    ['inp-name', 'inp-phone', 'inp-email', 'inp-instansi', 'inp-lainnya', 'inp-lookup-phone'].forEach(id => {
+      const el = $(id);
+      if (el) el.addEventListener('input', function () { const f = this.closest('.field'); if (f) clearFieldError(f.id); });
     });
 
     function setFieldError(fieldId) { $(fieldId).classList.add('has-error'); }
     function clearFieldError(fieldId) { $(fieldId).classList.remove('has-error'); }
 
-    // Submit check-in
     $('guest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const name = $('inp-name').value.trim();
       const phone = $('inp-phone').value.trim();
       const email = $('inp-email').value.trim();
@@ -853,49 +1008,94 @@
       const keperluan = $('inp-keperluan').value;
       const lainnya = $('inp-lainnya').value.trim();
 
-      // Validate
       let valid = true;
       if (!name) { setFieldError('field-name'); valid = false; } else clearFieldError('field-name');
       if (!phone) { setFieldError('field-phone'); valid = false; } else clearFieldError('field-phone');
       if (!keperluan) { setFieldError('field-keperluan'); valid = false; } else clearFieldError('field-keperluan');
       if (keperluan === 'Lainnya' && !lainnya) { setFieldError('field-lainnya'); valid = false; } else clearFieldError('field-lainnya');
+      if (!checkinPhotoFile) { $('field-photo-error').style.display = 'block'; valid = false; } else { $('field-photo-error').style.display = 'none'; }
       if (!valid) return;
 
       const btn = $('btn-submit');
-      btn.classList.add('loading');
-      btn.disabled = true;
+      btn.classList.add('loading'); btn.disabled = true;
 
       try {
         const finalKeperluan = keperluan === 'Lainnya' ? lainnya : keperluan;
+        const photoUrl = await uploadPhoto(checkinPhotoFile);
         const now = firebase.firestore.FieldValue.serverTimestamp();
 
         await db.collection('guests').add({
-          name,
-          phone,
-          email: email || null,
-          instansi: instansi || null,
-          keperluan: finalKeperluan,
-          photoUrl: null,
-          locationId,
-          checkInTime: now,
-          checkOutTime: null,
-          hostPhone: hostPhone || locationData.hostPhone || null,
-          status: 'checked_in',
+          name, phone, email: email || null, instansi: instansi || null,
+          keperluan: finalKeperluan, photoUrl, checkInPhotoUrl: photoUrl, checkOutPhotoUrl: null,
+          locationId, checkInTime: now, checkOutTime: null,
+          hostPhone: hostPhone || locationData.hostPhone || null, status: 'checked_in',
         });
 
-        // Show success
         $('cok-name').textContent = name;
         $('cok-keperluan').textContent = finalKeperluan;
         $('cok-time').textContent = formatTime(new Date());
+        const photoEl = $('cok-photo');
+        photoEl.src = URL.createObjectURL(checkinPhotoFile);
+        photoEl.classList.remove('hidden');
         showView('view-checkin-ok');
-
-        // Fire-and-forget notification
         triggerNotification(name, hostPhone || locationData.hostPhone);
       } catch (err) {
         console.error('Check-in error:', err);
         showToast('Gagal check in. Silakan coba lagi.');
-        btn.classList.remove('loading');
-        btn.disabled = false;
+        btn.classList.remove('loading'); btn.disabled = false;
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Phone Lookup (Checkout)
+    // ═══════════════════════════════════════════════════════════════
+    $('lookup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = $('inp-lookup-phone').value.trim();
+      if (!phone) { setFieldError('field-lookup-phone'); return; }
+      clearFieldError('field-lookup-phone');
+
+      const btn = $('btn-lookup');
+      btn.classList.add('loading'); btn.disabled = true;
+      const resultsEl = $('lookup-results');
+      resultsEl.classList.add('hidden'); resultsEl.innerHTML = '';
+
+      try {
+        const snapshot = await db.collection('guests')
+          .where('phone', '==', phone)
+          .where('locationId', '==', locationId)
+          .where('status', '==', 'checked_in')
+          .orderBy('checkInTime', 'desc')
+          .get();
+
+        if (snapshot.empty) {
+          resultsEl.innerHTML = '<div class="lookup-empty">Tidak ditemukan kunjungan aktif untuk nomor ini.</div>';
+          resultsEl.classList.remove('hidden');
+          btn.classList.remove('loading'); btn.disabled = false;
+          return;
+        }
+
+        let html = '';
+        snapshot.forEach(doc => {
+          const g = doc.data();
+          const checkIn = g.checkInTime?.toDate?.() || new Date();
+          const photoSrc = g.photoUrl || g.checkInPhotoUrl;
+          const photoHtml = photoSrc
+            ? `<img src="${escapeAttr(photoSrc)}" alt="">`
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+          html += `<div class="lookup-result-item" onclick="loadGuestForCheckout('${doc.id}')">
+            <div class="lr-avatar">${photoHtml}</div>
+            <div class="lr-info"><div class="lr-name">${escapeHtml(g.name)}</div>
+            <div class="lr-meta">${escapeHtml(g.keperluan)}${g.instansi ? ' · ' + escapeHtml(g.instansi) : ''}</div></div>
+            <div class="lr-time">${formatTime(checkIn)}</div></div>`;
+        });
+        resultsEl.innerHTML = html;
+        resultsEl.classList.remove('hidden');
+      } catch (err) {
+        console.error('Lookup error:', err);
+        showToast('Gagal mencari data. Coba lagi.');
+      } finally {
+        btn.classList.remove('loading'); btn.disabled = false;
       }
     });
 
@@ -905,30 +1105,28 @@
     async function loadGuestForCheckout(guestId) {
       try {
         const guestDoc = await db.collection('guests').doc(guestId).get();
-        if (!guestDoc.exists) {
-          showError('Data tamu tidak ditemukan.');
-          return;
-        }
+        if (!guestDoc.exists) { showError('Data tamu tidak ditemukan.'); return; }
         const guest = guestDoc.data();
 
-        // Already checked out → show final confirmation
         if (guest.status === 'checked_out') {
           $('cok2-time').textContent = guest.checkOutTime ? formatTime(guest.checkOutTime.toDate()) : '-';
           if (guest.checkInTime && guest.checkOutTime) {
             $('cok2-duration').textContent = formatDuration(guest.checkInTime.toDate(), guest.checkOutTime.toDate());
             $('cok2-duration-row').style.display = '';
-          } else {
-            $('cok2-duration-row').style.display = 'none';
-          }
+          } else { $('cok2-duration-row').style.display = 'none'; }
+          if (guest.checkOutPhotoUrl) { $('cok2-photo').src = guest.checkOutPhotoUrl; $('cok2-photo').classList.remove('hidden'); }
           showView('view-checkout-ok');
           return;
         }
 
-        // Active guest → show checkout form
         existingGuestId = guestId;
         $('co-name').textContent = guest.name;
         $('co-keperluan').textContent = guest.keperluan;
         $('co-instansi').textContent = guest.instansi || '';
+
+        if (guest.photoUrl || guest.checkInPhotoUrl) {
+          $('co-avatar-wrap').innerHTML = `<img src="${escapeAttr(guest.photoUrl || guest.checkInPhotoUrl)}" alt="${escapeAttr(guest.name)}">`;
+        }
 
         const checkInTime = guest.checkInTime.toDate();
         $('co-checkin-time').textContent = formatTime(checkInTime);
@@ -943,48 +1141,45 @@
 
     $('btn-checkout').addEventListener('click', async () => {
       if (!existingGuestId) return;
+      if (!checkoutPhotoFile) { $('checkout-photo-error').style.display = 'block'; return; }
+      $('checkout-photo-error').style.display = 'none';
 
       const btn = $('btn-checkout');
-      btn.classList.add('loading');
-      btn.disabled = true;
+      btn.classList.add('loading'); btn.disabled = true;
 
       try {
+        const photoUrl = await uploadPhoto(checkoutPhotoFile);
         await db.collection('guests').doc(existingGuestId).update({
           checkOutTime: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'checked_out',
+          checkOutPhotoUrl: photoUrl, status: 'checked_out',
         });
 
         if (durationInterval) clearInterval(durationInterval);
-
         $('cok2-time').textContent = formatTime(new Date());
         $('cok2-duration-row').style.display = 'none';
+        if (checkoutPhotoFile) {
+          $('cok2-photo').src = URL.createObjectURL(checkoutPhotoFile);
+          $('cok2-photo').classList.remove('hidden');
+        }
         showView('view-checkout-ok');
       } catch (err) {
         console.error('Check-out error:', err);
         showToast('Gagal check out. Silakan coba lagi.');
-        btn.classList.remove('loading');
-        btn.disabled = false;
+        btn.classList.remove('loading'); btn.disabled = false;
       }
     });
 
     // ═══════════════════════════════════════════════════════════════
-    // Notification (fire-and-forget)
+    // Notification
     // ═══════════════════════════════════════════════════════════════
     async function triggerNotification(guestName, phone) {
       try {
         await fetch('/api/guests/notify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            guestName,
-            locationName: locationData.name,
-            hostPhone: phone,
-            checkInTime: new Date().toISOString(),
-          }),
+          body: JSON.stringify({ guestName, locationName: locationData.name, hostPhone: phone, checkInTime: new Date().toISOString() }),
         });
-      } catch (err) {
-        console.warn('Notification failed:', err);
-      }
+      } catch (err) { console.warn('Notification failed:', err); }
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -1003,36 +1198,50 @@
     }
 
     function renderDuration(checkInTime) {
-      const now = new Date();
-      const diff = now - checkInTime;
+      const diff = Date.now() - checkInTime;
       const h = Math.floor(diff / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
-
       const durEl = $('co-duration');
-      if (h > 0) {
-        durEl.innerHTML = `<span class="dur-num">${h}j ${m}m</span><span class="dur-unit">${h} jam ${m} menit</span>`;
-      } else {
-        durEl.innerHTML = `<span class="dur-num">${m}</span><span class="dur-unit">menit</span>`;
-      }
+      if (h > 0) durEl.innerHTML = `<span class="dur-num">${h}j ${m}m</span><span class="dur-unit">${h} jam ${m} menit</span>`;
+      else durEl.innerHTML = `<span class="dur-num">${m}</span><span class="dur-unit">menit</span>`;
     }
 
-    function resetToCheckIn() {
+    function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function escapeAttr(s) { return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+    function resetToMain() {
       if (durationInterval) clearInterval(durationInterval);
       existingGuestId = null;
+      checkoutPhotoFile = null;
+      checkinPhotoFile = null;
+
       $('guest-form').reset();
+      $('lookup-form').reset();
       $('field-lainnya').classList.remove('visible');
-      ['field-name', 'field-phone', 'field-email', 'field-instansi', 'field-keperluan', 'field-lainnya'].forEach(clearFieldError);
-      $('btn-submit').classList.remove('loading');
-      $('btn-submit').disabled = false;
-      $('btn-checkout').classList.remove('loading');
-      $('btn-checkout').disabled = false;
+      $('lookup-results').classList.add('hidden');
+      $('lookup-results').innerHTML = '';
+
+      ['checkin-photo-capture', 'checkout-photo-capture'].forEach(id => {
+        const el = $(id);
+        const img = el.querySelector('img');
+        if (img) img.remove();
+        el.classList.remove('has-photo');
+      });
+      $('field-photo-error').style.display = 'none';
+      $('checkout-photo-error').style.display = 'none';
+      $('cok-photo').classList.add('hidden');
+      $('cok2-photo').classList.add('hidden');
+
+      ['btn-submit', 'btn-checkout', 'btn-lookup'].forEach(id => { $(id).classList.remove('loading'); $(id).disabled = false; });
+      ['field-name', 'field-phone', 'field-email', 'field-instansi', 'field-keperluan', 'field-lainnya', 'field-lookup-phone'].forEach(clearFieldError);
+
+      $('co-avatar-wrap').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+
+      switchTab('checkin');
       showView('view-loading');
       init();
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // Start
-    // ═══════════════════════════════════════════════════════════════
     init();
   </script>
 </body>

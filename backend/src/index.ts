@@ -5,6 +5,7 @@ import { staticPlugin } from '@elysiajs/static';
 import { join } from 'path';
 import { config } from './config';
 import { healthRoutes } from './routes/health';
+import { guestUploadRoute } from './routes/guest-upload';
 import { uploadRoutes } from './routes/upload';
 import { notificationRoutes } from './routes/notifications';
 import { guestRoutes } from './routes/guests';
@@ -24,6 +25,8 @@ const app = new Elysia()
       index: 'index.html',
     }),
   )
+  // Guest upload — no API key (guest web has no key)
+  .use(guestUploadRoute)
   .group('/api', (app) =>
     app
       .use(apiKeyGuard)

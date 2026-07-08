@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { signOut as firebaseSignOut } from 'firebase/auth';
+import { auth } from './config/firebase';
 import { useAuth } from './hooks/useAuth';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { LoginPage } from './pages/LoginPage';
@@ -12,8 +14,10 @@ import { SettingsPage } from './pages/SettingsPage';
 import { ToastContainer } from './components/ui/Toast';
 import { PageLoader } from './components/ui/LoadingSpinner';
 
+const WEB_ADMIN_ROLES = ['super_admin', 'admin'];
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, hostData, loading } = useAuth();
 
   if (loading) {
     return (
@@ -23,8 +27,59 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Not logged in → redirect to login
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Logged in but no host document → not registered
+  if (!hostData) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 px-4">
+        <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center">
+          <span className="text-red-600 text-2xl">⚠</span>
+        </div>
+        <h1 className="text-xl font-bold text-text-primary text-center">
+          Akun Tidak Terdaftar
+        </h1>
+        <p className="text-sm text-text-secondary text-center max-w-md">
+          Akun Anda belum terdaftar sebagai host/admin.
+          Silakan hubungi Super Admin untuk mendaftarkan akun Anda.
+        </p>
+        <button
+          onClick={() => firebaseSignOut(auth)}
+          className="mt-2 px-4 py-2 rounded-lg bg-primary-900 text-white text-sm font-medium hover:bg-primary-800"
+        >
+          Keluar
+        </button>
+      </div>
+    );
+  }
+
+  // Check role — only super_admin and admin can access web admin
+  if (!WEB_ADMIN_ROLES.includes(hostData.role)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 px-4">
+        <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center">
+          <span className="text-red-600 text-2xl">🚫</span>
+        </div>
+        <h1 className="text-xl font-bold text-text-primary text-center">
+          Akses Ditolak
+        </h1>
+        <p className="text-sm text-text-secondary text-center max-w-md">
+          Anda tidak memiliki akses ke Dashboard Admin Web.
+          Role Anda: <span className="font-semibold">{hostData.role}</span>.
+          <br />
+          Host dapat mengakses aplikasi mobile TamuKu.
+        </p>
+        <button
+          onClick={() => firebaseSignOut(auth)}
+          className="mt-2 px-4 py-2 rounded-lg bg-primary-900 text-white text-sm font-medium hover:bg-primary-800"
+        >
+          Keluar
+        </button>
+      </div>
+    );
   }
 
   return <>{children}</>;
