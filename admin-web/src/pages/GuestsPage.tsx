@@ -114,7 +114,7 @@ export function GuestsPage() {
         filterDateFrom: toISODate(d),
         filterDateTo: toISODate(to),
         periodLabel: formatDateLong(d),
-        canGoNext: dateOffset >= 0,
+        canGoNext: dateOffset < 0,
       };
     }
 
@@ -131,7 +131,7 @@ export function GuestsPage() {
         filterDateFrom: toISODate(monday),
         filterDateTo: toISODate(sunday),
         periodLabel: formatDateRange(monday, sunday),
-        canGoNext: dateOffset >= 0,
+        canGoNext: dateOffset < 0,
       };
     }
 
@@ -142,7 +142,7 @@ export function GuestsPage() {
       filterDateFrom: toISODate(monthStart),
       filterDateTo: toISODate(monthEnd),
       periodLabel: formatMonthYear(monthStart),
-      canGoNext: dateOffset >= 0,
+      canGoNext: dateOffset < 0,
     };
   }, [dateMode, dateOffset, customDateFrom, customDateTo]);
 
