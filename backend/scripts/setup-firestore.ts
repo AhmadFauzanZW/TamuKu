@@ -1,13 +1,13 @@
 /**
  * TamuKu Firestore Setup Script
- * 
+ *
  * Creates/updates the initial Firestore documents for:
  * - Super Admin host
  * - Default location
  * - Links them together
- * 
+ *
  * Usage: bun run scripts/setup-firestore.ts
- * 
+ *
  * Prerequisites: serviceAccountKey.json in backend/ directory
  */
 
@@ -107,13 +107,13 @@ async function setup() {
   if (verifyHost.exists && verifyLoc.exists) {
     const h = verifyHost.data()!;
     const l = verifyLoc.data()!;
-    
+
     console.log('   ✅ Host verified:');
     console.log(`      - name: ${h.name}`);
     console.log(`      - role: ${h.role}`);
     console.log(`      - locations: [${h.locations?.join(', ')}]`);
     console.log(`      - isActive: ${h.isActive}`);
-    
+
     console.log('   ✅ Location verified:');
     console.log(`      - name: ${l.name}`);
     console.log(`      - address: ${l.address}`);
