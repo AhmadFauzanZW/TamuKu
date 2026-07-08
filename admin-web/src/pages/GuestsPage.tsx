@@ -8,6 +8,7 @@ import { Select } from '../components/ui/Select';
 import { Card } from '../components/ui/Card';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { showToast } from '../components/ui/Toast';
+import { PhotoDisplay } from '../components/ui/PhotoDisplay';
 import { formatDateWIB } from '../lib/utils';
 import type { Guest, Location } from '../types';
 
@@ -17,6 +18,8 @@ export function GuestsPage() {
   const [search, setSearch] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,6 +56,7 @@ export function GuestsPage() {
           keperluan: d.data().keperluan ?? 'Lainnya',
           instansi: d.data().instansi ?? '',
           photoUrl: d.data().photoUrl ?? '',
+          checkInPhotoUrl: d.data().checkInPhotoUrl ?? '',
           checkOutPhotoUrl: d.data().checkOutPhotoUrl ?? '',
           locationId: d.data().locationId ?? '',
           checkInTime: d.data().checkInTime?.toDate?.() ?? new Date(),
@@ -81,6 +85,9 @@ export function GuestsPage() {
   }, [locations]);
 
   const filtered = useMemo(() => {
+    const fromDate = filterDateFrom ? new Date(filterDateFrom) : null;
+    const toDate = filterDateTo ? new Date(filterDateTo + 'T23:59:59') : null;
+
     return guests.filter((g) => {
       const matchSearch =
         !search ||
@@ -89,9 +96,11 @@ export function GuestsPage() {
         g.phone.includes(search);
       const matchLocation = !filterLocation || g.locationId === filterLocation;
       const matchStatus = !filterStatus || g.status === filterStatus;
-      return matchSearch && matchLocation && matchStatus;
+      const matchDateFrom = !fromDate || g.checkInTime >= fromDate;
+      const matchDateTo = !toDate || g.checkInTime <= toDate;
+      return matchSearch && matchLocation && matchStatus && matchDateFrom && matchDateTo;
     });
-  }, [guests, search, filterLocation, filterStatus]);
+  }, [guests, search, filterLocation, filterStatus, filterDateFrom, filterDateTo]);
 
   const locationOptions = locations.map((l) => ({
     value: l.locationId,
@@ -105,7 +114,7 @@ export function GuestsPage() {
       <div>
         <h2 className="text-xl font-bold text-text-primary">Tamu</h2>
         <p className="text-sm text-text-secondary mt-0.5">
-          Daftar kunjungan tamu ({guests.length} total)
+          Daftar kunjungan tamu ({filtered.length} dari {guests.length} total)
         </p>
       </div>
 
@@ -133,6 +142,30 @@ export function GuestsPage() {
             ]}
             placeholder="Semua Status"
           />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+          <div>
+            <label className="block text-xs font-medium text-text-secondary mb-1">
+              Dari Tanggal
+            </label>
+            <input
+              type="date"
+              value={filterDateFrom}
+              onChange={(e) => setFilterDateFrom(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-white border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-text-secondary mb-1">
+              Sampai Tanggal
+            </label>
+            <input
+              type="date"
+              value={filterDateTo}
+              onChange={(e) => setFilterDateTo(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-white border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            />
+          </div>
         </div>
       </Card>
 
@@ -204,6 +237,12 @@ export function GuestsPage() {
         data={filtered}
         keyExtractor={(g) => g.guestId}
         emptyMessage="Tidak ada tamu ditemukan"
+        expandedRowRender={(g) => (
+          <div className="flex flex-wrap gap-6">
+            <PhotoDisplay rawUrl={g.checkInPhotoUrl} label="Foto Check-in" />
+            <PhotoDisplay rawUrl={g.checkOutPhotoUrl} label="Foto Check-out" />
+          </div>
+        )}
       />
     </div>
   );

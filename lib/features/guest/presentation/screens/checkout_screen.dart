@@ -7,9 +7,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../injection_container.dart';
+import '../../../../shared/services/photo_service.dart';
 import '../../domain/entities/guest_entity.dart';
 import '../bloc/guest_bloc.dart';
-import '../bloc/guest_event.dart';
 import '../bloc/guest_state.dart';
 
 /// Check-out screen showing guest info and check-out action.
@@ -135,58 +135,36 @@ class _CheckoutView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xxl),
 
-                // ── Check-out Button ──
-                if (guest.status == GuestStatus.checkedIn)
-                  SizedBox(
-                    height: 52,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        context.read<GuestBloc>().add(
-                          CheckOutRequested(guest.guestId),
-                        );
-                      },
-                      icon: const Icon(Icons.logout_rounded),
-                      label: const Text(
-                        AppConstants.checkoutButton,
-                        style: AppTextStyles.button,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.accentRed,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.md),
+                // ── Note: check-in/check-out via Guest Web ──
+                Card(
+                  color: AppColors.primary50,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: AppColors.primary700,
                         ),
-                      ),
-                    ),
-                  )
-                else
-                  Card(
-                    color: AppColors.primary50,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.check_circle_outline,
-                            color: AppColors.primary700,
-                          ),
-                          const SizedBox(width: AppSpacing.sm),
-                          Text(
-                            AppConstants.alreadyCheckedOut,
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            'Check-in/check-out dilakukan melalui halaman tamu.',
                             style: AppTextStyles.body.copyWith(
                               color: AppColors.primary700,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
               ],
             ),
           );
@@ -246,8 +224,8 @@ class _PhotosSection extends StatelessWidget {
 
 /// Single photo card with rounded border and label.
 ///
-/// Displays a [CachedNetworkImage] inside a rounded container
-/// with a green border and a small label chip at the bottom-left.
+/// Fetches a presigned S3 URL via [PhotoService] before loading the image.
+/// Shows a loading indicator while the presigned URL is being resolved.
 class _PhotoCard extends StatelessWidget {
   final String imageUrl;
   final String label;
@@ -263,46 +241,62 @@ class _PhotoCard extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(13),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, _) => Container(
-                  color: AppColors.primary50,
-                  child: const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
+        child: FutureBuilder<String>(
+          future: PhotoService.getSignedUrl(imageUrl),
+          builder: (context, snapshot) {
+            final url = snapshot.data ?? imageUrl;
+            return Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: snapshot.connectionState == ConnectionState.waiting
+                      ? Container(
+                          color: AppColors.primary50,
+                          child: const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: url,
+                          fit: BoxFit.cover,
+                          placeholder: (_, _) => Container(
+                            color: AppColors.primary50,
+                            child: const Center(
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          ),
+                          errorWidget: (_, _, _) => Container(
+                            color: AppColors.primary50,
+                            child: const Icon(
+                              Icons.broken_image_outlined,
+                              color: AppColors.primary500,
+                              size: 48,
+                            ),
+                          ),
+                        ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary900.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    label,
+                    style: AppTextStyles.caption.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                errorWidget: (_, _, _) => Container(
-                  color: AppColors.primary50,
-                  child: const Icon(
-                    Icons.broken_image_outlined,
-                    color: AppColors.primary500,
-                    size: 48,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary900.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                label,
-                style: AppTextStyles.caption.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

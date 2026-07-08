@@ -5,6 +5,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../features/guest/domain/entities/guest_entity.dart';
 import '../../core/constants/app_constants.dart';
+import '../../shared/services/photo_service.dart';
 
 /// Guest list tile matching DESIGN.md Section 8.3.
 ///
@@ -149,7 +150,7 @@ class _KeperluanBadge extends StatelessWidget {
 
 /// Displays guest photo with fallback to initials avatar.
 ///
-/// Uses [CachedNetworkImage] for efficient image loading with cache.
+/// Fetches a presigned S3 URL via [PhotoService] before loading.
 /// Shows initials [CircleAvatar] when [photoUrl] is null or fails to load.
 class _GuestAvatar extends StatelessWidget {
   final String? photoUrl;
@@ -171,13 +172,22 @@ class _GuestAvatar extends StatelessWidget {
         border: Border.all(color: AppColors.primary100, width: 3),
       ),
       child: ClipOval(
-        child: CachedNetworkImage(
-          imageUrl: photoUrl!,
-          fit: BoxFit.cover,
-          width: 40,
-          height: 40,
-          placeholder: (_, __) => _InitialsAvatar(initials: initials),
-          errorWidget: (_, __, ___) => _InitialsAvatar(initials: initials),
+        child: FutureBuilder<String>(
+          future: PhotoService.getSignedUrl(photoUrl!),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _InitialsAvatar(initials: initials);
+            }
+            final url = snapshot.data ?? photoUrl!;
+            return CachedNetworkImage(
+              imageUrl: url,
+              fit: BoxFit.cover,
+              width: 40,
+              height: 40,
+              placeholder: (_, __) => _InitialsAvatar(initials: initials),
+              errorWidget: (_, __, ___) => _InitialsAvatar(initials: initials),
+            );
+          },
         ),
       ),
     );

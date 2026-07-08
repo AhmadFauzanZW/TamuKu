@@ -30,6 +30,7 @@ export interface Guest {
   keperluan: 'Meeting' | 'Personal' | 'Kantor' | 'Pengiriman' | 'Lainnya';
   instansi: string;
   photoUrl: string;
+  checkInPhotoUrl: string;
   checkOutPhotoUrl: string;
   locationId: string;
   checkInTime: Date;

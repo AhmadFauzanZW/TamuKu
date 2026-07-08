@@ -140,8 +140,10 @@ abstract final class AppConstants {
 
   // ─── Backend API ──────────────────────────────────────────────────
   /// Contabo VPS backend base URL
-  /// Ganti dengan URL production setelah deploy
-  static const String backendBaseUrl = 'http://localhost:3000';
+  /// Otomatis pakai localhost di debug, production URL di release
+  static String get backendBaseUrl => kDebugMode
+      ? 'http://localhost:3000'
+      : 'https://tamuku.chronaxis.site';
 
   /// API key untuk backend authentication (x-api-key header)
   /// Harus sama dengan API_KEY di backend .env
