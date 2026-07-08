@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>TamuKu — Buku Tamu Digital</title>
-  <link rel="icon" type="image/png" href="/guest/favicon.png">
+  <!-- <link rel="icon" type="image/png" href="/guest/favicon.png"> -->
   <style>
     /* ═══════════════════════════════════════════════════════════
        RESET & DESIGN TOKENS (DESIGN.md exact)
@@ -97,7 +97,7 @@
        ═══════════════════════════════════════════════════════════ */
     .content {
       width: 100%;
-      max-width: 480px;
+      max-width: 560px;
       margin: 0 auto;
       padding: var(--s-md);
       flex: 1;
@@ -529,6 +529,124 @@
 
     .hidden { display: none !important; }
     .mt-md { margin-top: var(--s-md); }
+
+    /* ═══════════════════════════════════════════════════════════
+       PHOTO CAPTURE
+       ═══════════════════════════════════════════════════════════ */
+    .photo-capture {
+      width: 100%;
+      min-height: 160px;
+      border: 2px dashed var(--border);
+      border-radius: var(--r-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .photo-capture:hover { border-color: var(--primary-500); background: var(--primary-50); }
+    .photo-capture svg { width: 40px; height: 40px; color: var(--text-secondary); }
+    .photo-capture span { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+    .photo-capture img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .photo-capture.has-photo svg,
+    .photo-capture.has-photo > span { display: none; }
+    .photo-capture.has-photo { border-style: solid; border-color: var(--primary-700); }
+
+    .retake-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .photo-capture.has-photo:hover .retake-overlay,
+    .photo-capture.has-photo:active .retake-overlay { opacity: 1; }
+    .retake-overlay svg { width: 24px; height: 24px; color: white; }
+
+    /* ═══════════════════════════════════════════════════════════
+       CAMERA MODAL
+       ═══════════════════════════════════════════════════════════ */
+    .camera-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .camera-modal.open { opacity: 1; pointer-events: auto; }
+    #camera-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #camera-canvas { display: none; }
+    .camera-controls {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 28px 0 40px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    }
+    .camera-btn {
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .camera-btn-shutter {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--primary-500);
+      border: 4px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transition: transform 0.1s;
+    }
+    .camera-btn-shutter:active { transform: scale(0.92); }
+    .camera-btn-shutter svg { width: 28px; height: 28px; color: white; }
+    .camera-btn-cancel {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+    .camera-btn-cancel svg { width: 20px; height: 20px; color: white; }
   </style>
 </head>
 <body>
@@ -642,9 +760,8 @@
                   <circle cx="12" cy="13" r="4"/>
                 </svg>
                 <span>Ambil Foto</span>
-                <input type="file" accept="image/*" capture="environment" id="checkin-photo-input">
                 <div class="retake-overlay">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   Ganti Foto
                 </div>
               </div>
@@ -688,7 +805,7 @@
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30" transform="rotate(90, 40, 40)"/></svg>
           </div>
           <img class="success-photo hidden" id="cok-photo" src="" alt="Foto Tamu">
           <h2>Berhasil Check In!</h2>
@@ -733,9 +850,8 @@
               <circle cx="12" cy="13" r="4"/>
             </svg>
             <span>Ambil Foto</span>
-            <input type="file" accept="image/*" capture="environment" id="checkout-photo-input">
             <div class="retake-overlay">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
               Ganti Foto
             </div>
           </div>
@@ -753,7 +869,7 @@
       <div class="card section-card state-view">
         <div class="success-view">
           <div class="check-circle">
-            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30"/></svg>
+            <svg viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="35"/><polyline class="check" points="25,42 35,52 55,30" transform="rotate(90, 40, 40)"/></svg>
           </div>
           <img class="success-photo hidden" id="cok2-photo" src="" alt="Foto Check Out">
           <h2>Berhasil Check Out!</h2>
@@ -822,6 +938,7 @@
     let checkoutPhotoFile = null;
     let cameraTarget = null;
     let cameraStream = null;
+    let existingGuestPhotoUrl = null;
 
     const $ = (id) => document.getElementById(id);
     const ALL_VIEWS = ['view-loading', 'view-error', 'view-main', 'view-checkin-ok', 'view-checkout', 'view-checkout-ok'];
@@ -865,8 +982,8 @@
         $('camera-video').srcObject = cameraStream;
         $('camera-modal').classList.add('open');
       } catch (err) {
-        console.warn('Camera API failed, fallback to file input:', err);
-        $(target + '-photo-input').click();
+        console.error('Camera access denied:', err);
+        showToast('Akses kamera ditolak. Silakan izinkan akses kamera di browser.');
       }
     }
 
@@ -906,8 +1023,7 @@
       reader.readAsDataURL(file);
     }
 
-    $('checkin-photo-input').addEventListener('change', function () { if (this.files?.[0]) applyPhoto(this.files[0], 'checkin'); });
-    $('checkout-photo-input').addEventListener('change', function () { if (this.files?.[0]) applyPhoto(this.files[0], 'checkout'); });
+
 
     // ═══════════════════════════════════════════════════════════════
     // Photo Upload (S3 presigned)
@@ -1019,6 +1135,23 @@
       const btn = $('btn-submit');
       btn.classList.add('loading'); btn.disabled = true;
 
+      // Guardrail: prevent double check-in
+      try {
+        const existingCheckin = await db.collection('guests')
+          .where('phone', '==', phone)
+          .where('locationId', '==', locationId)
+          .where('status', '==', 'checked_in')
+          .limit(1)
+          .get();
+        if (!existingCheckin.empty) {
+          showToast('Anda sudah melakukan check-in. Silakan check out terlebih dahulu.');
+          btn.classList.remove('loading'); btn.disabled = false;
+          return;
+        }
+      } catch (err) {
+        console.warn('Guardrail check failed, proceeding:', err);
+      }
+
       try {
         const finalKeperluan = keperluan === 'Lainnya' ? lainnya : keperluan;
         const photoUrl = await uploadPhoto(checkinPhotoFile);
@@ -1120,6 +1253,7 @@
         }
 
         existingGuestId = guestId;
+        existingGuestPhotoUrl = guest.photoUrl || guest.checkInPhotoUrl || null;
         $('co-name').textContent = guest.name;
         $('co-keperluan').textContent = guest.keperluan;
         $('co-instansi').textContent = guest.instansi || '';
@@ -1151,7 +1285,9 @@
         const photoUrl = await uploadPhoto(checkoutPhotoFile);
         await db.collection('guests').doc(existingGuestId).update({
           checkOutTime: firebase.firestore.FieldValue.serverTimestamp(),
-          checkOutPhotoUrl: photoUrl, status: 'checked_out',
+          checkOutPhotoUrl: photoUrl,
+          photoUrl: existingGuestPhotoUrl,
+          status: 'checked_out',
         });
 
         if (durationInterval) clearInterval(durationInterval);
@@ -1212,6 +1348,7 @@
     function resetToMain() {
       if (durationInterval) clearInterval(durationInterval);
       existingGuestId = null;
+      existingGuestPhotoUrl = null;
       checkoutPhotoFile = null;
       checkinPhotoFile = null;
 

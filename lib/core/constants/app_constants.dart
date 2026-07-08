@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Application-wide constants for TamuKu.
 abstract final class AppConstants {
   static const String appName = 'TamuKu';
@@ -15,6 +13,8 @@ abstract final class AppConstants {
   static const String fieldKeperluanLainnya = 'keperluanLainnya';
   static const String fieldInstansi = 'instansi';
   static const String fieldPhotoUrl = 'photoUrl';
+  static const String fieldCheckInPhotoUrl = 'checkInPhotoUrl';
+  static const String fieldCheckOutPhotoUrl = 'checkOutPhotoUrl';
   static const String fieldLocationId = 'locationId';
   static const String fieldCheckInTime = 'checkInTime';
   static const String fieldCheckOutTime = 'checkOutTime';
@@ -138,8 +138,8 @@ abstract final class AppConstants {
 
   // ─── Backend API ──────────────────────────────────────────────────
   /// Contabo VPS backend base URL
-  /// Ganti dengan URL production setelah deploy
-  static const String backendBaseUrl = 'http://localhost:3000';
+  /// Pakai deployed VPS URL di semua mode (localhost gak bisa di device fisik)
+  static const String backendBaseUrl = 'https://tamuku.chronaxis.site';
 
   /// API key untuk backend authentication (x-api-key header)
   /// Harus sama dengan API_KEY di backend .env
@@ -189,9 +189,7 @@ abstract final class AppConstants {
   // ─── Web Guest URL ────────────────────────────────────────────────
   /// Base URL for the web-based guest check-in page
   /// Served by Contabo backend at /guest/
-  static String get guestWebUrl => kDebugMode
-      ? 'http://localhost:3000/guest'
-      : 'https://tamuku.chronaxis.site/guest';
+  static const String guestWebUrl = 'https://tamuku.chronaxis.site/guest';
 
   // ─── Telegram ────────────────────────────────────────────────────
   /// Telegram Bot username (tanpa @)

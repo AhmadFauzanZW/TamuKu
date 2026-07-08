@@ -13,6 +13,14 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "locationId", "order": "ASCENDING" },
+        { "fieldPath": "checkInTime", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "locationId", "order": "ASCENDING" },
         { "fieldPath": "status", "order": "ASCENDING" }
       ]
     },
@@ -22,6 +30,16 @@
       "fields": [
         { "fieldPath": "locationId", "order": "ASCENDING" },
         { "fieldPath": "keperluan", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "locationId", "order": "ASCENDING" },
+        { "fieldPath": "phone", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "checkInTime", "order": "DESCENDING" }
       ]
     },
     {

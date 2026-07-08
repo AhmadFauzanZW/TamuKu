@@ -36,16 +36,16 @@ service cloud.firestore {
     match /guests/{guestId} {
       // Guest form submission (no auth required)
       allow create: if true;
-      // Admin/host can read guests
-      allow read: if isAuth();
+      // Public read (guest checkout lookup by phone+locationId+status)
+      allow read: if true;
       // Update:
-      //   - Unauthenticated: guest checkout — must set status, checkOutTime, and photoUrl
+      //   - Unauthenticated: guest checkout — must set status, checkOutTime, and photoUrl/checkOutPhotoUrl
       //   - Authenticated: admin/host of the location (full update)
       allow update: if
         (!isAuth()
           && request.resource.data.status == 'checked_out'
           && request.resource.data.checkOutTime != null
-          && request.resource.data.photoUrl != null)
+          && (request.resource.data.photoUrl != null || request.resource.data.checkOutPhotoUrl != null))
         ||
         (isAuth() && (isSuperAdminOrAdmin() || managesLocation(resource.data.locationId)));
       // Delete: super_admin only

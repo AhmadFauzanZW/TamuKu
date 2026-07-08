@@ -1,5 +1,9 @@
 import { Elysia, t } from 'elysia';
-import { generatePresignedUrl } from '../services/s3';
+import {
+  generatePresignedUrl,
+  generatePresignedGetUrl,
+  getObjectNameFromUrl,
+} from '../services/s3';
 import { config } from '../config';
 
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -35,5 +39,31 @@ export const guestUploadRoute = new Elysia().post(
     body: t.Object({
       contentType: t.String(),
     }),
+  },
+)
+/**
+ * GET /api/guests/photo-url — generate presigned GET URL for guest photos.
+ * No API key required (guest web / Flutter app has no key).
+ */
+.get(
+  '/api/guests/photo-url',
+  async ({ query }) => {
+    const { url } = query;
+    if (!url) {
+      return { success: false, error: 'Parameter url diperlukan' };
+    }
+
+    const objectName = getObjectNameFromUrl(url as string);
+    if (!objectName) {
+      return { success: false, error: 'URL S3 tidak valid' };
+    }
+
+    try {
+      const signedUrl = await generatePresignedGetUrl(objectName, 3600);
+      return { success: true, data: { signedUrl } };
+    } catch (err) {
+      console.error('Presigned GET error:', err);
+      return { success: false, error: 'Gagal membuat URL akses foto' };
+    }
   },
 );

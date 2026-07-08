@@ -49,6 +49,8 @@ export function DashboardPage() {
             keperluan: data.keperluan ?? 'Lainnya',
             instansi: data.instansi ?? '',
             photoUrl: data.photoUrl ?? '',
+            checkInPhotoUrl: data.checkInPhotoUrl ?? '',
+            checkOutPhotoUrl: data.checkOutPhotoUrl ?? '',
             locationId: data.locationId ?? '',
             checkInTime: data.checkInTime?.toDate?.() ?? new Date(),
             checkOutTime: data.checkOutTime?.toDate?.() ?? null,
