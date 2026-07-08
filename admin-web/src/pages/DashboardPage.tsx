@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Card, StatCard } from '../components/ui/Card';
+import { useAuth } from '../hooks/useAuth';
+import { StatCard } from '../components/ui/Card';
 import { DataTable } from '../components/ui/DataTable';
 import { Badge } from '../components/ui/Badge';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { formatDateWIB } from '../lib/utils';
 import { MapPin, Users, UserCheck, UserMinus } from 'lucide-react';
-import type { Guest, Location, Host } from "../types";
+import type { Guest } from "../types";
 
 export function DashboardPage() {
   const [stats, setStats] = useState({
@@ -20,8 +21,11 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     async function load() {
+      if (!user) return;
       try {
         const [locSnap, hostSnap, guestSnap] = await Promise.all([
           getDocs(collection(db, 'locations')),
@@ -77,7 +81,7 @@ export function DashboardPage() {
     }
 
     load();
-  }, []);
+  }, [user]);
 
   if (loading) return <PageLoader />;
 

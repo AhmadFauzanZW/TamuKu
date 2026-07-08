@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { auth } from '../config/firebase';
-import { Role, permissions, RolePermissions } from '../lib/roles';
+import { Role, permissions } from '../lib/roles';
+import type { RolePermissions } from '../lib/roles';
 
 interface UseRoleReturn {
   role: Role | null;

@@ -33,12 +33,17 @@ export function LocationsPage() {
   const [deleting, setDeleting] = useState(false);
 
   async function loadLocations() {
+    if (!hostData) {
+      showToast('error', 'Anda belum terdaftar sebagai host. Silakan hubungi admin.');
+      setLoading(false);
+      return;
+    }
     try {
       let q;
-      if (hostData?.role === 'super_admin') {
+      if (hostData.role === 'super_admin') {
         q = collection(db, 'locations');
       } else {
-        const assignedIds = hostData?.locations ?? [];
+        const assignedIds = hostData.locations ?? [];
         if (assignedIds.length === 0) {
           setLocations([]);
           setLoading(false);

@@ -1,6 +1,7 @@
 ﻿import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routes/app_router.dart';
@@ -13,25 +14,66 @@ import '../widgets/visit_chart.dart';
 /// Dashboard admin menampilkan ringkasan tamu, grafik kunjungan,
 /// dan daftar aktivitas terbaru.
 ///
-/// Uses [StreamBuilder] for real-time Firestore data and
-/// [VisitChart] (fl_chart) for the 7-day bar chart.
-class DashboardScreen extends StatelessWidget {
+/// Uses [StreamBuilder] for real-time Firestore data filtered by
+/// the stored [locationId], and [VisitChart] (fl_chart) for the
+/// 7-day bar chart.
+class DashboardScreen extends StatefulWidget {
   /// Creates a [DashboardScreen].
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  String? _locationId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocationId();
+  }
+
+  Future<void> _loadLocationId() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      _locationId = prefs.getString('locationId');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
 
-    // Stream today's guests for real-time stats
-    final todayGuestsStream = FirebaseFirestore.instance
+    // Stream today's guests for real-time stats, filtered by locationId
+    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
         .collection(AppConstants.guestsCollection)
         .where(
           AppConstants.fieldCheckInTime,
           isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
-        )
-        .snapshots();
+        );
+
+    if (_locationId != null && _locationId!.isNotEmpty) {
+      query = query.where(AppConstants.fieldLocationId, isEqualTo: _locationId);
+    }
+
+    final todayGuestsStream = query.snapshots();
+
+    if (_locationId == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_locationId!.isEmpty) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Tidak ada lokasi yang dipilih. Silakan login ulang.'),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

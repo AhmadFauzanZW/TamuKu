@@ -18,9 +18,9 @@ import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { showToast } from '../components/ui/Toast';
-import { formatDateShort, getInitials } from '../lib/utils';
+import { getInitials } from '../lib/utils';
 import { roleLabels, Role } from '../lib/roles';
-import { Plus, Edit, Trash2, UserCog } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 import type { Host } from '../types';
 
 export function HostsPage() {
@@ -33,6 +33,11 @@ export function HostsPage() {
   const [deleting, setDeleting] = useState(false);
 
   async function loadHosts() {
+    if (!hostData) {
+      showToast('error', 'Anda belum terdaftar sebagai host. Silakan hubungi admin.');
+      setLoading(false);
+      return;
+    }
     try {
       let hostList: Host[] = [];
       if (hostData?.role === 'super_admin') {

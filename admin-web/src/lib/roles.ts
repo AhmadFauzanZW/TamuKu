@@ -1,8 +1,10 @@
-export enum Role {
-  SUPER_ADMIN = 'super_admin',
-  ADMIN = 'admin',
-  HOST = 'host',
-}
+export const Role = {
+  SUPER_ADMIN: 'super_admin',
+  ADMIN: 'admin',
+  HOST: 'host',
+} as const;
+
+export type Role = (typeof Role)[keyof typeof Role];
 
 export interface RolePermissions {
   canManageLocations: boolean;

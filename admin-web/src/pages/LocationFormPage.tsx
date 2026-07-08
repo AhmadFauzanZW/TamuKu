@@ -1,10 +1,10 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   collection,
   doc,
   getDoc,
-  getDocs,
   addDoc,
   updateDoc,
   serverTimestamp,
@@ -13,7 +13,6 @@ import { db } from '../config/firebase';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { Select } from '../components/ui/Select';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { showToast } from '../components/ui/Toast';
 import { ArrowLeft, Save } from 'lucide-react';

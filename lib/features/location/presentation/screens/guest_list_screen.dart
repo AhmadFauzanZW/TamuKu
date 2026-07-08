@@ -10,10 +10,14 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../injection_container.dart';
-import '../../../guest/domain/entities/guest_entity.dart';
 import '../../../guest/presentation/bloc/guest_bloc.dart';
 import '../../../guest/presentation/bloc/guest_event.dart';
 import '../../../guest/presentation/bloc/guest_state.dart';
+import '../../../../shared/widgets/guest_tile.dart';
+
+// NOTE: Located in location/ feature for historical reasons —
+// manages the guest list scoped to a specific location.
+// Logically belongs to guest/ but moving would break imports.
 
 /// Layar daftar tamu dengan pencarian, filter, dan sort real-time.
 class GuestListScreen extends StatelessWidget {
@@ -214,7 +218,13 @@ class _BodyState extends State<_Body> {
                 return ListView.builder(
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   itemCount: state.guests.length,
-                  itemBuilder: (_, i) => _GuestTile(guest: state.guests[i]),
+                  itemBuilder: (_, i) => GuestTile(
+                    guest: state.guests[i],
+                    onTap: () => Navigator.of(context).pushNamed(
+                      AppRoutes.checkout,
+                      arguments: state.guests[i],
+                    ),
+                  ),
                 );
               }
               return const SizedBox.shrink();
@@ -250,92 +260,4 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-class _GuestTile extends StatelessWidget {
-  const _GuestTile({required this.guest});
-  final GuestEntity guest;
-
-  @override
-  Widget build(BuildContext context) {
-    final in_ = guest.status == GuestStatus.checkedIn;
-    final ci = guest.checkInTime;
-    final h = ci.hour.toString().padLeft(2, '0');
-    final m = ci.minute.toString().padLeft(2, '0');
-    var t = 'Masuk: $h:$m WIB';
-    if (guest.checkOutTime != null) {
-      final oh = guest.checkOutTime!.hour.toString().padLeft(2, '0');
-      final om = guest.checkOutTime!.minute.toString().padLeft(2, '0');
-      t = 'Masuk: $h:$m - Keluar: $oh:$om WIB';
-    }
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.lgBorder),
-      child: ListTile(
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            AppRoutes.checkout,
-            arguments: guest,
-          );
-        },
-        contentPadding: const EdgeInsets.all(AppSpacing.md),
-        leading: const CircleAvatar(
-          radius: 24,
-          backgroundColor: AppColors.primary900,
-          child: Icon(Icons.person, color: Colors.white, size: 28),
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                guest.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.xs,
-              ),
-              decoration: BoxDecoration(
-                color: in_ ? AppColors.warningBg : AppColors.successBg,
-                borderRadius: AppRadius.smBorder,
-              ),
-              child: Text(
-                in_
-                    ? AppConstants.filterCheckedIn
-                    : AppConstants.filterCompleted,
-                style: TextStyle(
-                  color: in_ ? AppColors.warning : AppColors.success,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              'Keperluan: ${guest.keperluan.toValue()}',
-              style: TextStyle(color: AppColors.textSecondaryOf(context)),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Row(
-              children: [
-                Icon(Icons.access_time, size: 14, color: AppColors.textSecondaryOf(context)),
-                const SizedBox(width: AppSpacing.xs),
-                Text(t, style: AppTextStyles.caption),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// Private _GuestTile removed — using shared GuestTile from lib/shared/widgets/

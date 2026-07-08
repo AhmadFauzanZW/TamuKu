@@ -13,6 +13,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -61,11 +62,42 @@ initializeApp({
 });
 
 const db = getFirestore();
+const auth = getAuth();
+
+// --- Password from CLI args or default ---
+const PASSWORD = process.argv[2] || 'admin123';
 
 // --- Main ---
 async function setup() {
   console.log('🔥 TamuKu Firestore Setup');
   console.log('========================\n');
+
+  // 0. Create/Update Firebase Auth user
+  console.log('👤 Setting up Firebase Auth user...');
+  try {
+    const existingUser = await auth.getUserByEmail(HOST_DATA.email).catch(() => null);
+    
+    if (existingUser) {
+      // Update password
+      await auth.updateUser(existingUser.uid, { password: PASSWORD });
+      console.log('   ✅ Updated existing Auth user password');
+      console.log(`   📧 Email: ${HOST_DATA.email}`);
+    } else {
+      // Create new Auth user with specific UID
+      await auth.createUser({
+        uid: HOST_ID,
+        email: HOST_DATA.email,
+        password: PASSWORD,
+        displayName: HOST_DATA.name,
+      });
+      console.log('   ✅ Created new Auth user');
+      console.log(`   📧 Email: ${HOST_DATA.email}`);
+      console.log(`   🔑 Password: ${PASSWORD}`);
+    }
+  } catch (err: any) {
+    console.error(`   ❌ Auth setup failed: ${err.message}`);
+    console.error('   Continuing with Firestore setup...');
+  }
 
   // 1. Create/Update Super Admin Host
   console.log('📋 Setting up Super Admin host...');
