@@ -143,12 +143,12 @@ abstract final class AppConstants {
 
   /// API key untuk backend authentication (x-api-key header)
   /// Harus sama dengan API_KEY di backend .env
-  static const String backendApiKey = 'tamuku-dev-key-2026';
+  static const String backendApiKey = 'YOUR_API_KEY_HERE';
 
   // ─── Firebase / Auth ────────────────────────────────────────────────
   /// Google Sign-In Web Client ID dari Firebase Console
   static const String googleWebClientId =
-      '762093911458-u891nq74tvdh8jcg9n8p40ieq1oitolg.apps.googleusercontent.com';
+      'YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com';
 
   // ─── Checkout Screen Strings ────────────────────────────────────
   /// Guest data card title on checkout screen

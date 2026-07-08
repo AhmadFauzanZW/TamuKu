@@ -5,10 +5,10 @@
  * Auth may assign a different UID when creating users via auth.createUser() or when
  * users sign in via email/password. This creates a mismatch between:
  *   - The host document ID (hosts/2utKhEE094jiCNiBN12)
- *   - The actual Firebase Auth UID for ahfa201204@gmail.com
+ *   - The actual Firebase Auth UID for the admin email
  *
  * What this script does:
- *   1. Looks up the real Auth UID for ahfa201204@gmail.com
+ *   1. Looks up the real Auth UID for the configured admin email
  *   2. If hosts/{realUid} doesn't exist, copies data from hosts/2utKhEE094jiCNiBN12
  *      and deletes the old document
  *   3. Updates ALL locations' adminId to the real UID
@@ -28,7 +28,7 @@ import { join } from 'path';
 
 // --- Configuration ---
 const OLD_HOST_ID = '2utKhEE094jiCNiBN12';
-const ADMIN_EMAIL = 'ahfa201204@gmail.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || ''; // Set ADMIN_EMAIL environment variable before running
 
 // --- Initialize Firebase Admin ---
 const serviceAccountPath = join(import.meta.dir, '..', 'serviceAccountKey.json');

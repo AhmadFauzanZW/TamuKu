@@ -3,7 +3,7 @@ import 'dotenv/config';
 export const config = {
   port: Number(process.env.PORT) || 3000,
   host: process.env.HOST || '0.0.0.0',
-  apiKey: process.env.API_KEY || 'tamuku-dev-key-2026',
+  apiKey: process.env.API_KEY || '',
   s3: {
     endPoint: process.env.S3_ENDPOINT || 'sg.contabostorage.com',
     accessKey: process.env.S3_ACCESS_KEY || '',

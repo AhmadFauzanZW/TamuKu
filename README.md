@@ -1,259 +1,154 @@
-# 🏛️ TamuKu — Buku Tamu Digital
+# TamuKu — Buku Tamu Digital
 
-> Aplikasi mobile Flutter untuk mencatat dan mengelola kunjungan tamu secara digital.
+> A modern digital guest book application for government offices, company reception desks, and public service locations.
 
-![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase)
-![BLoC](https://img.shields.io/badge/BLoC-8.x-0094F5?logo=bloc)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)](https://dart.dev)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase)](https://firebase.google.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
----
+## Overview
 
-## 📖 Tentang TamuKu
+TamuKu replaces traditional paper-based guest registration with a modern QR-code-based check-in/check-out system. Guests scan a QR code, fill a simple form, and check in — all within 30 seconds.
 
-TamuKu adalah aplikasi mobile berbasis Flutter yang menggantikan buku tamu konvensional dengan sistem digital berbasis QR code. Tamu cukup memindai QR code di lokasi, mengisi formulir registrasi singkat, dan data kunjungan otomatis tercatat secara real-time.
+**Key Features:**
+- 📱 QR code scan-to-check-in (no app download required for guests)
+- 🔐 Admin dashboard with real-time guest tracking
+- 📊 Analytics dashboard with charts and data export (CSV/Excel)
+- 🔔 Instant push notifications (FCM + Telegram) when guests arrive
+- 🌐 Offline-first architecture with automatic sync
+- 🌙 Dark mode support
 
-Admin dapat memantau kunjungan melalui dashboard mobile, menerima notifikasi Telegram saat tamu tiba, serta mengunduh data kunjungan dalam format CSV untuk keperluan pelaporan dan kepatuhan.
+## Tech Stack
 
-**Target waktu check-in: ≤ 30 detik** — dari pemindaian QR hingga data tercatat.
+| Layer | Technology |
+|-------|-----------|
+| Mobile | Flutter 3.x / Dart 3.x |
+| State Management | flutter_bloc 8.x + equatable |
+| Backend | ElysiaJS + Bun on Contabo VPS |
+| Database | Cloud Firestore |
+| Authentication | Firebase Auth (Email + Google) |
+| Notifications | FCM + Telegram Bot API |
+| Storage | Contabo S3 (MinIO) |
+| Admin Web | React 19 + Vite + Tailwind CSS |
+| Guest Web | Vanilla HTML/CSS/JS |
 
----
-
-## ✨ Fitur Utama
-
-### 👤 Tamu (Guest)
-- Pemindaian QR code untuk akses form registrasi
-- Formulir auto-fill untuk kunjungan berulang
-- Check-in dan check-out dengan satu sentuhan
-- Pelacakan durasi kunjungan otomatis
-- Tidak perlu login atau registrasi akun
-
-### 🔧 Admin
-- **Dashboard** real-time — jumlah tamu hari ini, sedang berkunjung, sudah pulang
-- **Daftar tamu** — pencarian, filter berdasarkan status/keperluan/tanggal
-- **QR Generator** — buat dan cetak QR code untuk setiap lokasi
-- **Ekspor CSV** — unduh data kunjungan untuk pelaporan
-- **Notifikasi WhatsApp** — otomatis kirim pesan ke host saat tamu check-in
-- **Multi-lokasi** — kelola beberapa lokasi dalam satu akun admin
-- **Dark mode** — mode gelap untuk kenyamanan visual
-
-### ⚙️ Technical
-- **Offline-first** — data lokal tersimpan, disync saat online
-- **Cross-platform** — Android dan iOS dari satu codebase
-- **Real-time sync** — Firestore snapshot listener, perubahan langsung terlihat
-- **Firebase backend** — Firestore, Auth, FCM, Storage, Cloud Functions
-
----
-
-## 🎯 Target Pengguna
-
-| Segmen | Kebutuhan |
-|--------|-----------|
-| RT/RW | Pencatatan kunjungan warga dan tamu |
-| Masjid | Pencatatan jamaah tamu dan donatur |
-| Kantor / Instansi | Registrasi tamu dan kunjungan dinas |
-| Apartemen | Check-in penghuni dan tamu |
-| Sekolah | Pencatatan kunjungan orang tua / tamu |
-| Event / Pameran | Registrasi peserta dan pengunjung |
-
----
-
-## 🛠️ Tech Stack
-
-| Komponen | Teknologi | Versi |
-|----------|-----------|-------|
-| Bahasa | Dart | 3.x |
-| Framework | Flutter | 3.x (latest stable) |
-| State Management | flutter_bloc | 8.x |
-| State Equivalence | equatable | 2.x |
-| Database | Cloud Firestore | — |
-| Local Storage | hive + sqflite | — |
-| Authentication | Firebase Auth (Email + Google OAuth) | — |
-| Push Notification | Firebase Cloud Messaging (FCM) | — |
-| File Storage | Firebase Storage | — |
-| QR Generation | qr_flutter | 4.x |
-| QR Scanning | mobile_scanner | 5.x |
-| Charts | fl_chart | — |
-| Image Picker | image_picker | — |
-| Network Detection | connectivity_plus | — |
-| Image Caching | cached_network_image | — |
-| Date Formatting | intl | — |
-| Cloud Functions | Firebase Cloud Functions | — |
-| Linting | flutter_lints + analysis_options.yaml | strict |
-
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-
-- **Flutter SDK** 3.x (latest stable channel)
-- **Dart SDK** 3.x
-- **Firebase Account** — [console.firebase.google.com](https://console.firebase.google.com)
-- **Android Studio** atau **VS Code** dengan Flutter/Dart extensions
-- **Git**
+- Flutter 3.x installed ([flutter.dev](https://flutter.dev))
+- Dart 3.x
+- Firebase project (free Spark plan works)
+- Node.js 18+ (for admin web)
+- Bun 1.x (for backend)
 
 ### Installation
 
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/AhmadFauzanZW/TamuKu.git
+   cd TamuKu
+   ```
+
+2. **Install Flutter dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Configure Firebase**
+   - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
+   - Enable Authentication (Email/Password + Google)
+   - Enable Cloud Firestore
+   - Enable Cloud Messaging
+   - Download `google-services.json` → `android/app/`
+   - Download `GoogleService-Info.plist` → `ios/Runner/`
+
+4. **Configure Backend**
+   ```bash
+   cd backend
+   cp .env.example .env
+   # Edit .env with your credentials
+   bun install
+   ```
+
+5. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+### Backend Setup
+
 ```bash
-# Clone repository
-git clone https://github.com/[org]/tamuku.git
-cd tamuku
-
-# Install dependencies
-flutter pub get
-
-# Configure Firebase (interactive)
-flutterfire configure
-
-# Run the app
-flutter run
+cd backend
+bun install
+bun run dev
 ```
 
-### Firebase Setup
+### Admin Web Setup
 
-1. Buat project baru di [Firebase Console](https://console.firebase.google.com)
-2. Daftarkan aplikasi Android dan iOS
-3. Enable layanan yang diperlukan:
-   - **Cloud Firestore** — database utama
-   - **Firebase Authentication** — Email/Password + Google Sign-In
-   - **Firebase Storage** — penyimpanan foto tamu
-   - **Cloud Messaging (FCM)** — push notification
-   - **Cloud Functions** — trigger notifikasi saat data berubah
-4. Download `google-services.json` (Android) dan `GoogleService-Info.plist` (iOS)
-5. Tempatkan file di lokasi yang sesuai:
-   - Android: `android/app/google-services.json`
-   - iOS: `ios/Runner/GoogleService-Info.plist`
-6. Deploy Firestore rules: `firebase deploy --only firestore:rules`
+```bash
+cd admin-web
+cp .env.example .env
+# Edit .env with your Firebase config
+npm install
+npm run dev
+```
 
----
-
-## 📁 Struktur Proyek
+## Project Structure
 
 ```
 tamuku/
-├── lib/
-│   ├── main.dart
-│   ├── app.dart
-│   │
-│   ├── core/
-│   │   ├── constants/
-│   │   │   └── app_constants.dart
-│   │   ├── theme/
-│   │   │   ├── app_colors.dart
-│   │   │   ├── app_text_styles.dart
-│   │   │   └── app_theme.dart
-│   │   ├── routes/
-│   │   │   └── app_router.dart
-│   │   ├── utils/
-│   │   │   ├── validators.dart
-│   │   │   ├── formatters.dart
-│   │   │   └── permissions.dart
-│   │   └── errors/
-│   │       ├── failures.dart
-│   │       └── exceptions.dart
-│   │
-│   ├── features/
-│   │   ├── auth/
-│   │   │   ├── data/datasources/
-│   │   │   ├── data/repositories/
-│   │   │   ├── domain/entities/
-│   │   │   ├── domain/repositories/
-│   │   │   └── presentation/bloc/
-│   │   │   └── presentation/screens/
-│   │   ├── guest/
-│   │   │   ├── data/datasources/
-│   │   │   ├── data/repositories/
-│   │   │   ├── domain/entities/
-│   │   │   ├── domain/repositories/
-│   │   │   └── presentation/bloc/
-│   │   │   └── presentation/screens/
-│   │   ├── location/
-│   │   │   ├── data/datasources/
-│   │   │   ├── data/repositories/
-│   │   │   ├── domain/entities/
-│   │   │   ├── domain/repositories/
-│   │   │   └── presentation/bloc/
-│   │   │   └── presentation/screens/
-│   │   └── notification/
-│   │       ├── data/repositories/
-│   │       ├── domain/repositories/
-│   │       └── presentation/bloc/
-│   │
-│   ├── shared/
-│   │   └── widgets/
-│   │
-│   └── injection_container.dart
-│
-├── assets/
-│   ├── images/
-│   │   └── logo.png
-│   └── fonts/
-│
-├── test/
-│   ├── unit/
-│   ├── widget/
-│   ├── bloc/
-│   └── integration/
-│
-├── android/
-├── ios/
-├── firebase.json
-├── firestore.rules
-├── firestore.indexes.json
-├── pubspec.yaml
-├── analysis_options.yaml
-└── README.md
+├── lib/                          # Flutter source code
+│   ├── core/                     # Theme, constants, routes, utils
+│   ├── features/                 # Feature modules (Clean Architecture)
+│   │   ├── auth/                 # Authentication (Firebase Auth + BLoC)
+│   │   ├── guest/                # Guest management (CRUD + check-in/out)
+│   │   ├── location/             # Location + QR + Dashboard
+│   │   └── notification/         # FCM + Telegram notifications
+│   └── shared/                   # Reusable widgets and services
+├── backend/                      # ElysiaJS API server
+│   ├── src/routes/               # API endpoints
+│   └── src/services/             # S3, FCM, Telegram, Excel
+├── admin-web/                    # React admin dashboard
+└── test/                         # Unit, widget, and integration tests
 ```
 
----
+## Architecture
 
-## 📚 Dokumentasi
+```
+Flutter App
+├── Firebase Auth          → Authentication
+├── Cloud Firestore        → Real-time database
+├── FCM                    → Push notifications
+├── Contabo S3 (MinIO)    → Guest photo storage
+└── Contabo VPS (ElysiaJS) → Backend API
+    ├── POST /api/guests/notify    → Host notification
+    ├── POST /api/upload/url       → Presigned S3 URLs
+    ├── POST /api/notifications/*  → FCM + Telegram
+    └── GET  /api/export/guests    → Excel export
 
-| Dokumen | Deskripsi |
-|---------|-----------|
-| [AGENTS.md](./AGENTS.md) | AI agent governance & coding standards |
-| [DESIGN.md](./DESIGN.md) | Design system & visual identity |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | Contribution guidelines *(to be created)* |
+UI (Screen) → BLoC (Event → State) → Repository → DataSource (Remote + Local)
+```
 
----
+## Firestore Security Rules
 
-## 👥 Tim
+See `firestore.rules` for the full ruleset. Key principles:
+- Guest form submissions are publicly writable (no auth required)
+- Admin operations require Firebase Auth
+- Host profiles are only accessible by the owner
 
-| Nama | NIM | Peran |
-|------|-----|-------|
-| Hafiz Nur Rizki | 24110300038 | Team Member |
-| Ahmad Fauzan | 24110500007 | Tech Lead |
-| Annur Syahrin Aisyah | 24110500014 | Team Member |
+## Contributing
 
-**Dosen Pembimbing:** Hedy Pamungkas, S.T., M.T.I
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-**Mflutter_bloc Documentation](https://pub.dev/packages/flutter_bloc)
-- [Equatable Documentation](https://pub.dev/packages/equatable
-**Institusi:** Universitas Cakrawala — 2026
+## License
 
----
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## 📖 Referensi
+## Acknowledgments
 
-- [Flutter Documentation](https://docs.flutter.dev)
-- [Dart Language](https://dart.dev)
-- [Firebase Documentation](https://firebase.google.com/docs)
-- [Riverpod Documentation](https://riverpod.dev)
-- [FlutterFire Plugins](https://firebase.flutter.dev)
-- [qr_flutter Package](https://pub.dev/packages/qr_flutter)
-- [mobile_scanner Package](https://pub.dev/packages/mobile_scanner)
-- [fl_chart Package](https://pub.dev/packages/fl_chart)
-
----
-
-## 📄 License
-
-Proyek ini dibuat untuk keperluan akademik (UAS Mobile Computing — Universitas Cakrawala, 2026).
-
-Untuk penggunaan non-akademik, silakan hubungi tim pengembang.
-
----
-
-*Dibuat oleh Tim Mobile Computing Kelompok 9 — Universitas Cakrawala, 2026*
+- [Flutter](https://flutter.dev)
+- [Firebase](https://firebase.google.com)
+- [ElysiaJS](https://elysiajs.com)
+- [fl_chart](https://pub.dev/packages/fl_chart)
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc)

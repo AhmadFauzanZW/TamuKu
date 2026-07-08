@@ -1,9 +1,17 @@
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
+
 # Miscellaneous
 *.class
 *.log
 *.pyc
-*.swp
-.DS_Store
 .atom/
 .build/
 .buildlog/
@@ -53,7 +61,17 @@ docs/FIREBASE_SETUP.md
 node_modules/
 
 *.docx
+~$*
+
+# Build artifacts
+backend/dist/
+
+# Environment files
+backend/.env
+backend/.env.example.local
 
 # Firebase Admin SDK
 backend/serviceAccountKey.json
+
+# Admin web env
 admin-web/.env

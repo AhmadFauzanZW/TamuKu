@@ -190,7 +190,7 @@
 
 ## Concept Coverage Tracker
 
-Pastikan semua concept tertulis di AGENTS.md tercakup:
+Pastikan semua konsep arsitektur tercakup:
 
 | Concept | Tercakup? | Oleh | Tugas |
 |---------|-----------|------|-------|

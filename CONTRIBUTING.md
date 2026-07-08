@@ -6,11 +6,11 @@
 
 ## Tim
 
-| Nama | NIM | Fokus |
-|------|-----|-------|
-| Hafiz Nur Rizki | 24110300038 | Firebase & Backend |
-| Ahmad Fauzan | 24110500007 | Architecture & Full Stack |
-| Annur Syahrin Aisyah | 24110500014 | UI/UX & Frontend |
+| Nama | Fokus |
+|------|-------|
+| Hafiz Nur Rizki | Firebase & Backend |
+| Ahmad Fauzan | Architecture & Full Stack |
+| Annur Syahrin Aisyah | UI/UX & Frontend |
 
 ---
 
@@ -63,7 +63,7 @@ Refs: #issue-number
 ### Pull Request Process
 
 1. Create feature branch from `develop`
-2. Implement changes following [AGENTS.md](AGENTS.md) coding standards
+3. Implement changes following the project's coding standards
 3. Run `flutter analyze` — must pass with **0 issues**
 4. Write tests for new service/model code
 5. Update [DESIGN.md](DESIGN.md) if adding new components
@@ -147,7 +147,7 @@ flutter test test/widget/      # Run only widget tests
 | When | Update |
 |------|--------|
 | New workflow rules | This file (`CONTRIBUTING.md`) |
-| New architectural patterns | [AGENTS.md](AGENTS.md) |
+| New architectural patterns | `DESIGN.md` |
 | New components or token changes | [DESIGN.md](DESIGN.md) |
 | New features or setup steps | [README.md](README.md) |
 
@@ -157,11 +157,10 @@ flutter test test/widget/      # Run only widget tests
 
 | Topic | Contact |
 |-------|---------|
-| Architecture decisions | Ahmad Fauzan (24110500007) |
-| Firebase & Backend | Hafiz Nur Rizki (24110300038) |
-| UI/UX | Annur Syahrin Aisyah (24110500014) |
+| Architecture decisions | Ahmad Fauzan |
+| Firebase & Backend | Hafiz Nur Rizki |
+| UI/UX | Annur Syahrin Aisyah |
 
 ---
 
-*Terakhir diperbarui: 5 Juli 2026*
 *Proyek UAS Mobile Computing — Universitas Cakrawala*

@@ -23,8 +23,8 @@ const LOCATION_ID = 'os7bez2TcYgh3HyvfxUv'; // Your existing location document I
 
 const HOST_DATA = {
   name: 'Super Admin',
-  email: 'ahfa201204@gmail.com',  // ← Update if different
-  phone: '082132290468',
+  email: 'admin@example.com',  // ← Update if different
+  phone: '081234567890',
   photoUrl: null,
   locations: [LOCATION_ID],
   role: 'super_admin',
@@ -37,7 +37,7 @@ const LOCATION_DATA = {
   name: 'Kantor Universitas Cakrawala',
   address: 'Jl. Merdeka No. 17, Bandung',
   adminId: HOST_ID,
-  hostPhone: '082132290468',
+  hostPhone: '081234567890',
   qrCodeValue: LOCATION_ID,
   createdAt: new Date('2026-07-05'),
   isActive: true,
@@ -65,7 +65,7 @@ const db = getFirestore();
 const auth = getAuth();
 
 // --- Password from CLI args or default ---
-const PASSWORD = process.argv[2] || 'admin123';
+const PASSWORD = process.argv[2]; // Set via command line argument
 
 // --- Main ---
 async function setup() {
@@ -159,7 +159,7 @@ async function setup() {
     console.log('\n🎉 Firestore setup complete!');
     console.log('   You can now:');
     console.log('   1. Run the admin dashboard: cd ../admin-web && bun run dev');
-    console.log('   2. Login with: ahfa201204@gmail.com');
+    console.log('   2. Login with the admin email set in the script');
     console.log('   3. Create more locations and hosts from the dashboard');
   } else {
     console.error('   ❌ Verification failed — documents not found after write');
