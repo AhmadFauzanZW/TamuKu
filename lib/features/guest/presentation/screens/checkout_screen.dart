@@ -6,6 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../injection_container.dart';
 import '../../domain/entities/guest_entity.dart';
 import '../bloc/guest_bloc.dart';
 import '../bloc/guest_event.dart';
@@ -22,8 +23,8 @@ class CheckoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final guest = ModalRoute.of(context)!.settings.arguments as GuestEntity;
 
-    return BlocProvider.value(
-      value: BlocProvider.of<GuestBloc>(context),
+    return BlocProvider(
+      create: (_) => getIt<GuestBloc>(),
       child: _CheckoutView(guest: guest),
     );
   }

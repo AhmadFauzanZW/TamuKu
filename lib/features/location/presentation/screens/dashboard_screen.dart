@@ -47,17 +47,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
 
-    // Stream today's guests for real-time stats, filtered by locationId
-    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
-        .collection(AppConstants.guestsCollection)
-        .where(
-          AppConstants.fieldCheckInTime,
-          isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
-        );
+    // Stream today's guests for real-time stats, filtered by locationId.
+    // Equality filter (locationId) MUST come before range filter
+    // (checkInTime >=) for correct Firestore index usage.
+    Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(
+      AppConstants.guestsCollection,
+    );
 
     if (_locationId != null && _locationId!.isNotEmpty) {
       query = query.where(AppConstants.fieldLocationId, isEqualTo: _locationId);
     }
+    query = query.where(
+      AppConstants.fieldCheckInTime,
+      isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
+    );
 
     final todayGuestsStream = query.snapshots();
 
@@ -95,6 +98,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: todayGuestsStream,
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            debugPrint('Dashboard Firestore error: ${snapshot.error}');
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.xl),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.redAccent,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    const Text(
+                      'Gagal memuat data tamu. Periksa koneksi Anda.',
+                      style: AppTextStyles.body,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      snapshot.error.toString(),
+                      style: AppTextStyles.caption,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
           final docs = snapshot.data?.docs ?? [];
           final totalCount = docs.length;
           final activeCount = docs.where((doc) {
