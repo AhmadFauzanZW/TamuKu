@@ -18,6 +18,8 @@ const app = new Elysia()
     origin: config.corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-api-key'],
+    exposeHeaders: ['Content-Length', 'Content-Type'],
+    maxAge: 600,
   }))
   .use(swagger())
   .use(healthRoutes)

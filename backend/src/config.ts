@@ -34,5 +34,5 @@ export const config = {
   },
   corsOrigins: process.env.CORS_ORIGINS
     ? process.env.CORS_ORIGINS.split(',').map((s) => s.trim())
-    : [],
+    : ['http://localhost:5173', 'http://localhost:3000'],
 } as const;
