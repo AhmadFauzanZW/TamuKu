@@ -1,23 +1,28 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm install
+
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
 COPY . .
-# VITE_ env vars are baked at build time via Docker build args
-ARG VITE_FIREBASE_API_KEY
-ARG VITE_FIREBASE_AUTH_DOMAIN
-ARG VITE_FIREBASE_PROJECT_ID
-ARG VITE_FIREBASE_STORAGE_BUCKET
-ARG VITE_FIREBASE_MESSAGING_SENDER_ID
-ARG VITE_FIREBASE_APP_ID
-ARG VITE_BACKEND_URL
-ARG VITE_API_KEY
 RUN npm run build
 
-# Stage 2: Serve with nginx
+# Stage 2: Serve
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built assets
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy runtime config entrypoint
+COPY docker/40-write-runtime-config.sh /docker-entrypoint.d/
+RUN chmod +x /docker-entrypoint.d/40-write-runtime-config.sh
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost/health || exit 1
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

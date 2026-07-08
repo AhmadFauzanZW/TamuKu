@@ -9,3 +9,5 @@ dist-scripts
 *.md
 .git
 .gitignore
+*.log
+.DS_Store

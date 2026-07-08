@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+import { appConfig } from '../config/app-config';
+
+const API_BASE = appConfig.apiBaseUrl;
 
 /**
  * Fetch a presigned S3 URL for a guest photo via the backend API.

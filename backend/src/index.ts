@@ -15,10 +15,25 @@ import { apiKeyGuard } from './middleware/api-key-guard';
 
 const app = new Elysia()
   .use(cors({
-    origin: config.corsOrigins,
+    origin: (request: Request) => {
+      const requestOrigin = request.headers.get('Origin') ?? '';
+      // No origin = server-to-server — allow
+      if (!requestOrigin) return true;
+      // Empty list or wildcard = allow all
+      if (config.corsOrigins.length === 0 || config.corsOrigins.includes('*')) return true;
+      // Match against allowed origins
+      return config.corsOrigins.some((allowed) => {
+        // Support wildcard patterns (e.g., *.chronaxis.site)
+        if (allowed.includes('*')) {
+          const regex = new RegExp('^' + allowed.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$');
+          return regex.test(requestOrigin);
+        }
+        return allowed === requestOrigin;
+      });
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-api-key'],
-    exposeHeaders: ['Content-Length', 'Content-Type'],
+    credentials: true,
     maxAge: 600,
   }))
   .use(swagger())
