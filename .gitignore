@@ -75,3 +75,11 @@ backend/serviceAccountKey.json
 
 # Admin web env
 admin-web/.env
+
+# Signing
+android/key.properties
+android/keystore/*.jks
+android/keystore/*.keystore
+
+# Environment secrets
+*.env.local

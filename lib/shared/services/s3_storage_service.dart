@@ -9,11 +9,10 @@ class S3StorageService {
 
   S3StorageService() {
     _client = Minio(
-      endPoint: S3Config.endpoint,
+      endPoint: S3Config.endPoint,
       useSSL: S3Config.useSsl,
       accessKey: S3Config.accessKey,
       secretKey: S3Config.secretKey,
-      region: S3Config.region,
     );
   }
 

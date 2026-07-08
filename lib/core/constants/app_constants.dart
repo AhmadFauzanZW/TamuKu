@@ -22,6 +22,20 @@ abstract final class AppConstants {
   static const String fieldStatus = 'status';
   static const String fieldAddress = 'address';
   static const String fieldAdminId = 'adminId';
+
+  // ── Backend URL ───────────────────────────────────────────────
+  static const String backendBaseUrl = 'https://tamuku-api.chronaxis.site';
+
+  // API key — injected via --dart-define at build time, fallback for local dev
+  // Usage: flutter build apk --dart-define=API_KEY=your-production-key
+  static const String backendApiKey = String.fromEnvironment(
+    'API_KEY',
+    defaultValue: 'tamuku-dev-key-2026',
+  );
+
+  // Guest web check-in URL
+  static const String guestWebUrl =
+      'https://tamuku-api.chronaxis.site/web/guest';
   static const List<String> keperluanOptions = [
     'Meeting',
     'Personal',
@@ -137,13 +151,7 @@ abstract final class AppConstants {
   ];
 
   // ─── Backend API ──────────────────────────────────────────────────
-  /// Contabo VPS backend base URL
-  /// Pakai deployed VPS URL di semua mode (localhost gak bisa di device fisik)
-  static const String backendBaseUrl = 'https://tamuku.chronaxis.site';
-
-  /// API key untuk backend authentication (x-api-key header)
-  /// Harus sama dengan API_KEY di backend .env
-  static const String backendApiKey = 'YOUR_API_KEY_HERE';
+  // backendBaseUrl, backendApiKey, guestWebUrl defined at top of class.
 
   // ─── Firebase / Auth ────────────────────────────────────────────────
   /// Google Sign-In Web Client ID dari Firebase Console
@@ -186,10 +194,7 @@ abstract final class AppConstants {
   /// Back button text
   static const String backButton = 'Kembali';
 
-  // ─── Web Guest URL ────────────────────────────────────────────────
-  /// Base URL for the web-based guest check-in page
-  /// Served by Contabo backend at /guest/
-  static const String guestWebUrl = 'https://tamuku.chronaxis.site/guest';
+  // guestWebUrl defined at top of class.
 
   // ─── Telegram ────────────────────────────────────────────────────
   /// Telegram Bot username (tanpa @)

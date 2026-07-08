@@ -1,29 +1,30 @@
 /// Contabo S3 Storage configuration.
-/// Replace placeholder values with real credentials.
+/// Credentials injected via --dart-define at build time.
 /// DO NOT commit real credentials to git.
 class S3Config {
   S3Config._();
 
   /// Contabo S3 endpoint (Asia - Singapore)
-  static const String endpoint = 'sg.contabostorage.com';
+  static const String endPoint = 'sin1.contabostorage.com';
 
   /// Bucket name for guest photos
-  static const String bucketName = 'tamuku-guest-photos';
-
-  /// Region (Contabo uses empty string for default)
-  static const String region = '';
+  static const String bucketName = 'tamuku';
 
   /// Use SSL
   static const bool useSsl = true;
 
-  // ─── Credentials (replace with your Contabo S3 API keys) ─────────
-  /// Access Key from Contabo Customer Control Panel → Object Storage → API Keys
-  static const String accessKey = 'YOUR_CONTABO_ACCESS_KEY';
+  // ─── Credentials via --dart-define ──────────────────────────────
+  // Usage: flutter build apk --dart-define=S3_ACCESS_KEY=xxx --dart-define=S3_SECRET_KEY=yyy
+  static const String accessKey = String.fromEnvironment(
+    'S3_ACCESS_KEY',
+    defaultValue: '',
+  );
 
-  /// Secret Key from Contabo Customer Control Panel → Object Storage → API Keys
-  static const String secretKey = 'YOUR_CONTABO_SECRET_KEY';
+  static const String secretKey = String.fromEnvironment(
+    'S3_SECRET_KEY',
+    defaultValue: '',
+  );
 
   /// Base URL for public access to uploaded files.
-  /// Format: https://endpoint/bucket
-  static String get publicBaseUrl => 'https://$endpoint/$bucketName';
+  static String get publicBaseUrl => 'https://$endPoint/$bucketName';
 }
