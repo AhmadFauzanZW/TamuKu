@@ -53,3 +53,7 @@ docs/FIREBASE_SETUP.md
 node_modules/
 
 *.docx
+
+# Firebase Admin SDK
+backend/serviceAccountKey.json
+admin-web/.env
