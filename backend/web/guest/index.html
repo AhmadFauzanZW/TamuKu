@@ -6,311 +6,582 @@
   <title>TamuKu — Buku Tamu Digital</title>
   <link rel="icon" type="image/png" href="/guest/favicon.png">
   <style>
-    /* === RESET & BASE === */
+    /* ═══════════════════════════════════════════════════════════
+       RESET & DESIGN TOKENS (DESIGN.md exact)
+       ═══════════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #1B5E20;
-      --primary-light: #4CAF50;
-      --primary-bg: #E8F5E9;
+      /* Primary Palette */
+      --primary-900: #1B5E20;
+      --primary-700: #2E7D32;
+      --primary-500: #43A047;
+      --primary-100: #C8E6C9;
+      --primary-50: #E8F5E9;
+
+      /* Neutrals */
+      --bg: #FAFAF5;
       --surface: #FFFFFF;
-      --background: #F5F5F5;
-      --text: #212121;
+      --text: #1A1A1A;
       --text-secondary: #757575;
+      --text-disabled: #BDBDBD;
       --border: #E0E0E0;
-      --error: #D32F2F;
-      --error-bg: #FFEBEE;
-      --success: #388E3C;
-      --success-bg: #E8F5E9;
-      --warning: #F57C00;
-      --radius: 12px;
-      --radius-sm: 8px;
+      --border-light: #F0F0F0;
+
+      /* Accents */
+      --red: #D32F2F;
+      --red-light: #FFEBEE;
+      --amber: #F9A825;
+      --success: #2E7D32;
+
+      /* Spacing */
+      --s-xs: 4px;
+      --s-sm: 8px;
+      --s-md: 16px;
+      --s-lg: 24px;
+      --s-xl: 32px;
+      --s-2xl: 48px;
+
+      /* Radii */
+      --r-sm: 4px;
+      --r-md: 8px;
+      --r-lg: 12px;
+      --r-xl: 16px;
+      --r-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
     }
+
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--background);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 0;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* === HEADER === */
+    /* ═══════════════════════════════════════════════════════════
+       HEADER
+       ═══════════════════════════════════════════════════════════ */
     .header {
-      background: var(--primary);
+      background: var(--primary-900);
       color: white;
       width: 100%;
-      padding: 20px 24px;
+      padding: 20px var(--s-md);
       text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(27,94,32,0.2);
     }
-    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-    .header p { font-size: 13px; opacity: 0.85; }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+    .header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
 
-    /* === CONTENT === */
+    /* ═══════════════════════════════════════════════════════════
+       LAYOUT
+       ═══════════════════════════════════════════════════════════ */
     .content {
       width: 100%;
       max-width: 480px;
-      padding: 20px 16px;
+      margin: 0 auto;
+      padding: var(--s-md);
       flex: 1;
     }
 
-    /* === CARDS === */
+    /* ═══════════════════════════════════════════════════════════
+       CARDS
+       ═══════════════════════════════════════════════════════════ */
     .card {
       background: var(--surface);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-radius: var(--r-lg);
+      padding: var(--s-md);
+      margin-bottom: var(--s-md);
+      box-shadow: var(--shadow-md);
     }
-    .card-title {
-      font-size: 13px;
+
+    /* Location card — green left border */
+    .location-card {
+      border-left: 4px solid var(--primary-900);
+      padding: 20px;
+    }
+    .location-card .loc-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary-700);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .location-card .loc-icon svg { width: 14px; height: 14px; }
+    .location-card .loc-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .location-card .loc-address {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Section card */
+    .section-card { padding: 20px; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
     }
+    .section-title svg { width: 14px; height: 14px; }
 
-    /* === FORM === */
-    .form-group { margin-bottom: 16px; }
-    .form-group label {
+    /* ═══════════════════════════════════════════════════════════
+       FORM INPUTS
+       ═══════════════════════════════════════════════════════════ */
+    .field { margin-bottom: 16px; }
+    .field:last-of-type { margin-bottom: 20px; }
+    .field label {
       display: block;
       font-size: 14px;
       font-weight: 500;
       color: var(--text);
       margin-bottom: 6px;
     }
-    .form-group label .required { color: var(--error); }
-    .form-group input, .form-group select, .form-group textarea {
+    .field label .req { color: var(--red); }
+    .field input,
+    .field select {
       width: 100%;
-      padding: 12px 14px;
+      height: 48px;
+      padding: 0 14px;
       border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: var(--r-lg);
       font-size: 16px;
       color: var(--text);
       background: var(--surface);
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
+      appearance: none;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    .field-select-wrap { position: relative; }
+    .field-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--text-secondary);
+      pointer-events: none;
+    }
+    .field-select-wrap select { padding-right: 40px; }
+    .field input:focus,
+    .field select:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(27,94,32,0.1);
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(67,160,71,0.12);
     }
-    .form-group input.error, .form-group select.error {
-      border-color: var(--error);
+    .field.has-error input,
+    .field.has-error select {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(211,47,47,0.08);
     }
-    .form-group .error-text {
-      color: var(--error);
-      font-size: 12px;
-      margin-top: 4px;
+    .field-error {
       display: none;
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 6px;
+      padding-left: 2px;
     }
-    .form-group input.error + .error-text,
-    .form-group select.error + .error-text {
-      display: block;
+    .field.has-error .field-error { display: block; }
+    .field-sub {
+      display: none;
+      margin-top: 8px;
+      animation: fadeSlideIn 0.25s ease-out;
     }
+    .field-sub.visible { display: block; }
 
-    /* === BUTTONS === */
+    /* ═══════════════════════════════════════════════════════════
+       BUTTONS
+       ═══════════════════════════════════════════════════════════ */
     .btn {
       width: 100%;
-      padding: 14px;
+      height: 48px;
       border: none;
-      border-radius: var(--radius);
+      border-radius: var(--r-lg);
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
     }
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    .btn-primary:not(:disabled):hover {
-      background: #154218;
-    }
-    .btn-success {
-      background: var(--success);
-      color: white;
-    }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-primary { background: var(--primary-900); color: white; }
+    .btn-primary:not(:disabled):hover { background: var(--primary-700); }
+    .btn-danger { background: var(--red); color: white; }
+    .btn-danger:not(:disabled):hover { background: #B71C1C; }
     .btn-outline {
       background: transparent;
-      color: var(--primary);
-      border: 1.5px solid var(--primary);
+      color: var(--primary-900);
+      border: 1.5px solid var(--primary-900);
     }
-    .btn-outline:not(:disabled):hover {
-      background: var(--primary-bg);
-    }
-
-    /* === STATUS BADGES === */
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .badge-success { background: var(--success-bg); color: var(--success); }
-    .badge-warning { background: #FFF3E0; color: var(--warning); }
-
-    /* === LOADING === */
-    .spinner {
-      width: 20px;
-      height: 20px;
+    .btn-outline:not(:disabled):hover { background: var(--primary-50); }
+    .btn-spinner {
+      width: 20px; height: 20px;
       border: 2.5px solid rgba(255,255,255,0.3);
       border-top-color: white;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.6s linear infinite;
+      display: none;
     }
-    .spinner-dark {
-      border-color: rgba(0,0,0,0.1);
-      border-top-color: var(--primary);
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn.loading .btn-text { opacity: 0; }
+    .btn.loading .btn-spinner { display: block; position: absolute; }
 
-    /* === CONFIRMATION === */
-    .confirmation {
-      text-align: center;
-      padding: 30px 20px;
-    }
-    .confirmation .icon {
-      width: 72px;
-      height: 72px;
+    /* ═══════════════════════════════════════════════════════════
+       LOADING STATE
+       ═══════════════════════════════════════════════════════════ */
+    .loading-state { text-align: center; padding: 60px 20px; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--primary-100);
+      border-top-color: var(--primary-700);
       border-radius: 50%;
-      background: var(--success-bg);
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 16px;
+    }
+    .loading-text { font-size: 14px; color: var(--text-secondary); }
+
+    /* ═══════════════════════════════════════════════════════════
+       ERROR STATE
+       ═══════════════════════════════════════════════════════════ */
+    .error-state { text-align: center; padding: 60px 20px; }
+    .error-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--red-light);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
+      margin: 0 auto 20px;
     }
-    .confirmation .icon svg {
-      width: 36px;
-      height: 36px;
-      color: var(--success);
+    .error-icon svg { width: 32px; height: 32px; color: var(--red); }
+    .error-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .error-state p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
-    .confirmation h2 {
+
+    /* ═══════════════════════════════════════════════════════════
+       SUCCESS / CONFIRMATION
+       ═══════════════════════════════════════════════════════════ */
+    .success-view { text-align: center; padding: 40px 20px 30px; }
+    .check-circle {
+      width: 80px; height: 80px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+    .check-circle svg { width: 80px; height: 80px; transform: rotate(-90deg); }
+    .check-circle .circle {
+      fill: none;
+      stroke: var(--primary-700);
+      stroke-width: 3;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      animation: drawCircle 0.5s ease-out 0.1s forwards;
+    }
+    .check-circle .check {
+      fill: none;
+      stroke: var(--primary-700);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: drawCheck 0.35s ease-out 0.5s forwards;
+    }
+    .success-view h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .success-view .subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .summary-card {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      padding: 16px 20px;
+      margin: 0 auto 24px;
+      max-width: 320px;
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 14px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .s-label { color: var(--text-secondary); }
+    .summary-row .s-value { font-weight: 600; color: var(--text); text-align: right; }
+
+    /* ═══════════════════════════════════════════════════════════
+       CHECKOUT VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .checkout-header { text-align: center; padding: 8px 0 16px; }
+    .checkout-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--primary-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .checkout-avatar svg { width: 28px; height: 28px; color: var(--primary-700); }
+    .checkout-name {
       font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .checkout-detail { font-size: 14px; color: var(--text-secondary); }
+    .checkout-instansi { font-size: 13px; color: var(--text-disabled); margin-top: 2px; }
+    .duration-card {
+      background: var(--primary-50);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      margin-bottom: var(--s-md);
+      text-align: center;
+    }
+    .duration-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
       margin-bottom: 8px;
     }
-    .confirmation p {
-      color: var(--text-secondary);
+    .duration-time {
       font-size: 14px;
-      margin-bottom: 20px;
+      font-weight: 700;
+      color: var(--primary-900);
+      line-height: 1.2;
     }
+    .duration-time .dur-num {
+      font-size: 36px;
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .duration-time .dur-unit {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--primary-700);
+    }
+    .info-rows { padding: 0 4px; }
     .info-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
       font-size: 14px;
     }
     .info-row:last-child { border-bottom: none; }
-    .info-row .label { color: var(--text-secondary); }
-    .info-row .value { font-weight: 500; }
+    .info-row .i-label { color: var(--text-secondary); }
+    .info-row .i-value { font-weight: 500; color: var(--text); }
 
-    /* === HIDDEN === */
-    .hidden { display: none !important; }
-
-    /* === CHECKOUT === */
-    .checkout-card {
-      text-align: center;
-    }
-    .checkout-card .guest-name {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 12px 0 4px;
-    }
-    .checkout-card .guest-detail {
-      color: var(--text-secondary);
+    /* ═══════════════════════════════════════════════════════════
+       ERROR TOAST
+       ═══════════════════════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--red);
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--r-lg);
       font-size: 14px;
-    }
-    .duration-box {
-      background: var(--primary-bg);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      margin: 16px 0;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      max-width: 90%;
       text-align: center;
     }
-    .duration-box .time {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
-    .duration-box .label {
+
+    /* ═══════════════════════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════════════════════ */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes drawCircle { to { stroke-dashoffset: 0; } }
+    @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+    .state-view { animation: fadeSlideIn 0.3s ease-out; }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .footer {
+      text-align: center;
+      padding: var(--s-md) var(--s-md) var(--s-lg);
       font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 4px;
+      color: var(--text-disabled);
     }
+
+    .hidden { display: none !important; }
+    .mt-md { margin-top: var(--s-md); }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <div class="header">
-    <h1>&#127977; TamuKu</h1>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="header-logo">T</div>
+      <h1>TamuKu</h1>
+    </div>
     <p>Buku Tamu Digital</p>
-  </div>
+  </header>
 
-  <!-- MAIN CONTENT -->
-  <div class="content">
+  <!-- ═══════════ MAIN CONTENT ═══════════ -->
+  <main class="content">
 
-    <!-- LOADING STATE -->
-    <div id="loading" class="card" style="text-align: center; padding: 40px;">
-      <div class="spinner spinner-dark" style="margin: 0 auto 12px;"></div>
-      <p style="color: var(--text-secondary);">Memuat data lokasi...</p>
+    <!-- ─── LOADING STATE ─── -->
+    <div id="view-loading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Memuat data lokasi...</p>
     </div>
 
-    <!-- ERROR STATE -->
-    <div id="error-state" class="card hidden" style="text-align: center; padding: 30px;">
-      <p style="font-size: 40px; margin-bottom: 12px;">&#9888;&#65039;</p>
-      <h3 style="margin-bottom: 8px;">Terjadi Kesalahan</h3>
-      <p id="error-message" style="color: var(--text-secondary); font-size: 14px;"></p>
+    <!-- ─── ERROR STATE ─── -->
+    <div id="view-error" class="error-state hidden">
+      <div class="error-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h3>Terjadi Kesalahan</h3>
+      <p id="error-message"></p>
+      <button class="btn btn-outline" style="max-width:200px;margin:0 auto" onclick="retry()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+        </svg>
+        Kembali
+      </button>
     </div>
 
-    <!-- CHECK-IN FORM -->
-    <div id="checkin-form" class="hidden">
-      <!-- Location Info -->
-      <div class="card">
-        <div class="card-title">&#128205; Lokasi</div>
-        <div id="location-name" style="font-weight: 600; font-size: 16px; margin-bottom: 4px;"></div>
-        <div id="location-address" style="color: var(--text-secondary); font-size: 13px;"></div>
+    <!-- ─── CHECK-IN FORM ─── -->
+    <div id="view-checkin" class="hidden">
+      <div class="card location-card state-view">
+        <div class="loc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Lokasi
+        </div>
+        <div class="loc-name" id="location-name"></div>
+        <div class="loc-address" id="location-address"></div>
       </div>
 
-      <!-- Guest Form -->
-      <div class="card">
-        <div class="card-title">&#128203; Data Diri</div>
+      <div class="card section-card state-view">
+        <div class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <line x1="20" y1="8" x2="20" y2="14"/>
+            <line x1="23" y1="11" x2="17" y2="11"/>
+          </svg>
+          Data Diri
+        </div>
+
         <form id="guest-form" novalidate>
-          <div class="form-group">
-            <label>Nama Lengkap <span class="required">*</span></label>
-            <input type="text" id="name" placeholder="Masukkan nama lengkap" required>
-            <div class="error-text">Nama wajib diisi</div>
+          <div class="field" id="field-name">
+            <label>Nama Lengkap <span class="req">*</span></label>
+            <input type="text" id="inp-name" placeholder="Masukkan nama lengkap" autocomplete="name">
+            <div class="field-error">Nama wajib diisi</div>
           </div>
-          <div class="form-group">
-            <label>No. WhatsApp <span class="required">*</span></label>
-            <input type="tel" id="phone" placeholder="081234567890" required>
-            <div class="error-text">Nomor WhatsApp wajib diisi</div>
+          <div class="field" id="field-phone">
+            <label>No. WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="inp-phone" placeholder="081234567890" autocomplete="tel">
+            <div class="field-error">Nomor WhatsApp wajib diisi</div>
           </div>
-          <div class="form-group">
+          <div class="field" id="field-email">
             <label>Email</label>
-            <input type="email" id="email" placeholder="email@example.com (opsional)">
+            <input type="email" id="inp-email" placeholder="email@contoh.com (opsional)" autocomplete="email">
           </div>
-          <div class="form-group">
+          <div class="field" id="field-instansi">
             <label>Instansi / Perusahaan</label>
-            <input type="text" id="instansi" placeholder="Nama instansi (opsional)">
+            <input type="text" id="inp-instansi" placeholder="Nama instansi (opsional)" autocomplete="organization">
           </div>
-          <div class="form-group">
-            <label>Keperluan <span class="required">*</span></label>
-            <select id="keperluan" required>
+          <div class="field field-select-wrap" id="field-keperluan">
+            <label>Keperluan <span class="req">*</span></label>
+            <select id="inp-keperluan">
               <option value="">Pilih keperluan</option>
               <option value="Meeting">Meeting</option>
               <option value="Personal">Personal</option>
@@ -318,95 +589,131 @@
               <option value="Pengiriman">Pengiriman</option>
               <option value="Lainnya">Lainnya</option>
             </select>
-            <div class="error-text">Keperluan wajib dipilih</div>
+            <div class="field-error">Keperluan wajib dipilih</div>
           </div>
-          <button type="submit" class="btn btn-primary" id="submit-btn">
-            <span id="submit-text">Check In</span>
-            <div id="submit-spinner" class="spinner hidden"></div>
+          <div class="field field-sub" id="field-lainnya">
+            <label>Keperluan Lainnya <span class="req">*</span></label>
+            <input type="text" id="inp-lainnya" placeholder="Sebutkan keperluan Anda">
+            <div class="field-error">Keperluan wajib diisi</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit">
+            <span class="btn-text">Check In</span>
+            <div class="btn-spinner"></div>
           </button>
         </form>
       </div>
     </div>
 
-    <!-- CHECK-IN CONFIRMATION -->
-    <div id="checkin-confirmation" class="card hidden">
-      <div class="confirmation">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <h2>Berhasil Check In!</h2>
-        <p>Selamat datang di lokasi kami</p>
-        <div class="card" style="text-align: left; margin-bottom: 0;">
-          <div class="info-row">
-            <span class="label">Nama</span>
-            <span class="value" id="confirm-name"></span>
+    <!-- ─── CHECK-IN CONFIRMATION ─── -->
+    <div id="view-checkin-ok" class="hidden">
+      <div class="card section-card state-view">
+        <div class="success-view">
+          <div class="check-circle">
+            <svg viewBox="0 0 80 80">
+              <circle class="circle" cx="40" cy="40" r="35"/>
+              <polyline class="check" points="25,42 35,52 55,30"/>
+            </svg>
           </div>
-          <div class="info-row">
-            <span class="label">Keperluan</span>
-            <span class="value" id="confirm-keperluan"></span>
+          <h2>Berhasil Check In!</h2>
+          <p class="subtitle">Selamat datang di lokasi kami</p>
+          <div class="summary-card">
+            <div class="summary-row">
+              <span class="s-label">Nama</span>
+              <span class="s-value" id="cok-name"></span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">Keperluan</span>
+              <span class="s-value" id="cok-keperluan"></span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">Waktu Masuk</span>
+              <span class="s-value" id="cok-time"></span>
+            </div>
           </div>
-          <div class="info-row">
-            <span class="label">Waktu Masuk</span>
-            <span class="value" id="confirm-time"></span>
-          </div>
+          <button class="btn btn-outline mt-md" onclick="resetToCheckIn()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Kembali ke Awal
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- CHECKOUT VIEW -->
-    <div id="checkout-view" class="card hidden">
-      <div class="checkout-card">
-        <div class="icon" style="width: 56px; height: 56px; margin-bottom: 0;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
+    <!-- ─── CHECKOUT VIEW ─── -->
+    <div id="view-checkout" class="hidden">
+      <div class="card section-card state-view">
+        <div class="checkout-header">
+          <div class="checkout-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="checkout-name" id="co-name"></div>
+          <div class="checkout-detail" id="co-keperluan"></div>
+          <div class="checkout-instansi" id="co-instansi"></div>
         </div>
-        <div class="guest-name" id="checkout-name"></div>
-        <div class="guest-detail" id="checkout-keperluan"></div>
-        <div class="duration-box">
-          <div class="time" id="checkout-duration">--</div>
-          <div class="label">Durasi Kunjungan</div>
+        <div class="duration-card">
+          <div class="duration-label">Durasi Kunjungan</div>
+          <div class="duration-time" id="co-duration"></div>
         </div>
-        <div class="info-row">
-          <span class="label">Masuk</span>
-          <span class="value" id="checkout-checkin-time"></span>
+        <div class="info-rows">
+          <div class="info-row">
+            <span class="i-label">Waktu Masuk</span>
+            <span class="i-value" id="co-checkin-time"></span>
+          </div>
         </div>
-        <button class="btn btn-primary" id="checkout-btn" style="margin-top: 16px;">
-          <span id="checkout-text">Check Out</span>
-          <div id="checkout-spinner" class="spinner hidden"></div>
+        <button class="btn btn-danger mt-md" id="btn-checkout">
+          <span class="btn-text">Check Out</span>
+          <div class="btn-spinner"></div>
         </button>
       </div>
     </div>
 
-    <!-- CHECKOUT CONFIRMATION -->
-    <div id="checkout-confirmation" class="card hidden">
-      <div class="confirmation">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <h2>Berhasil Check Out!</h2>
-        <p>Terima kasih telah berkunjung</p>
-        <div class="info-row">
-          <span class="label">Waktu Keluar</span>
-          <span class="value" id="checkout-confirm-time"></span>
+    <!-- ─── CHECKOUT CONFIRMATION ─── -->
+    <div id="view-checkout-ok" class="hidden">
+      <div class="card section-card state-view">
+        <div class="success-view">
+          <div class="check-circle">
+            <svg viewBox="0 0 80 80">
+              <circle class="circle" cx="40" cy="40" r="35"/>
+              <polyline class="check" points="25,42 35,52 55,30"/>
+            </svg>
+          </div>
+          <h2>Berhasil Check Out!</h2>
+          <p class="subtitle">Terima kasih telah berkunjung</p>
+          <div class="summary-card">
+            <div class="summary-row">
+              <span class="s-label">Waktu Keluar</span>
+              <span class="s-value" id="cok2-time"></span>
+            </div>
+            <div class="summary-row" id="cok2-duration-row">
+              <span class="s-label">Durasi</span>
+              <span class="s-value" id="cok2-duration"></span>
+            </div>
+          </div>
+          <button class="btn btn-outline mt-md" onclick="resetToCheckIn()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Kembali ke Awal
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Firebase SDK (compat mode for simplicity) -->
+  </main>
+
+  <footer class="footer">TamuKu &middot; Buku Tamu Digital</footer>
+
+  <!-- Error Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════ FIREBASE SDK ═══════════ -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <script>
     // ═══════════════════════════════════════════════════════════════
-    // Firebase Config — same project as Flutter app
+    // Firebase Config
     // ═══════════════════════════════════════════════════════════════
     const firebaseConfig = {
       apiKey: "AIzaSyB9KsNkbl3UZZKkPW_gynHFCf--liiYOYA",
@@ -427,6 +734,34 @@
     let hostPhone = '';
     let locationData = null;
     let existingGuestId = null;
+    let durationInterval = null;
+
+    // ═══════════════════════════════════════════════════════════════
+    // DOM Helpers
+    // ═══════════════════════════════════════════════════════════════
+    const $ = (id) => document.getElementById(id);
+    const ALL_VIEWS = ['view-loading', 'view-error', 'view-checkin', 'view-checkin-ok', 'view-checkout', 'view-checkout-ok'];
+
+    function showView(id) {
+      ALL_VIEWS.forEach(v => $(v).classList.add('hidden'));
+      const el = $(id);
+      el.classList.remove('hidden');
+      // Re-trigger enter animation
+      const anim = el.querySelector('.state-view');
+      if (anim) {
+        anim.style.animation = 'none';
+        anim.offsetHeight; // reflow
+        anim.style.animation = '';
+      }
+    }
+
+    function showToast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('visible'), 4000);
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // Init — parse URL params and load location
@@ -461,72 +796,111 @@
       }
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // Check-In Flow
-    // ═══════════════════════════════════════════════════════════════
-    function showCheckInForm() {
-      hide('loading');
-      show('checkin-form');
-      document.getElementById('location-name').textContent = locationData.name || '-';
-      document.getElementById('location-address').textContent = locationData.address || '-';
+    function showError(msg) {
+      $('error-message').textContent = msg;
+      showView('view-error');
     }
 
-    document.getElementById('guest-form').addEventListener('submit', async (e) => {
+    function retry() {
+      showView('view-loading');
+      locationData = null;
+      existingGuestId = null;
+      init();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Check-In Form
+    // ═══════════════════════════════════════════════════════════════
+    function showCheckInForm() {
+      $('location-name').textContent = locationData.name || '-';
+      $('location-address').textContent = locationData.address || '-';
+      showView('view-checkin');
+    }
+
+    // Keperluan sub-field toggle
+    $('inp-keperluan').addEventListener('change', function () {
+      const lainnya = $('field-lainnya');
+      if (this.value === 'Lainnya') {
+        lainnya.classList.add('visible');
+        $('inp-lainnya').focus();
+      } else {
+        lainnya.classList.remove('visible');
+        $('inp-lainnya').value = '';
+        clearFieldError('field-lainnya');
+      }
+      clearFieldError('field-keperluan');
+    });
+
+    // Clear field errors on input
+    ['inp-name', 'inp-phone', 'inp-email', 'inp-instansi', 'inp-lainnya'].forEach(id => {
+      $(id).addEventListener('input', function () {
+        const field = this.closest('.field');
+        if (field) clearFieldError(field.id);
+      });
+    });
+
+    function setFieldError(fieldId) { $(fieldId).classList.add('has-error'); }
+    function clearFieldError(fieldId) { $(fieldId).classList.remove('has-error'); }
+
+    // Submit check-in
+    $('guest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const instansi = document.getElementById('instansi').value.trim();
-      const keperluan = document.getElementById('keperluan').value;
+      const name = $('inp-name').value.trim();
+      const phone = $('inp-phone').value.trim();
+      const email = $('inp-email').value.trim();
+      const instansi = $('inp-instansi').value.trim();
+      const keperluan = $('inp-keperluan').value;
+      const lainnya = $('inp-lainnya').value.trim();
 
+      // Validate
       let valid = true;
-      if (!name) { setError('name'); valid = false; } else { clearError('name'); }
-      if (!phone) { setError('phone'); valid = false; } else { clearError('phone'); }
-      if (!keperluan) { setError('keperluan'); valid = false; } else { clearError('keperluan'); }
+      if (!name) { setFieldError('field-name'); valid = false; } else clearFieldError('field-name');
+      if (!phone) { setFieldError('field-phone'); valid = false; } else clearFieldError('field-phone');
+      if (!keperluan) { setFieldError('field-keperluan'); valid = false; } else clearFieldError('field-keperluan');
+      if (keperluan === 'Lainnya' && !lainnya) { setFieldError('field-lainnya'); valid = false; } else clearFieldError('field-lainnya');
       if (!valid) return;
 
-      const btn = document.getElementById('submit-btn');
-      const text = document.getElementById('submit-text');
-      const spinner = document.getElementById('submit-spinner');
+      const btn = $('btn-submit');
+      btn.classList.add('loading');
       btn.disabled = true;
-      text.textContent = 'Memproses...';
-      spinner.classList.remove('hidden');
 
       try {
+        const finalKeperluan = keperluan === 'Lainnya' ? lainnya : keperluan;
         const now = firebase.firestore.FieldValue.serverTimestamp();
-        const guestRef = await db.collection('guests').add({
-          name: name,
-          phone: phone,
+
+        await db.collection('guests').add({
+          name,
+          phone,
           email: email || null,
           instansi: instansi || null,
-          keperluan: keperluan,
+          keperluan: finalKeperluan,
           photoUrl: null,
-          locationId: locationId,
+          locationId,
           checkInTime: now,
           checkOutTime: null,
           hostPhone: hostPhone || locationData.hostPhone || null,
           status: 'checked_in',
         });
 
-        hide('checkin-form');
-        show('checkin-confirmation');
-        document.getElementById('confirm-name').textContent = name;
-        document.getElementById('confirm-keperluan').textContent = keperluan;
-        document.getElementById('confirm-time').textContent = formatTime(new Date());
+        // Show success
+        $('cok-name').textContent = name;
+        $('cok-keperluan').textContent = finalKeperluan;
+        $('cok-time').textContent = formatTime(new Date());
+        showView('view-checkin-ok');
 
+        // Fire-and-forget notification
         triggerNotification(name, hostPhone || locationData.hostPhone);
       } catch (err) {
         console.error('Check-in error:', err);
-        alert('Gagal check in. Silakan coba lagi.');
+        showToast('Gagal check in. Silakan coba lagi.');
+        btn.classList.remove('loading');
         btn.disabled = false;
-        text.textContent = 'Check In';
-        spinner.classList.add('hidden');
       }
     });
 
     // ═══════════════════════════════════════════════════════════════
-    // Check-Out Flow
+    // Checkout
     // ═══════════════════════════════════════════════════════════════
     async function loadGuestForCheckout(guestId) {
       try {
@@ -537,40 +911,42 @@
         }
         const guest = guestDoc.data();
 
+        // Already checked out → show final confirmation
         if (guest.status === 'checked_out') {
-          hide('loading');
-          show('checkout-confirmation');
-          document.getElementById('checkout-confirm-time').textContent =
-            guest.checkOutTime ? formatTime(guest.checkOutTime.toDate()) : '-';
+          $('cok2-time').textContent = guest.checkOutTime ? formatTime(guest.checkOutTime.toDate()) : '-';
+          if (guest.checkInTime && guest.checkOutTime) {
+            $('cok2-duration').textContent = formatDuration(guest.checkInTime.toDate(), guest.checkOutTime.toDate());
+            $('cok2-duration-row').style.display = '';
+          } else {
+            $('cok2-duration-row').style.display = 'none';
+          }
+          showView('view-checkout-ok');
           return;
         }
 
+        // Active guest → show checkout form
         existingGuestId = guestId;
-        hide('loading');
-        show('checkout-view');
-        document.getElementById('checkout-name').textContent = guest.name;
-        document.getElementById('checkout-keperluan').textContent = guest.keperluan;
+        $('co-name').textContent = guest.name;
+        $('co-keperluan').textContent = guest.keperluan;
+        $('co-instansi').textContent = guest.instansi || '';
 
         const checkInTime = guest.checkInTime.toDate();
-        document.getElementById('checkout-checkin-time').textContent = formatTime(checkInTime);
-        updateDuration(checkInTime);
-
-        setInterval(() => updateDuration(checkInTime), 60000);
+        $('co-checkin-time').textContent = formatTime(checkInTime);
+        renderDuration(checkInTime);
+        durationInterval = setInterval(() => renderDuration(checkInTime), 30000);
+        showView('view-checkout');
       } catch (err) {
         console.error('Load guest error:', err);
         showError('Gagal memuat data tamu.');
       }
     }
 
-    document.getElementById('checkout-btn').addEventListener('click', async () => {
+    $('btn-checkout').addEventListener('click', async () => {
       if (!existingGuestId) return;
 
-      const btn = document.getElementById('checkout-btn');
-      const text = document.getElementById('checkout-text');
-      const spinner = document.getElementById('checkout-spinner');
+      const btn = $('btn-checkout');
+      btn.classList.add('loading');
       btn.disabled = true;
-      text.textContent = 'Memproses...';
-      spinner.classList.remove('hidden');
 
       try {
         await db.collection('guests').doc(existingGuestId).update({
@@ -578,15 +954,16 @@
           status: 'checked_out',
         });
 
-        hide('checkout-view');
-        show('checkout-confirmation');
-        document.getElementById('checkout-confirm-time').textContent = formatTime(new Date());
+        if (durationInterval) clearInterval(durationInterval);
+
+        $('cok2-time').textContent = formatTime(new Date());
+        $('cok2-duration-row').style.display = 'none';
+        showView('view-checkout-ok');
       } catch (err) {
         console.error('Check-out error:', err);
-        alert('Gagal check out. Silakan coba lagi.');
+        showToast('Gagal check out. Silakan coba lagi.');
+        btn.classList.remove('loading');
         btn.disabled = false;
-        text.textContent = 'Check Out';
-        spinner.classList.add('hidden');
       }
     });
 
@@ -611,35 +988,46 @@
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // Helpers
+    // Utilities
     // ═══════════════════════════════════════════════════════════════
-    function show(id) { document.getElementById(id).classList.remove('hidden'); }
-    function hide(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function showError(msg) {
-      hide('loading');
-      show('error-state');
-      document.getElementById('error-message').textContent = msg;
-    }
-
-    function setError(fieldId) {
-      document.getElementById(fieldId).classList.add('error');
-    }
-    function clearError(fieldId) {
-      document.getElementById(fieldId).classList.remove('error');
-    }
-
     function formatTime(date) {
       return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' WIB';
     }
 
-    function updateDuration(checkInTime) {
+    function formatDuration(start, end) {
+      const diff = end - start;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      if (h > 0) return `${h} jam ${m} menit`;
+      return `${m} menit`;
+    }
+
+    function renderDuration(checkInTime) {
       const now = new Date();
       const diff = now - checkInTime;
-      const hours = Math.floor(diff / 3600000);
-      const minutes = Math.floor((diff % 3600000) / 60000);
-      document.getElementById('checkout-duration').textContent =
-        hours > 0 ? `${hours}j ${minutes}m` : `${minutes} menit`;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+
+      const durEl = $('co-duration');
+      if (h > 0) {
+        durEl.innerHTML = `<span class="dur-num">${h}j ${m}m</span><span class="dur-unit">${h} jam ${m} menit</span>`;
+      } else {
+        durEl.innerHTML = `<span class="dur-num">${m}</span><span class="dur-unit">menit</span>`;
+      }
+    }
+
+    function resetToCheckIn() {
+      if (durationInterval) clearInterval(durationInterval);
+      existingGuestId = null;
+      $('guest-form').reset();
+      $('field-lainnya').classList.remove('visible');
+      ['field-name', 'field-phone', 'field-email', 'field-instansi', 'field-keperluan', 'field-lainnya'].forEach(clearFieldError);
+      $('btn-submit').classList.remove('loading');
+      $('btn-submit').disabled = false;
+      $('btn-checkout').classList.remove('loading');
+      $('btn-checkout').disabled = false;
+      showView('view-loading');
+      init();
     }
 
     // ═══════════════════════════════════════════════════════════════

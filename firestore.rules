@@ -2,23 +2,55 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Guests — Tamu
+    // ── Helper Functions ──────────────────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Baca role dari dokumen hosts milik user yang sedang login
+    function getUserRole() {
+      return get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.role;
+    }
+
+    function isSuperAdmin() {
+      return isAuth() && getUserRole() == 'super_admin';
+    }
+
+    // Cek apakah user adalah super_admin ATAU mengelola lokasi tersebut
+    function managesLocation(locId) {
+      return isSuperAdmin()
+        || locId in get(/databases/$(database)/documents/hosts/$(request.auth.uid)).data.locations;
+    }
+
+    // ── Guests — Tamu ────────────────────────────────────────────────
     match /guests/{guestId} {
-      allow read: if request.auth != null;
+      // Tamu boleh submit form tanpa login
       allow create: if true;
-      allow update, delete: if request.auth != null;
+      // Hanya admin yang login yang bisa membaca data tamu
+      allow read: if isAuth();
+      // Update/hapus hanya super_admin atau admin yang mengelola lokasi tamu
+      allow update, delete: if isAuth() && (isSuperAdmin() || managesLocation(resource.data.locationId));
     }
 
-    // Locations — Lokasi
+    // ── Locations — Lokasi ───────────────────────────────────────────
     match /locations/{locationId} {
+      // QR code perlu diakses publik (guest scan)
       allow read: if true;
-      allow write: if request.auth != null;
+      // Hanya super_admin yang boleh buat/hapus lokasi
+      allow create, delete: if isSuperAdmin();
+      // Update: admin yang login + mengelola lokasi tersebut
+      allow update: if isAuth() && (isSuperAdmin() || managesLocation(locationId));
     }
 
-    // Hosts — Admin/User
+    // ── Hosts — Admin/User ───────────────────────────────────────────
     match /hosts/{hostId} {
-      allow read, update: if request.auth != null && request.auth.uid == hostId;
-      allow create: if request.auth != null;
+      // Semua admin yang login boleh membaca daftar host
+      allow read: if isAuth();
+      // Hanya super_admin yang boleh tambah host baru
+      allow create: if isSuperAdmin();
+      // Update: super_admin atau user mengupdate profil sendiri
+      allow update: if isAuth() && (isSuperAdmin() || request.auth.uid == hostId);
+      // Tidak ada yang boleh hapus host
       allow delete: if false;
     }
   }
