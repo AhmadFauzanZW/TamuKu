@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm install
 COPY . .
 # VITE_ env vars are baked at build time via Docker build args
 ARG VITE_FIREBASE_API_KEY
