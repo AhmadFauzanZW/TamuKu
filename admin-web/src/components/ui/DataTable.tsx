@@ -58,6 +58,9 @@ export function DataTable<T>({
                   {col.header}
                 </th>
               ))}
+              {expandedRowRender && (
+                <th className="px-4 py-3 w-10" />
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-border-light">
@@ -79,10 +82,23 @@ export function DataTable<T>({
                           : String((item as Record<string, unknown>)[col.key] ?? '')}
                       </td>
                     ))}
+                    {expandedRowRender && (
+                      <td className="px-4 py-3 text-right">
+                        <svg
+                          className={`w-4 h-4 text-text-secondary transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </td>
+                    )}
                   </tr>
                   {expandedRowRender && (
                     <tr>
-                      <td colSpan={columns.length} className="p-0">
+                      <td colSpan={columns.length + 1} className="p-0">
                         <div
                           className="overflow-hidden transition-all duration-300 ease-in-out"
                           style={{ maxHeight: isExpanded ? '500px' : '0' }}
