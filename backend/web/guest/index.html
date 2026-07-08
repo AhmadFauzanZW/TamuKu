@@ -647,6 +647,14 @@
       border: 2px solid rgba(255,255,255,0.5);
     }
     .camera-btn-cancel svg { width: 20px; height: 20px; color: white; }
+    .camera-btn-flip {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+    .camera-btn-flip svg { width: 20px; height: 20px; color: white; }
   </style>
 </head>
 <body>
@@ -899,6 +907,9 @@
       <button class="camera-btn camera-btn-cancel" onclick="closeCamera()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
+      <button class="camera-btn camera-btn-flip" onclick="switchCamera()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
       <button class="camera-btn camera-btn-shutter" onclick="capturePhoto()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="4"/></svg>
       </button>
@@ -938,6 +949,7 @@
     let checkoutPhotoFile = null;
     let cameraTarget = null;
     let cameraStream = null;
+    let currentFacingMode = 'environment';
     let existingGuestPhotoUrl = null;
 
     const $ = (id) => document.getElementById(id);
@@ -974,9 +986,10 @@
     // ═══════════════════════════════════════════════════════════════
     async function openCamera(target) {
       cameraTarget = target;
+      currentFacingMode = 'environment';
       try {
         cameraStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } },
+          video: { facingMode: currentFacingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
           audio: false,
         });
         $('camera-video').srcObject = cameraStream;
@@ -992,6 +1005,25 @@
       $('camera-video').srcObject = null;
       $('camera-modal').classList.remove('open');
       cameraTarget = null;
+    }
+
+    async function switchCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(t => t.stop());
+      }
+      currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: currentFacingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false,
+        });
+        cameraStream = stream;
+        $('camera-video').srcObject = stream;
+      } catch (err) {
+        console.error('Camera switch failed:', err);
+        currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+        showToast('Gagal mengganti kamera.');
+      }
     }
 
     function capturePhoto() {

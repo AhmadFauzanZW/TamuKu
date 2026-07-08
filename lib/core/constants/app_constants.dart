@@ -34,8 +34,7 @@ abstract final class AppConstants {
   );
 
   // Guest web check-in URL
-  static const String guestWebUrl =
-      'https://tamuku-api.chronaxis.site/web/guest';
+  static const String guestWebUrl = 'https://tamuku-api.chronaxis.site/guest';
   static const List<String> keperluanOptions = [
     'Meeting',
     'Personal',
