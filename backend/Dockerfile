@@ -11,6 +11,8 @@ COPY web/ web/
 
 # serviceAccountKey.json is mounted via volume at runtime, NOT copied into image
 
+RUN bun run build
+
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
