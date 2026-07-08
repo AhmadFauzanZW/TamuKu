@@ -1,20 +1,21 @@
 import { Elysia, t } from 'elysia';
 import admin from 'firebase-admin';
-import { readFileSync, existsSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync } from 'fs';
 import { config } from '../config';
 
 let fbInit = false;
 
+function getFirebaseCredentials() {
+  if (config.firebase.serviceAccountJson) {
+    return JSON.parse(config.firebase.serviceAccountJson);
+  }
+  return JSON.parse(readFileSync(config.firebase.serviceAccountPath, 'utf-8'));
+}
+
 function ensureFirebase() {
   if (fbInit) return;
-  const saPath = resolve(config.firebase.serviceAccountPath);
-  console.log(`[Hosts] Resolved service account path: ${saPath}`);
-  console.log(`[Hosts] File exists: ${existsSync(saPath)}`);
-  const raw = readFileSync(saPath, 'utf-8');
-  const sa = JSON.parse(raw);
+  const sa = getFirebaseCredentials();
   console.log(`[Hosts] Service account project_id: ${sa.project_id}`);
-  console.log(`[Hosts] Service account keys: ${Object.keys(sa).join(', ')}`);
   admin.initializeApp({ credential: admin.credential.cert(sa) });
   fbInit = true;
 }

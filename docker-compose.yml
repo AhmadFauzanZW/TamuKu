@@ -11,8 +11,6 @@ services:
       - "3000:3000"
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend/serviceAccountKey.json:/app/serviceAccountKey.json:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s

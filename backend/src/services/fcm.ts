@@ -4,9 +4,16 @@ import { readFileSync } from 'fs';
 
 let initialized = false;
 
+function getFirebaseCredentials() {
+  if (config.firebase.serviceAccountJson) {
+    return JSON.parse(config.firebase.serviceAccountJson);
+  }
+  return JSON.parse(readFileSync(config.firebase.serviceAccountPath, 'utf-8'));
+}
+
 export function initFirebase() {
   if (initialized) return;
-  const serviceAccount = JSON.parse(readFileSync(config.firebase.serviceAccountPath, 'utf-8'));
+  const serviceAccount = getFirebaseCredentials();
   admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
   initialized = true;
 }
