@@ -1,13 +1,13 @@
 /**
  * TamuKu Firestore Delete Script
- * 
+ *
  * Usage:
  *   bun run scripts/delete-firestore.ts                    # Delete ALL data
  *   bun run scripts/delete-firestore.ts guests             # Delete only guests
  *   bun run scripts/delete-firestore.ts hosts              # Delete only hosts
  *   bun run scripts/delete-firestore.ts locations          # Delete only locations
  *   bun run scripts/delete-firestore.ts all                # Delete everything
- * 
+ *
  * ⚠️  DESTRUCTIVE — cannot be undone!
  */
 
@@ -37,7 +37,7 @@ const auth = getAuth();
 async function deleteCollection(name: string) {
   const ref = db.collection(name);
   const snapshot = await ref.get();
-  
+
   if (snapshot.empty) {
     console.log(`   📭 ${name}: already empty`);
     return 0;

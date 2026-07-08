@@ -107,7 +107,9 @@ class _BodyState extends State<_Body> {
               prefixIcon: const Icon(Icons.search, color: AppColors.primary900),
               border: OutlineInputBorder(
                 borderRadius: AppRadius.mdBorder,
-                borderSide: BorderSide(color: AppColors.textSecondaryOf(context)),
+                borderSide: BorderSide(
+                  color: AppColors.textSecondaryOf(context),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: AppRadius.mdBorder,
@@ -150,7 +152,9 @@ class _BodyState extends State<_Body> {
                               selected: s,
                               selectedColor: AppColors.primary900,
                               labelStyle: TextStyle(
-                                color: s ? Colors.white : AppColors.textPrimaryOf(context),
+                                color: s
+                                    ? Colors.white
+                                    : AppColors.textPrimaryOf(context),
                                 fontWeight: s
                                     ? FontWeight.bold
                                     : FontWeight.normal,
@@ -220,10 +224,9 @@ class _BodyState extends State<_Body> {
                   itemCount: state.guests.length,
                   itemBuilder: (_, i) => GuestTile(
                     guest: state.guests[i],
-                    onTap: () => Navigator.of(context).pushNamed(
-                      AppRoutes.checkout,
-                      arguments: state.guests[i],
-                    ),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).pushNamed(AppRoutes.checkout, arguments: state.guests[i]),
                   ),
                 );
               }
@@ -252,7 +255,9 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Text(
             'Belum ada tamu',
-            style: AppTextStyles.body.copyWith(color: AppColors.textSecondaryOf(context)),
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textSecondaryOf(context),
+            ),
           ),
         ],
       ),

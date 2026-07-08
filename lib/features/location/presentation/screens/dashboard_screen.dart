@@ -62,9 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final todayGuestsStream = query.snapshots();
 
     if (_locationId == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_locationId!.isEmpty) {

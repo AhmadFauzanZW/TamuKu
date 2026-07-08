@@ -76,7 +76,7 @@ async function setup() {
   console.log('👤 Setting up Firebase Auth user...');
   try {
     const existingUser = await auth.getUserByEmail(HOST_DATA.email).catch(() => null);
-    
+
     if (existingUser) {
       // Update password
       await auth.updateUser(existingUser.uid, { password: PASSWORD });
